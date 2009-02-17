@@ -6,15 +6,6 @@
  This source file is developed and maintained by:
  + Jeremy Bridon jbridon@psu.edu
  
- File: Main.cpp
- Desc: Main application entry point.
- 
 ***************************************************************/
 
-#include <stdio.h>
-
-int main()
-{
-	printf("Hello, World!\n");
-	return 0;
-}
+#include "Player.h"

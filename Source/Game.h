@@ -6,15 +6,20 @@
  This source file is developed and maintained by:
  + Jeremy Bridon jbridon@psu.edu
  
- File: Main.cpp
- Desc: Main application entry point.
+ File: Game.h
+ Desc: The game manager that takes two player instances and
+       plays them through a single game.
  
 ***************************************************************/
 
-#include <stdio.h>
+// Inclusion guard
+#ifndef __GAME_H_
+#define __GAME_H_
 
-int main()
+class Game
 {
-	printf("Hello, World!\n");
-	return 0;
-}
+	
+};
+
+// End of inclusion guard
+#endif

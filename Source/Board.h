@@ -15,11 +15,9 @@
 #ifndef __BOARD_H_
 #define __BOARD_H_
 
-#include <Windows.h>
-
-class HighresClock
+class Board
 {
-
+	
 };
 
 // End of inclusion guard

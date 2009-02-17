@@ -6,15 +6,20 @@
  This source file is developed and maintained by:
  + Jeremy Bridon jbridon@psu.edu
  
- File: Main.cpp
- Desc: Main application entry point.
+ File: Player.h
+ Desc: A pure virtual class that describes the basic functions
+       needed to implement for a player (AI or user based).
  
 ***************************************************************/
 
-#include <stdio.h>
+// Inclusion guard
+#ifndef __PLAYER_H_
+#define __PLAYER_H_
 
-int main()
+class Player
 {
-	printf("Hello, World!\n");
-	return 0;
-}
+	
+};
+
+// End of inclusion guard
+#endif
