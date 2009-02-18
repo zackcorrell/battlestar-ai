@@ -12,9 +12,18 @@
 ***************************************************************/
 
 #include <stdio.h>
+#include <queue>
+#include "Ships.h"
+#include "Board.h"
 
 int main()
 {
+	// Place a few ships
+
+	Board SampleBoard(NULL);
+	SampleBoard.Print();
+
+	// Test board code
 	printf("Hello, World!\n");
 	return 0;
 }

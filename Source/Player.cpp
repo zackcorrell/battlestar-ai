@@ -9,3 +9,5 @@
 ***************************************************************/
 
 #include "Player.h"
+
+// Nothing to implement, this is a pure virtual class
