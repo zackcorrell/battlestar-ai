@@ -12,14 +12,11 @@
 ***************************************************************/
 
 #include <stdio.h>
-#include <queue>
 #include "Ships.h"
-#include "Board.h"
-
 int main()
 {
 	// Build the board and print the data
-	Board SampleBoard(NULL);
+	Board SampleBoard(10, 10, NULL);
 	SampleBoard.Print();
 
 	return 0;

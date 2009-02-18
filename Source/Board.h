@@ -26,7 +26,7 @@ class Board
 public:
 
 	// Constructor
-	Board(queue<Ship> *Ships);
+	Board(int BoardWidth, int BoardHeight, queue<Ship> *Ships);
 
 	// Destructor
 	~Board();
@@ -46,9 +46,8 @@ public:
 private:
 
 	// Board data
-	static const int BoardWidth = 10;
-	static const int BoardHeight = 10;
-	ShotState BoardData[BoardWidth][BoardHeight];
+	int BoardWidth, BoardHeight;
+	ShotState *BoardData;
 };
 
 // End of inclusion guard

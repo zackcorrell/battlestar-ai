@@ -33,8 +33,8 @@ class Player
 {
 public:
 
-	// Constructor takes and saves a name
-	Player(char* Name);
+	// Constructor takes and saves a name as well as board size
+	Player(char* Name, int BoardWidth, int BoardHeight);
 
 	// Destruct or
 	~Player();
@@ -55,10 +55,15 @@ public:
 	// Result of shot; The result of the shot is returned. Called right after a Shoot is called
 	virtual void ShootResult(int x, int y, ShotState state) = NULL;
 
+protected:
+
+	// Board size
+	int BoardWidth, BoardHeight;
+
 private:
 
 	// Name buffer
-	char*PlayerName;
+	char* PlayerName;
 
 };
 

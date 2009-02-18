@@ -24,7 +24,7 @@ class Game
 public:
 
 	// Constructor; takes two opponents and a game count.
-	Game(Player* PlayerA, Player* PlayerB, int Games = 1);
+	Game(Player* PlayerA, Player* PlayerB, int BoardWidth, int BoardHeight, int Games = 1);
 
 	// Run a single itteration of a game, return 0 if player 0 won, and 1 if player 1 won
 	int Run();
@@ -39,6 +39,9 @@ private:
 
 	// Game count
 	int GameCount;
+
+	// Board size
+	int BoardWidth, BoardHeight;
 };
 
 // End of inclusion guard

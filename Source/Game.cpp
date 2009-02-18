@@ -10,7 +10,7 @@
 
 #include "Game.h"
 
-Game::Game(Player* PlayerA, Player* PlayerB, int Games)
+Game::Game(Player* PlayerA, Player* PlayerB, int BoardWidth, int BoardHeight, int Games)
 {
 	// Validate
 	if(PlayerA == NULL || PlayerB == NULL)
@@ -18,6 +18,10 @@ Game::Game(Player* PlayerA, Player* PlayerB, int Games)
 		printf("PlayerA or PlayerB have been given NULL values.\n");
 		exit(-1);
 	}
+
+	// Save size
+	this->BoardWidth = BoardWidth;
+	this->BoardHeight = BoardHeight;
 
 	// Save game count
 	GameCount = Games;
@@ -36,7 +40,7 @@ int Game::Run()
 	for(int i = 0; i < 2; i++)
 	{
 		Players[i]->Reset();
-		Boards[i] = new Board(&Players[i]->Setup());
+		Boards[i] = new Board(BoardWidth, BoardHeight, &Players[i]->Setup());
 	}
 
 	// Keep looping until we have a winner
@@ -56,11 +60,11 @@ int Game::Run()
 			int x, y;
 			Players[i]->Shoot(&x, &y);
 
-			// Retrieve result and apply logic
-			
+			// Retrieve result of the enemy's board (Internally applies needed rules)
+			ShotState State = Boards[ (i + 1) % 2 ]->GetState(x, y);
 
 			// Player i gets result
-			Players[i]->ShootResult(x, y, 0);
+			Players[i]->ShootResult(x, y, State);
 		}
 	}
 

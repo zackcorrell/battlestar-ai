@@ -10,7 +10,7 @@
 
 #include "Player.h"
 
-Player::Player(char* Name)
+Player::Player(char* Name, int BoardWidth, int BoardHeight)
 {
 	// Validate input
 	if(Name == NULL)
@@ -22,6 +22,10 @@ Player::Player(char* Name)
 	// Copy name
 	PlayerName = new char[strlen(Name) + 1];
 	strcpy(PlayerName, Name);
+
+	// Copy over width / height
+	this->BoardWidth = BoardWidth;
+	this->BoardHeight = BoardHeight;
 }
 
 Player::~Player()

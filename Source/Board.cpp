@@ -10,14 +10,26 @@
 
 #include "Board.h"
 
-Board::Board(queue<Ship> *Ships)
+Board::Board(int BoardWidth, int BoardHeight, queue<Ship> *Ships)
 {
+	// Save size
+	this->BoardWidth = BoardWidth;
+	this->BoardHeight = BoardHeight;
+
+	// Allocate board space
+	BoardData = new ShotState[BoardWidth * BoardHeight];
+	if(BoardData == NULL)
+	{
+		printf("The board count not be allocated.\n");
+		exit(-1);
+	}
+
 	// Initialize the board
 	for(int x = 0; x < BoardWidth; x++)
 	{
 		for(int y = 0; y < BoardHeight; y++)
 		{
-			BoardData[y][x] = StateEmpty;
+			BoardData[y * BoardWidth + x] = StateEmpty;
 		}
 	}
 
@@ -61,14 +73,14 @@ Board::Board(queue<Ship> *Ships)
 			}
 
 			// Out of bounds or on an existance ship (collision)
-			if(x < 0 || x >= BoardWidth || y < 0 || y >= BoardHeight || BoardData[y][x] == StateShip)
+			if(x < 0 || x >= BoardWidth || y < 0 || y >= BoardHeight || BoardData[y * BoardWidth + x] == StateShip)
 			{
 				printf("The given ship has invalid placement.\n");
 				exit(-1);
 			}
 
 			// Place ship piece
-			BoardData[y][x] = StateShip;
+			BoardData[y * BoardWidth + x] = StateShip;
 		}
 
 		// Pop ship off the queue
@@ -79,7 +91,8 @@ Board::Board(queue<Ship> *Ships)
 
 Board::~Board()
 {
-	// Nothing to release
+	// Release board
+	delete[] BoardData;
 }
 
 ShotState Board::GetState(int x, int y)
@@ -91,7 +104,20 @@ ShotState Board::GetState(int x, int y)
 		exit(-1);
 	}
 
-	return BoardData[y][x];
+	// Get current state
+	ShotState State = BoardData[y * BoardWidth + x];
+
+	// If we have nothing, return a miss
+	if(State == StateEmpty)
+	{
+		BoardData[y * BoardWidth + x] = StateMiss;
+		return StateMiss;
+	}
+	else if(State == StateShip)
+	{
+		BoardData[y * BoardWidth + x] = StateHit;
+		return StateHit;
+	}
 }
 
 void Board::SetState(int x, int y, ShotState State)
@@ -103,7 +129,7 @@ void Board::SetState(int x, int y, ShotState State)
 		exit(-1);
 	}
 
-	BoardData[y][x] = State;
+	BoardData[y * BoardWidth + x] = State;
 }
 
 bool Board::ValidateWin()
@@ -115,7 +141,7 @@ bool Board::ValidateWin()
 		for(int y = 0; y < BoardHeight && Valid; y++)
 		{
 			// There is still a ship piece on board
-			if(BoardData[y][x] == StateShip)
+			if(BoardData[y * BoardWidth + x] == StateShip)
 				Valid = false;
 		}
 	}
@@ -131,11 +157,11 @@ void Board::Print()
 	// Print table
 	for(int x = 0; x < BoardWidth; x++)
 	{
-		printf("[%d]", x);
+		printf("[%c]", 'A' + x);
 		for(int y = 0; y < BoardHeight; y++)
 		{
 			char output;
-			switch(BoardData[y][x])
+			switch(BoardData[y * BoardWidth + x])
 			{
 			case StateMiss:	output = 'o'; break;
 			case StateHit:	output = 'x'; break;
