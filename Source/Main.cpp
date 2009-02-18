@@ -18,12 +18,9 @@
 
 int main()
 {
-	// Place a few ships
-
+	// Build the board and print the data
 	Board SampleBoard(NULL);
 	SampleBoard.Print();
 
-	// Test board code
-	printf("Hello, World!\n");
 	return 0;
 }

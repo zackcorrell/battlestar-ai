@@ -10,4 +10,26 @@
 
 #include "Player.h"
 
-// Nothing to implement, this is a pure virtual class
+Player::Player(char* Name)
+{
+	// Validate input
+	if(Name == NULL)
+	{
+		printf("Invalid name for Player.\n");
+		exit(-1);
+	}
+
+	// Copy name
+	PlayerName = new char[strlen(Name) + 1];
+	strcpy(PlayerName, Name);
+}
+
+Player::~Player()
+{
+	delete[] PlayerName;
+}	
+
+char* Player::GetName()
+{
+	return PlayerName;
+}

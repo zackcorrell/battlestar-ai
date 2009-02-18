@@ -14,7 +14,8 @@
 	   First Setup() is called to setup the board. After there
 	   is a loop that asks each player to Shoot(...) and returns
 	   the result in Shot(...). It is up to the implementation
-	   to deal with internal data support.
+	   to deal with internal data support. Reset() *should* be
+	   called to deal with resetting the internals of the class.
  
 ***************************************************************/
 
@@ -32,7 +33,17 @@ class Player
 {
 public:
 
-	// Constructor and destructor not needed, pure virtual class
+	// Constructor takes and saves a name
+	Player(char* Name);
+
+	// Destruct or
+	~Player();
+
+	// Returns a pointer to the name
+	char* GetName();
+
+	// Reset for a new game
+	virtual void Reset() = NULL;
 
 	// Setup; First called when a new game is created
 	// Returns a queue of ships and position pairs
@@ -42,7 +53,12 @@ public:
 	virtual void Shoot(int *x, int *y) = NULL;
 
 	// Result of shot; The result of the shot is returned. Called right after a Shoot is called
-	virtual void Shot(int x, int y, ShotState state) = NULL;
+	virtual void ShootResult(int x, int y, ShotState state) = NULL;
+
+private:
+
+	// Name buffer
+	char*PlayerName;
 
 };
 

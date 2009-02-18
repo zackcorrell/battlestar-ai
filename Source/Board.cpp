@@ -151,5 +151,5 @@ void Board::Print()
 	
 	// print legent
 	printf("Legend: ' ' is water; 'o' is a miss\n");
-	printf("        'x' is a hit; '#' is a sunk ship\n\n");
+	printf("        'x' is a hit; '#' is a sink\n\n");
 }

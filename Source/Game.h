@@ -16,9 +16,29 @@
 #ifndef __GAME_H_
 #define __GAME_H_
 
+#include "Player.h"
+#include "Board.h"
+
 class Game
 {
-	
+public:
+
+	// Constructor; takes two opponents and a game count.
+	Game(Player* PlayerA, Player* PlayerB, int Games = 1);
+
+	// Run a single itteration of a game, return 0 if player 0 won, and 1 if player 1 won
+	int Run();
+
+	// Run all games
+	void RunAll(int *Player0Score, int *Player1Score);
+
+private:
+
+	// Both players 0 and 1
+	Player* Players[2];
+
+	// Game count
+	int GameCount;
 };
 
 // End of inclusion guard
