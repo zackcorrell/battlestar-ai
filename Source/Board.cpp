@@ -10,34 +10,158 @@
 
 #include "Board.h"
 
-Board::Board(int BoardWidth, int BoardHeight, queue<Ship> *Ships)
+Board::Board(queue<Ship> *Ships, int BoardWidth, int BoardHeight)
 {
-	// Save size
-	this->BoardWidth = BoardWidth;
-	this->BoardHeight = BoardHeight;
-
 	// Allocate board space
 	BoardData = new ShotState[BoardWidth * BoardHeight];
-	if(BoardData == NULL)
+	if(Ships == NULL || BoardData == NULL)
 	{
 		printf("The board count not be allocated.\n");
 		exit(-1);
 	}
 
+	// Save size
+	this->BoardWidth = BoardWidth;
+	this->BoardHeight = BoardHeight;
+
 	// Initialize the board
-	for(int x = 0; x < BoardWidth; x++)
+	for(int i = 0; i < BoardWidth * BoardHeight; i++)
+		BoardData[i] = StateEmpty;
+
+	// Validate ship placement and place to board data
+	if(ValidateShip(Ships, NULL, BoardWidth, BoardHeight, BoardData) == false)
 	{
-		for(int y = 0; y < BoardHeight; y++)
-		{
-			BoardData[y * BoardWidth + x] = StateEmpty;
-		}
+		printf("The given ship has invalid placement.\n");
+		exit(-1);
+	}
+}
+
+Board::~Board()
+{
+	// Release board
+	delete[] BoardData;
+}
+
+ShotState Board::GetState(int x, int y)
+{
+	// Validate position
+	if(x < 0 || x >= BoardWidth || y < 0 || y >= BoardHeight)
+	{
+		printf("The given ship has invalid placement.\n");
+		exit(-1);
 	}
 
-	// For each ship (Pass if given Ships queue is null)
-	while(Ships != NULL && !Ships->empty())
+	// Get current state
+	return BoardData[y * BoardWidth + x];
+}
+
+void Board::SetState(int x, int y, ShotState State)
+{
+	// Validate position
+	if(x < 0 || x >= BoardWidth || y < 0 || y >= BoardHeight)
 	{
+		printf("The given ship has invalid placement.\n");
+		exit(-1);
+	}
+
+	// Save the state
+	BoardData[y * BoardWidth + x] = State;
+}
+
+bool Board::ValidateWin()
+{
+	// Does there exist any square that is a "Ship"
+	bool Valid = true;
+	for(int i = 0; i < BoardWidth * BoardHeight; i++)
+	{
+		// There is still a ship piece on board
+		if(BoardData[i] == StateShip)
+			Valid = false;
+	}
+
+	// Return valid
+	return Valid;
+}
+
+void Board::Print()
+{
+	// Print top line
+	printf("   [0][1][2][3][4][5][6][7][8][9]\n");
+
+	// Print table
+	for(int y = 0; y < BoardHeight; y++)
+	{
+		printf("[%c]", 'A' + y);
+		for(int x = 0; x < BoardWidth; x++)
+		{
+			char output;
+			switch(BoardData[y * BoardWidth + x])
+			{
+				case StateShip:	output = '#'; break;
+				case StateMiss:	output = 'o'; break;
+				case StateHit:	output = 'x'; break;
+				default:		output = ' '; break;
+			}
+
+			// Output current element
+			printf("(%c)", output);
+		}
+		printf("\n");
+	}
+	
+	// print legent
+	printf("Legend: ' ' is water; 'o' is a miss\n");
+	printf("        'x' is a hit; '#' is a ship\n\n");
+}
+
+bool Board::ValidateShip(queue<Ship> *ShipList, Ship *NewShip, int Width, int Height, ShotState* GivenBuffer)
+{
+	// Validate data
+	if(ShipList == NULL)
+		return false;
+
+	// Copy over the ships queue
+	queue<Ship> Ships = *ShipList;
+
+	// Allocate a new board (only if needed)
+	ShotState* BoardData;
+	if(GivenBuffer == NULL)
+		BoardData = new ShotState[Width * Height];
+	else
+		BoardData = GivenBuffer;
+
+	// Initialize board
+	for(int i = 0; i < Width * Height; i++)
+		BoardData[i] = StateEmpty;
+
+	// For each ship
+	bool stop = false;
+	while(!stop)
+	{
+		// Target ship to write
+		Ship myShip;
+
 		// Get ship data
-		Ship myShip = Ships->front();
+		if(!Ships.empty())
+		{
+			// Pop off queue
+			myShip = Ships.front();
+			Ships.pop();
+		}
+		else
+		{
+			// Now that all ships are placed, test this last ship
+			if(NewShip == NULL)
+			{
+				if(GivenBuffer == NULL)
+					delete [] BoardData;
+				return true; // Valid
+			}
+
+			// Copy over given ship for last ship check
+			myShip = *NewShip;
+			stop = true;
+		}
 
 		// Place ship
 		for(int i = 0; i < (int)myShip.ship; i++)
@@ -73,109 +197,20 @@ Board::Board(int BoardWidth, int BoardHeight, queue<Ship> *Ships)
 			}
 
 			// Out of bounds or on an existance ship (collision)
-			if(x < 0 || x >= BoardWidth || y < 0 || y >= BoardHeight || BoardData[y * BoardWidth + x] == StateShip)
+			if(x < 0 || x >= Width || y < 0 || y >= Height || BoardData[y * Width + x] == StateShip)
 			{
-				printf("The given ship has invalid placement.\n");
-				exit(-1);
+				if(GivenBuffer == NULL)
+					delete [] BoardData;
+				return false;
 			}
 
 			// Place ship piece
-			BoardData[y * BoardWidth + x] = StateShip;
-		}
-
-		// Pop ship off the queue
-		Ships->pop();
-	}
-
-}
-
-Board::~Board()
-{
-	// Release board
-	delete[] BoardData;
-}
-
-ShotState Board::GetState(int x, int y)
-{
-	// Validate position
-	if(x < 0 || x >= BoardWidth || y < 0 || y >= BoardHeight)
-	{
-		printf("The given ship has invalid placement.\n");
-		exit(-1);
-	}
-
-	// Get current state
-	ShotState State = BoardData[y * BoardWidth + x];
-
-	// If we have nothing, return a miss
-	if(State == StateEmpty)
-	{
-		BoardData[y * BoardWidth + x] = StateMiss;
-		return StateMiss;
-	}
-	else if(State == StateShip)
-	{
-		BoardData[y * BoardWidth + x] = StateHit;
-		return StateHit;
-	}
-}
-
-void Board::SetState(int x, int y, ShotState State)
-{
-	// Validate position
-	if(x < 0 || x >= BoardWidth || y < 0 || y >= BoardHeight)
-	{
-		printf("The given ship has invalid placement.\n");
-		exit(-1);
-	}
-
-	BoardData[y * BoardWidth + x] = State;
-}
-
-bool Board::ValidateWin()
-{
-	// Does there exist any square that is a "Ship"
-	bool Valid = true;
-	for(int x = 0; x < BoardWidth && Valid; x++)
-	{
-		for(int y = 0; y < BoardHeight && Valid; y++)
-		{
-			// There is still a ship piece on board
-			if(BoardData[y * BoardWidth + x] == StateShip)
-				Valid = false;
+			BoardData[y * Width + x] = StateShip;
 		}
 	}
 
-	return Valid;
-}
-
-void Board::Print()
-{
-	// Print top line
-	printf("   [0][1][2][3][4][5][6][7][8][9]\n");
-
-	// Print table
-	for(int x = 0; x < BoardWidth; x++)
-	{
-		printf("[%c]", 'A' + x);
-		for(int y = 0; y < BoardHeight; y++)
-		{
-			char output;
-			switch(BoardData[y * BoardWidth + x])
-			{
-			case StateMiss:	output = 'o'; break;
-			case StateHit:	output = 'x'; break;
-			case StateSink:	output = '#'; break;
-			default:		output = ' '; break;
-			}
-
-			// Output current element
-			printf("(%c)", output);
-		}
-		printf("\n");
-	}
-	
-	// print legent
-	printf("Legend: ' ' is water; 'o' is a miss\n");
-	printf("        'x' is a hit; '#' is a sink\n\n");
+	// Release the board and return validation
+	if(GivenBuffer == NULL)
+		delete [] BoardData;
+	return true;
 }

@@ -42,14 +42,13 @@ public:
 	// Returns a pointer to the name
 	char* GetName();
 
-	// Reset for a new game
+	// Need to implement: Reset for a new game
 	virtual void Reset() = NULL;
 
-	// Setup; First called when a new game is created
-	// Returns a queue of ships and position pairs
-	virtual queue<Ship> Setup() = NULL;
+	// Need to implement: First called when a new game is created, returns a queue of ships and position pairs
+	virtual void Setup(queue<Ship> *Ships) = NULL;
 
-	// Shoot; Target an x and y position and shoot
+	// Need to implement: Shoot a target an x and y position and shoot
 	virtual void Shoot(int *x, int *y) = NULL;
 
 	// Result of shot; The result of the shot is returned. Called right after a Shoot is called

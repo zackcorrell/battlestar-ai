@@ -16,8 +16,12 @@
 #ifndef __GAME_H_
 #define __GAME_H_
 
+#include <queue>
 #include "Player.h"
 #include "Board.h"
+#include "Main.h"
+
+using namespace std;
 
 class Game
 {
@@ -26,19 +30,19 @@ public:
 	// Constructor; takes two opponents and a game count.
 	Game(Player* PlayerA, Player* PlayerB, int BoardWidth, int BoardHeight, int Games = 1);
 
-	// Run a single itteration of a game, return 0 if player 0 won, and 1 if player 1 won
-	int Run();
-
 	// Run all games
 	void RunAll(int *Player0Score, int *Player1Score);
 
 private:
 
+	// Run a single itteration of a game, return 0 if player 0 won, and 1 if player 1 won
+	int Run();
+
 	// Both players 0 and 1
 	Player* Players[2];
 
-	// Game count
-	int GameCount;
+	// Total games played, target total game count
+	int TotalGames, GameCount;
 
 	// Board size
 	int BoardWidth, BoardHeight;

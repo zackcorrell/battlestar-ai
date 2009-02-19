@@ -7,7 +7,8 @@
  + Jeremy Bridon jbridon@psu.edu
  
  File: Board.h
- Desc: An interface to a standard board of Battleship.
+ Desc: A standard board of Battleship. Usefull for the Game class,
+       but not that usefull for use in Player instances.
  
 ***************************************************************/
 
@@ -26,7 +27,7 @@ class Board
 public:
 
 	// Constructor
-	Board(int BoardWidth, int BoardHeight, queue<Ship> *Ships);
+	Board(queue<Ship> *Ships, int BoardWidth, int BoardHeight);
 
 	// Destructor
 	~Board();
@@ -42,6 +43,12 @@ public:
 
 	// Print data to screen
 	void Print();
+
+	// Helpfull static function to determine ship-ship collisions
+	// Returns true if the ships list and newship (if given) don't collidare and are in the board size
+	// Send NULL to *NewShip if you just want to validate just the queue set
+	// If the given buffer is not null, this function will write to that memory
+	static bool ValidateShip(queue<Ship> *ShipList, Ship* NewShip, int Width, int Height, ShotState* GivenBuffer = NULL);
 
 private:
 
