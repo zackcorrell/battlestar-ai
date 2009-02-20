@@ -18,5 +18,9 @@
 // Global silent boolean
 extern bool Silence;
 
+// Global logging boolean
+extern bool Logging;
+extern FILE* LoggingFile;
+
 // End of inclusion guard
 #endif

@@ -17,21 +17,32 @@
 #include "Windows.h" // WINDOWS SPECIFIC
 #include "Main.h"
 
-// Define some global variables (As seen in main.h, used for configuration)
+// Define globals from Main.h
 bool Silence;
+bool Logging;
+FILE* LoggingFile;
 
-int main()
+// Main application entry point
+int main(int argc, char *argv[])
 {
-	/* TODO:
-		Create logging system (verbose mode output)
-		Have a quite flag -q or -s
-	*/
+	/*** Start of initialization of global variables ***/
 
-	// Set silence to true
 	Silence = false;
-	
+	Logging = false;
+
+	/*** End of initialization of global variables ***/
+
+	// Open the logging file if enabled
+	if(Logging == true)
+	{
+		// Open output file
+		LoggingFile = fopen("Output.log", "w");
+	}
+
 	// Seed the random
 	srand((int)GetTickCount()); // WINDOWS SPECIFIC
+
+	/*** Start of main simulation ***/
 
 	// Build the board and print the data
 	DumbPlayer Player1(10, 10);
@@ -43,6 +54,12 @@ int main()
 	// Start game
 	int p1, p2;
 	SampleGame.RunAll(&p1, &p2);
+
+	/*** End of main simulation ***/
+
+	// Close file if opened
+	if(Logging == true)
+		fclose(LoggingFile);
 
 	return 0;
 }
