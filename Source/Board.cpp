@@ -16,7 +16,7 @@ Board::Board(queue<Ship> *Ships, int BoardWidth, int BoardHeight)
 	BoardData = new ShotState[BoardWidth * BoardHeight];
 	if(Ships == NULL || BoardData == NULL)
 	{
-		printf("The board count not be allocated.\n");
+		Printf("The board count not be allocated.\n");
 		exit(-1);
 	}
 
@@ -31,7 +31,7 @@ Board::Board(queue<Ship> *Ships, int BoardWidth, int BoardHeight)
 	// Validate ship placement and place to board data
 	if(ValidateShip(Ships, NULL, BoardWidth, BoardHeight, BoardData) == false)
 	{
-		printf("The given ship has invalid placement.\n");
+		Printf("The given ship has invalid placement.\n");
 		exit(-1);
 	}
 }
@@ -47,7 +47,7 @@ ShotState Board::GetState(int x, int y)
 	// Validate position
 	if(x < 0 || x >= BoardWidth || y < 0 || y >= BoardHeight)
 	{
-		printf("The given ship has invalid placement.\n");
+		Printf("The given ship has invalid placement.\n");
 		exit(-1);
 	}
 
@@ -60,7 +60,7 @@ void Board::SetState(int x, int y, ShotState State)
 	// Validate position
 	if(x < 0 || x >= BoardWidth || y < 0 || y >= BoardHeight)
 	{
-		printf("The given ship has invalid placement.\n");
+		Printf("The given ship has invalid placement.\n");
 		exit(-1);
 	}
 
@@ -86,12 +86,12 @@ bool Board::ValidateWin()
 void Board::Print()
 {
 	// Print top line
-	printf("   [0][1][2][3][4][5][6][7][8][9]\n");
+	Printf("   [0][1][2][3][4][5][6][7][8][9]\n");
 
 	// Print table
 	for(int y = 0; y < BoardHeight; y++)
 	{
-		printf("[%c]", 'A' + y);
+		Printf("[%c]", 'A' + y);
 		for(int x = 0; x < BoardWidth; x++)
 		{
 			char output;
@@ -104,14 +104,14 @@ void Board::Print()
 			}
 
 			// Output current element
-			printf("(%c)", output);
+			Printf("(%c)", output);
 		}
-		printf("\n");
+		Printf("\n");
 	}
 	
 	// print legent
-	printf("Legend: ' ' is water; 'o' is a miss\n");
-	printf("        'x' is a hit; '#' is a ship\n\n");
+	Printf("Legend: ' ' is water; 'o' is a miss\n");
+	Printf("        'x' is a hit; '#' is a ship\n\n");
 }
 
 bool Board::ValidateShip(queue<Ship> *ShipList, Ship *NewShip, int Width, int Height, ShotState* GivenBuffer)

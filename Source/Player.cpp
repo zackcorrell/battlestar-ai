@@ -15,7 +15,7 @@ Player::Player(char* Name, int BoardWidth, int BoardHeight)
 	// Validate input
 	if(Name == NULL)
 	{
-		printf("Invalid name for Player.\n");
+		Printf("Invalid name for Player.\n");
 		exit(-1);
 	}
 

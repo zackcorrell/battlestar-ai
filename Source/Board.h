@@ -16,11 +16,8 @@
 #ifndef __BOARD_H_
 #define __BOARD_H_
 
-#include <queue>
-#include <stdio.h>
+#include "Util.h"
 #include "Ships.h"
-
-using namespace std;
 
 class Board
 {

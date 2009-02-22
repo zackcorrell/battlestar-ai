@@ -7,15 +7,13 @@
  + Jeremy Bridon jbridon@psu.edu
  
  File: Main.cpp
- Desc: Main application entry point.
+ Desc: Main application entry point. Now supports UNIX and Win32
  
 ***************************************************************/
 
-#include <stdio.h>
+#include "Util.h"
 #include "DumbPlayer.h"
 #include "Game.h"
-#include "Windows.h" // WINDOWS SPECIFIC
-#include "Main.h"
 
 // Define globals from Main.h
 bool Silence;
@@ -27,8 +25,8 @@ int main(int argc, char *argv[])
 {
 	/*** Start of initialization of global variables ***/
 
-	Silence = false;
-	Logging = false;
+	Silence = true;
+	Logging = true;
 
 	/*** End of initialization of global variables ***/
 
@@ -37,10 +35,18 @@ int main(int argc, char *argv[])
 	{
 		// Open output file
 		LoggingFile = fopen("Output.log", "w");
+		if(LoggingFile == NULL)
+		{
+			printf("Failed to open 'Output.log'\n");
+			return -1;
+		}
+
+		// Place header
+		fprintf(LoggingFile, "Starting log file...\n====================\n\n");
 	}
 
-	// Seed the random
-	srand((int)GetTickCount()); // WINDOWS SPECIFIC
+	// Seed the rand
+	srand((int)clock());
 
 	/*** Start of main simulation ***/
 
@@ -48,8 +54,8 @@ int main(int argc, char *argv[])
 	DumbPlayer Player1(10, 10);
 	DumbPlayer Player2(10, 10);
 
-	// Setup a game (10x10 board, 10,000 rounds)
-	Game SampleGame(&Player1, &Player2, 10, 10, 1);
+	// Setup a game (10x10 board, 100 rounds)
+	Game SampleGame(&Player1, &Player2, 10, 10, 100);
 
 	// Start game
 	int p1, p2;
@@ -59,7 +65,11 @@ int main(int argc, char *argv[])
 
 	// Close file if opened
 	if(Logging == true)
+	{
+		// Place header
+		fprintf(LoggingFile, "\nEnding log file\n====================\n");
 		fclose(LoggingFile);
+	}
 
 	return 0;
 }

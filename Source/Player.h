@@ -24,10 +24,8 @@
 #define __PLAYER_H_
 
 // Includes
-#include <queue>
+#include "Util.h"
 #include "Ships.h"
-
-using namespace std;
 
 class Player
 {

@@ -16,7 +16,6 @@
 #define __DUMBPLAYER_H_
 
 // Includes
-#include <cstdlib>
 #include "Player.h"
 #include "Board.h"
 

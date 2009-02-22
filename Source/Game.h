@@ -16,12 +16,9 @@
 #ifndef __GAME_H_
 #define __GAME_H_
 
-#include <queue>
 #include "Player.h"
 #include "Board.h"
-#include "Main.h"
-
-using namespace std;
+#include "Util.h"
 
 class Game
 {

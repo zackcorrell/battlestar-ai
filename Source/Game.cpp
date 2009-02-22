@@ -15,7 +15,7 @@ Game::Game(Player* PlayerA, Player* PlayerB, int BoardWidth, int BoardHeight, in
 	// Validate
 	if(PlayerA == NULL || PlayerB == NULL)
 	{
-		printf("PlayerA or PlayerB have been given NULL values.\n");
+		Printf("PlayerA or PlayerB have been given NULL values.\n");
 		exit(-1);
 	}
 
@@ -53,12 +53,12 @@ void Game::RunAll(int *Player0Score, int *Player1Score)
 
 	// If tie,
 	if(winner == -1)
-		printf(">> There has been a tie.\n");
+		Printf(">> There has been a tie.\n");
 	else
-		printf(">> Game winner, of %d rounds, is: (%d)[%s].\n", TotalGames, winner, Players[winner]->GetName());
+		Printf(">> Game winner, of %d rounds, is: (%d)[%s].\n", TotalGames, winner, Players[winner]->GetName());
 
 	// Final scores
-	printf(">> Final scores: (0)%d vs (1)%d.\n", Scores[0], Scores[1]);
+	Printf(">> Final scores: (0)%d vs (1)%d.\n", Scores[0], Scores[1]);
 
 	// Post back scores
 	*Player0Score = Scores[0];
@@ -68,11 +68,11 @@ void Game::RunAll(int *Player0Score, int *Player1Score)
 int Game::Run()
 {
 	// Print starting game
-	if(!Silence)
-		printf(">> Starting round %d between (0)[%s], and (1)[%s].\n", TotalGames, Players[0]->GetName(), Players[1]->GetName());
+	Printf(">> Starting round %d between (0)[%s], and (1)[%s].\n", TotalGames, Players[0]->GetName(), Players[1]->GetName());
 
-	// Start a game with two boards
+	// Start a game with two boards and a run count
 	Board* Boards[2];
+	int Turn = 0;
 
 	// Reset each player and setup the boards
 	for(int i = 0; i < 2; i++)
@@ -92,6 +92,9 @@ int Game::Run()
 	int winner = -1;
 	while(true && winner == -1)
 	{
+		// Say which turn we are in
+		Printf(">> Turn %d:\n", Turn++);
+
 		// Let both players play
 		for(int i = 0; i < 2 && winner == -1; i++)
 		{
@@ -118,11 +121,8 @@ int Game::Run()
 			Players[i]->ShootResult(x, y, State);
 
 			// Print out player i's board
-			if(!Silence)
-			{
-				printf(">> (%d)[%s]'s board:\n", i, Players[i]->GetName());
-				Boards[i]->Print();
-			}
+			Printf(">> (%d)[%s]'s board:\n", i, Players[i]->GetName());
+			Boards[i]->Print();
 		}
 
 		// If there is a winner, return the winner's id
@@ -142,8 +142,7 @@ int Game::Run()
 	TotalGames++;
 
 	// Print winner
-	if(!Silence)
-		printf(">> Round %d winner is: (%d)[%s]\n", TotalGames, winner, Players[winner]->GetName());
+	Printf(">> Round %d winner is: (%d)[%s]\n", TotalGames, winner, Players[winner]->GetName());
 
 	// Warning prevention
 	return winner;
