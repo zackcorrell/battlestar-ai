@@ -13,37 +13,51 @@
 DumbPlayer::DumbPlayer(int BoardWidth, int BoardHeight)
 	: Player("DumbPlayer AI", BoardWidth, BoardHeight)
 {
-	// Allocate "hit" board
+	// Allocate "hit" board (No need to init, that is done in Reset())
 	Board = new bool[BoardWidth * BoardHeight];
+
+	// Allocate placement board
+	for(int i = 0; i < 5; i++)
+	{
+		PlacementBoard[i] = new int[BoardWidth * BoardHeight];
+		for(int j = 0; j < BoardWidth * BoardHeight; j++)
+			PlacementBoard[i][j] = 0;
+	}
 }
 
 DumbPlayer::~DumbPlayer()
 {
+	// Print out some stat before removing this object
+	PrintStat();
+
 	// Release "hit" board
 	delete [] Board;
+
+	// Release placement board
+	for(int i = 0; i < 5; i++)
+		delete [] PlacementBoard[i];
+
 }
 
 void DumbPlayer::Reset()
 {
 	// Reset "hit" board
 	for(int i = 0; i < BoardWidth * BoardHeight; i++)
-	{
 		Board[i] = false;
-	}
 }
 
 void DumbPlayer::Setup(queue<Ship> *Ships)
 {
 	// Randomly choose ship positions
 	Ship TempShip;
-	for(int i = 5; i > 0; i--)
+	for(int i = 1; i <= 5; i++)
 	{
 		// Choose the appropriate type
 		TempShip.ship = (ShipType)i;
-		if(i == 2)
-			TempShip.ship = (ShipType)3;
-		else if(i == 1)
+		if(i == 1)
 			TempShip.ship = (ShipType)2;
+		else if(i == 2)
+			TempShip.ship = (ShipType)3;
 
 		// Choose a random direction
 		TempShip.direction = (Direction)(rand() % 4);
@@ -57,8 +71,11 @@ void DumbPlayer::Setup(queue<Ship> *Ships)
 			Ships->push(TempShip);
 		// Try again
 		else
-			i++;
+			i--;
 	}
+
+	// Add placement to placement history
+	AddShipsStat(*Ships);
 }
 
 void DumbPlayer::Shoot(int *x, int *y)

@@ -35,8 +35,8 @@ public:
 	// Set a board state
 	void SetState(int x, int y, ShotState State);
 
-	// Returns true if this board has a winning state
-	bool ValidateWin();
+	// Returns true if this board has all ships sunk
+	bool AllSunk();
 
 	// Print data to screen
 	void Print();

@@ -20,7 +20,7 @@ int Printf(const char * format,...)
 	va_start(ap, format);
 
 	// Sucess
-	int i;
+	int i = 0;
 
 	// If we are logging, place to log file
 	if( Logging )

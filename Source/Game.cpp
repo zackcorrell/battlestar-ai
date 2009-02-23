@@ -32,14 +32,20 @@ Game::Game(Player* PlayerA, Player* PlayerB, int BoardWidth, int BoardHeight, in
 	Players[1] = PlayerB;
 }
 
+Game::~Game()
+{
+	// Nothing to do...
+}
+
 void Game::RunAll(int *Player0Score, int *Player1Score)
 {
 	// For each game, save scores
 	int Scores[2] = {0, 0};
 	for(int i = 0; i < GameCount; i++)
 	{
-		// Save score
-		Scores[Run()]++;
+		// Save score (This could be one line, but hey, I like clarity!)
+		int winner = Run();
+		Scores[winner]++;
 	}
 
 	// Print out final scores
@@ -72,7 +78,6 @@ int Game::Run()
 
 	// Start a game with two boards and a run count
 	Board* Boards[2];
-	int Turn = 0;
 
 	// Reset each player and setup the boards
 	for(int i = 0; i < 2; i++)
@@ -88,21 +93,32 @@ int Game::Run()
 		Boards[i] = new Board(&ShipLists, BoardWidth, BoardHeight);
 	}
 
-	// Keep looping until we have a winner
+	// Keep tracking the winner and the number of turns per this game
 	int winner = -1;
-	while(true && winner == -1)
+	int Turn = 0; // A turn is defined by each player playing
+
+	// While the winner is unknown
+	while(winner == -1)
 	{
 		// Say which turn we are in
-		Printf(">> Turn %d:\n", Turn++);
+		if(!PrintEndGame)
+			Printf(">> Turn %d:\n", Turn++);
 
-		// Let both players play
+		// Let both players play unless we have a winner
 		for(int i = 0; i < 2 && winner == -1; i++)
 		{
+			// Print out player i's board
+			if(!PrintEndGame)
+			{
+				Printf(">> (%d)[%s]'s board:\n", i, Players[i]->GetName());
+				Boards[i]->Print();
+			}
+
 			// Player i shoots
 			int x, y;
 			Players[i]->Shoot(&x, &y);
 
-			// Retrieve result of the enemy's board (Internally applies needed rules)
+			// Retrieve state of the enemy's board
 			ShotState State = Boards[ (i + 1) % 2 ]->GetState(x, y);
 
 			// If we have nothing, return a miss
@@ -120,17 +136,19 @@ int Game::Run()
 			// Player i gets result
 			Players[i]->ShootResult(x, y, State);
 
-			// Print out player i's board
+			// If the opposite's board has no ships left, it's this player (i) that wins
+			if(Boards[(i + 1) % 2]->AllSunk())
+				winner = i;
+		}
+	}
+
+	// If we want to, lets show the final boards
+	if(PrintEndGame)
+	{
+		for(int i = 0; i < 2; i++)
+		{
 			Printf(">> (%d)[%s]'s board:\n", i, Players[i]->GetName());
 			Boards[i]->Print();
-		}
-
-		// If there is a winner, return the winner's id
-		for(int i = 0; i < 2 && winner == -1; i++)
-		{
-			// If a player board has no ships left, it's the opponent that wins
-			if(Boards[i]->ValidateWin())
-				winner = (i + 1) % 2;
 		}
 	}
 

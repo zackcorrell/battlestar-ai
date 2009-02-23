@@ -27,6 +27,9 @@ public:
 	// Constructor; takes two opponents and a game count.
 	Game(Player* PlayerA, Player* PlayerB, int BoardWidth, int BoardHeight, int Games = 1);
 
+	// Destructor
+	~Game();
+
 	// Run all games
 	void RunAll(int *Player0Score, int *Player1Score);
 
@@ -43,6 +46,7 @@ private:
 
 	// Board size
 	int BoardWidth, BoardHeight;
+
 };
 
 // End of inclusion guard

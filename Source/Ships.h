@@ -36,11 +36,12 @@ struct Ship
 
 // Shot / board element state
 enum ShotState {
+	// Before events:
 	StateEmpty,				// No shot state
 	StateShip,				// There is a ship, but still hidden, at this location
+	// After events:
 	StateMiss,				// There is just water in this location
 	StateHit,				// There is a ship, and it has been hit, at this location
-	StateSink				// There is a ship, and by hitting this location, you have sunk it
 };
 
 // End of inclusion guard

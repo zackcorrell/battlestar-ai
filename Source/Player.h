@@ -54,6 +54,16 @@ public:
 
 protected:
 
+	// Add a given queue to the placement board
+	// Assumes the given list is from low to high ship length
+	void AddShipsStat(queue<Ship> Ships);
+
+	// Print ship stat
+	void PrintStat();
+
+	// Board to keep placement history
+	int *PlacementBoard[5];
+
 	// Board size
 	int BoardWidth, BoardHeight;
 

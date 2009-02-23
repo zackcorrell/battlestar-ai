@@ -42,7 +42,9 @@ public:
 
 private:
 
+	// Board to prevent shooting at the same position
 	bool *Board;
+
 
 };
 

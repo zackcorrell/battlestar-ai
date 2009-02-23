@@ -68,19 +68,19 @@ void Board::SetState(int x, int y, ShotState State)
 	BoardData[y * BoardWidth + x] = State;
 }
 
-bool Board::ValidateWin()
+bool Board::AllSunk()
 {
 	// Does there exist any square that is a "Ship"
-	bool Valid = true;
-	for(int i = 0; i < BoardWidth * BoardHeight; i++)
+	bool AllSunk = true;
+	for(int i = 0; i < BoardWidth * BoardHeight && AllSunk; i++)
 	{
 		// There is still a ship piece on board
 		if(BoardData[i] == StateShip)
-			Valid = false;
+			AllSunk = false;
 	}
 
 	// Return valid
-	return Valid;
+	return AllSunk;
 }
 
 void Board::Print()
