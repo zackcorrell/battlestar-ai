@@ -18,9 +18,6 @@
 // Global silent boolean
 extern bool Silence;
 
-// Global silent flag for printing only endgame of board
-extern bool PrintEndGame;
-
 // Global logging boolean
 extern bool Logging;
 extern FILE* LoggingFile;

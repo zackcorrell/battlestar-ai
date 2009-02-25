@@ -15,28 +15,12 @@ DumbPlayer::DumbPlayer(int BoardWidth, int BoardHeight)
 {
 	// Allocate "hit" board (No need to init, that is done in Reset())
 	Board = new bool[BoardWidth * BoardHeight];
-
-	// Allocate placement board
-	for(int i = 0; i < 5; i++)
-	{
-		PlacementBoard[i] = new int[BoardWidth * BoardHeight];
-		for(int j = 0; j < BoardWidth * BoardHeight; j++)
-			PlacementBoard[i][j] = 0;
-	}
 }
 
 DumbPlayer::~DumbPlayer()
 {
-	// Print out some stat before removing this object
-	PrintStat();
-
 	// Release "hit" board
 	delete [] Board;
-
-	// Release placement board
-	for(int i = 0; i < 5; i++)
-		delete [] PlacementBoard[i];
-
 }
 
 void DumbPlayer::Reset()
@@ -74,7 +58,7 @@ void DumbPlayer::Setup(queue<Ship> *Ships)
 			i--;
 	}
 
-	// Add placement to placement history
+	// Add placement to placement history (For stats)
 	AddShipsStat(*Ships);
 }
 

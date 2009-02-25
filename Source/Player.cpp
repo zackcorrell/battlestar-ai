@@ -26,11 +26,28 @@ Player::Player(char* Name, int BoardWidth, int BoardHeight)
 	// Copy over width / height
 	this->BoardWidth = BoardWidth;
 	this->BoardHeight = BoardHeight;
+
+	// Allocate placement board
+	for(int i = 0; i < 5; i++)
+	{
+		PlacementBoard[i] = new int[BoardWidth * BoardHeight];
+		for(int j = 0; j < BoardWidth * BoardHeight; j++)
+			PlacementBoard[i][j] = 0;
+	}
 }
 
 Player::~Player()
 {
+	// Print out game stats (if not silent)
+	if(!Silence)
+		PrintStat();
+
+	// Release player name
 	delete[] PlayerName;
+
+	// Release placement board
+	for(int i = 0; i < 5; i++)
+		delete [] PlacementBoard[i];
 }	
 
 char* Player::GetName()
@@ -113,4 +130,3 @@ void Player::PrintStat()
 		Printf(">> Done\n");
 	}
 }
-

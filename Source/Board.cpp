@@ -47,7 +47,7 @@ ShotState Board::GetState(int x, int y)
 	// Validate position
 	if(x < 0 || x >= BoardWidth || y < 0 || y >= BoardHeight)
 	{
-		Printf("The given ship has invalid placement.\n");
+		Printf("The given target for GetState(...) is out of bounds.\n");
 		exit(-1);
 	}
 
@@ -60,7 +60,7 @@ void Board::SetState(int x, int y, ShotState State)
 	// Validate position
 	if(x < 0 || x >= BoardWidth || y < 0 || y >= BoardHeight)
 	{
-		Printf("The given ship has invalid placement.\n");
+		Printf("The given target for SetState(...) is out of bounds.\n");
 		exit(-1);
 	}
 
@@ -174,24 +174,16 @@ bool Board::ValidateShip(queue<Ship> *ShipList, Ship *NewShip, int Width, int He
 			{
 
 			// Grow ship towards north
-			case North:
-				y -= i;
-				break;
+			case North: y -= i; break;
 
 			// Grow ship towards north
-			case East:
-				x += i;
-				break;
+			case East: x += i; break;
 
 			// Grow ship towards north
-			case South:
-				y += i;
-				break;
+			case South: y += i; break;
 
 			// Grow ship towards north
-			case West:
-				x -= i;
-				break;
+			case West: x -= i; break;
 
 			default: break;
 			}

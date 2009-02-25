@@ -27,8 +27,29 @@ int Printf(const char * format,...)
 		i = vfprintf(LoggingFile, format, ap);
 
 	// If we are not in silence, print to stdio
-	if( !Silence )
+	if( !Logging && !Silence )
 		i = vprintf(format, ap);
+
+	return i;
+}
+
+int _Printf(const char * format,...)
+{
+	// Save the list of parameters
+	va_list ap;
+
+	// Start the processing
+	va_start(ap, format);
+
+	// Sucess
+	int i = 0;
+
+	// If we are logging, place to log file
+	if( Logging )
+		i = vfprintf(LoggingFile, format, ap);
+
+	// If we are not in silence, print to stdio
+	i = vprintf(format, ap);
 
 	return i;
 }

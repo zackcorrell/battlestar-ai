@@ -13,11 +13,11 @@
 
 #include "Util.h"
 #include "DumbPlayer.h"
+#include "ShooterPlayer.h"
 #include "Game.h"
 
 // Define globals from Main.h
 bool Silence;
-bool PrintEndGame;
 bool Logging;
 FILE* LoggingFile;
 
@@ -28,7 +28,6 @@ int main(int argc, char *argv[])
 
 	Silence = true;
 	Logging = true;
-	PrintEndGame = true;
 
 	/*** End of initialization of global variables ***/
 
@@ -53,11 +52,11 @@ int main(int argc, char *argv[])
 	/*** Start of main simulation ***/
 
 	// Build the board and print the data
-	DumbPlayer *Player1 = new DumbPlayer(10, 10);
+	ShooterPlayer *Player1 = new ShooterPlayer(10, 10);
 	DumbPlayer *Player2 = new DumbPlayer(10, 10);
 
-	// Setup a game (10x10 board, 10,000 rounds)
-	Game SampleGame(Player1, Player2, 10, 10, 10000);
+	// Setup a game (10x10 board, 1 rounds)
+	Game SampleGame((Player*)Player1, (Player*)Player2, 10, 10, 10);
 
 	// Start game
 	int p1, p2;

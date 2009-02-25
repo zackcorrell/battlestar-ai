@@ -59,12 +59,12 @@ void Game::RunAll(int *Player0Score, int *Player1Score)
 
 	// If tie,
 	if(winner == -1)
-		Printf(">> There has been a tie.\n");
+		_Printf(">> There has been a tie.\n");
 	else
-		Printf(">> Game winner, of %d rounds, is: (%d)[%s].\n", TotalGames, winner, Players[winner]->GetName());
+		_Printf(">> Game winner, of %d rounds, is: (%d)[%s].\n", TotalGames, winner, Players[winner]->GetName());
 
 	// Final scores
-	Printf(">> Final scores: (0)%d vs (1)%d.\n", Scores[0], Scores[1]);
+	_Printf(">> Final scores: (0)%d vs (1)%d.\n", Scores[0], Scores[1]);
 
 	// Post back scores
 	*Player0Score = Scores[0];
@@ -101,18 +101,14 @@ int Game::Run()
 	while(winner == -1)
 	{
 		// Say which turn we are in
-		if(!PrintEndGame)
-			Printf(">> Turn %d:\n", Turn++);
+		Printf(">> Turn %d:\n", Turn++);
 
 		// Let both players play unless we have a winner
 		for(int i = 0; i < 2 && winner == -1; i++)
 		{
 			// Print out player i's board
-			if(!PrintEndGame)
-			{
-				Printf(">> (%d)[%s]'s board:\n", i, Players[i]->GetName());
-				Boards[i]->Print();
-			}
+			Printf(">> (%d)[%s]'s board:\n", i, Players[i]->GetName());
+			Boards[i]->Print();
 
 			// Player i shoots
 			int x, y;
@@ -143,13 +139,10 @@ int Game::Run()
 	}
 
 	// If we want to, lets show the final boards
-	if(PrintEndGame)
+	for(int i = 0; i < 2; i++)
 	{
-		for(int i = 0; i < 2; i++)
-		{
-			Printf(">> (%d)[%s]'s board:\n", i, Players[i]->GetName());
-			Boards[i]->Print();
-		}
+		Printf(">> (%d)[%s]'s board:\n", i, Players[i]->GetName());
+		Boards[i]->Print();
 	}
 
 	// Release boards
