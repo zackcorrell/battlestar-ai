@@ -8,7 +8,10 @@ AI to the Game object.
 
 -- Build --
 
-To build, type:
+This application runs on both WIN32 and Unix/Unix-Like systems.
+This has been tested with GCC and VS2008.
+
+To build via the make file, type:
 
 $> make
 
@@ -19,6 +22,12 @@ $> make clean
 To run the application, type
 
 $> ./battlestar-ai
+
+To build via Visual Studion 2008:
+
+Create a new win32 C++ project, make sure the project is empty
+and is *not* using precompiled headers, and import the code. No
+special build flags are needed.
 
 -- Usage --
 

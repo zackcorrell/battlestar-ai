@@ -31,8 +31,5 @@ using namespace std;
 // If logging is on, print to log file, else if silence is on, don't print to standard io
 int Printf(const char *format, ...);
 
-// A forced printf
-int _Printf(const char *format, ...);
-
 // End of inclusion
 #endif

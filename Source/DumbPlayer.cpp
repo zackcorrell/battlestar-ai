@@ -80,4 +80,6 @@ void DumbPlayer::Shoot(int *x, int *y)
 void DumbPlayer::ShootResult(int x, int y, ShotState state)
 {
 	// Nothing to do...
+	x = y = 0;
+	state = StateMiss;
 }

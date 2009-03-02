@@ -83,4 +83,5 @@ void HumanPlayer::Shoot(int *x, int *y)
 void HumanPlayer::ShootResult(int x, int y, ShotState state)
 {
 	// Nothing to do...
+	printf("Result: (%d, %d):%d\n", x, y, state);
 }

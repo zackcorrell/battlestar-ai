@@ -21,13 +21,13 @@ bool Silence;
 bool Logging;
 FILE* LoggingFile;
 
-// Main application entry point
-int main(int argc, char *argv[])
+// Main application entry point (Arguments not needed)
+int main( /* int argc, char *argv[] */ )
 {
 	/*** Start of initialization of global variables ***/
 
-	Silence = true;
-	Logging = true;
+	Silence = false;
+	Logging = false;
 
 	/*** End of initialization of global variables ***/
 
@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
 	ShooterPlayer *Player1 = new ShooterPlayer(10, 10);
 	DumbPlayer *Player2 = new DumbPlayer(10, 10);
 
-	// Setup a game (10x10 board, 1 rounds)
+	// Setup a game (10x10 board, 10 rounds)
 	Game SampleGame((Player*)Player1, (Player*)Player2, 10, 10, 10);
 
 	// Start game

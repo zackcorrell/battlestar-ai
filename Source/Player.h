@@ -34,23 +34,23 @@ public:
 	// Constructor takes and saves a name as well as board size
 	Player(char* Name, int BoardWidth, int BoardHeight);
 
-	// Destruct or
+	// Destructor
 	~Player();
 
 	// Returns a pointer to the name
 	char* GetName();
 
 	// Need to implement: Reset for a new game
-	virtual void Reset() = NULL;
+	virtual void Reset() = 0;
 
 	// Need to implement: First called when a new game is created, returns a queue of ships and position pairs
-	virtual void Setup(queue<Ship> *Ships) = NULL;
+	virtual void Setup(queue<Ship> *Ships) = 0;
 
 	// Need to implement: Shoot a target an x and y position and shoot
-	virtual void Shoot(int *x, int *y) = NULL;
+	virtual void Shoot(int *x, int *y) = 0;
 
 	// Result of shot; The result of the shot is returned. Called right after a Shoot is called
-	virtual void ShootResult(int x, int y, ShotState state) = NULL;
+	virtual void ShootResult(int x, int y, ShotState state) = 0;
 
 protected:
 

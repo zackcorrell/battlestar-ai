@@ -44,27 +44,27 @@ void Game::RunAll(int *Player0Score, int *Player1Score)
 	for(int i = 0; i < GameCount; i++)
 	{
 		// Save score (This could be one line, but hey, I like clarity!)
-		int winner = Run();
-		Scores[winner]++;
+		int RoundWinner = Run();
+		Scores[RoundWinner]++;
 	}
 
 	// Print out final scores
-	int winner;
+	int GameWinner;
 	if(Scores[0] > Scores[1])
-		winner = 0;
+		GameWinner = 0;
 	else if(Scores[1] > Scores[0])
-		winner = 1;
+		GameWinner = 1;
 	else
-		winner = -1; // Tie
+		GameWinner = -1; // Tie
 
 	// If tie,
-	if(winner == -1)
-		_Printf(">> There has been a tie.\n");
+	if(GameWinner == -1)
+		Printf(">> There has been a tie.\n");
 	else
-		_Printf(">> Game winner, of %d rounds, is: (%d)[%s].\n", TotalGames, winner, Players[winner]->GetName());
+		Printf(">> Game winner, of %d rounds, is: (%d)[%s].\n", TotalGames, GameWinner, Players[GameWinner]->GetName());
 
 	// Final scores
-	_Printf(">> Final scores: (0)%d vs (1)%d.\n", Scores[0], Scores[1]);
+	Printf(">> Final scores: (0)%d vs (1)%d.\n", Scores[0], Scores[1]);
 
 	// Post back scores
 	*Player0Score = Scores[0];
