@@ -89,14 +89,15 @@ int Game::Run()
 	for(int i = 0; i < 2; i++)
 	{
 		// Create a ship queue
-		queue<Ship> ShipLists;
+		queue<Ship> ShipList;
 
 		// Call reset and then setup
 		Players[i]->Reset();
-		Players[i]->Setup(&ShipLists);
+		Players[i]->Setup(&ShipList);
 
 		// Setup the game board
-		Boards[i] = new Board(&ShipLists, BoardWidth, BoardHeight);
+		Boards[i] = new Board(BoardWidth, BoardHeight);
+		Boards[i]->AddShips(&ShipList);
 	}
 
 	// Keep tracking the winner and the number of turns per this game

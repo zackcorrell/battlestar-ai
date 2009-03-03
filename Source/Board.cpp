@@ -10,11 +10,11 @@
 
 #include "Board.h"
 
-Board::Board(queue<Ship> *Ships, int BoardWidth, int BoardHeight)
+Board::Board(int BoardWidth, int BoardHeight)
 {
 	// Allocate board space
 	BoardData = new ShotState[BoardWidth * BoardHeight];
-	if(Ships == NULL || BoardData == NULL)
+	if(BoardData == NULL)
 	{
 		Printf("The board count not be allocated.\n");
 		exit(-1);
@@ -27,6 +27,22 @@ Board::Board(queue<Ship> *Ships, int BoardWidth, int BoardHeight)
 	// Initialize the board
 	for(int i = 0; i < BoardWidth * BoardHeight; i++)
 		BoardData[i] = StateEmpty;
+}
+
+Board::~Board()
+{
+	// Release board
+	delete[] BoardData;
+}
+
+void Board::AddShips(queue<Ship> *Ships)
+{
+	// Validate given pointer
+	if(Ships == NULL)
+	{
+		Printf("The given ships list is null.\n");
+		exit(-1);
+	}
 
 	// Validate ship placement and place to board data
 	if(ValidateShip(Ships, NULL, BoardWidth, BoardHeight, BoardData) == false)
@@ -34,12 +50,6 @@ Board::Board(queue<Ship> *Ships, int BoardWidth, int BoardHeight)
 		Printf("The given ship has invalid placement.\n");
 		exit(-1);
 	}
-}
-
-Board::~Board()
-{
-	// Release board
-	delete[] BoardData;
 }
 
 ShotState Board::GetState(int x, int y)

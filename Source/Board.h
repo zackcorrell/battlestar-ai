@@ -24,10 +24,13 @@ class Board
 public:
 
 	// Constructor
-	Board(queue<Ship> *Ships, int BoardWidth, int BoardHeight);
+	Board(int BoardWidth, int BoardHeight);
 
 	// Destructor
 	~Board();
+
+	// Add ships
+	void AddShips(queue<Ship> *Ships);
 
 	// Get a board state
 	ShotState GetState(int x, int y);

@@ -15,6 +15,7 @@
 #include "DumbPlayer.h" // Randomization
 #include "SinkPlayer.h" // Randomization with sinking-intelligence
 #include "ShooterPlayer.h" // Intelligent shooting without sinking-intelligence
+#include "GAPlayer.h" // Genetic algorithm approach
 #include "Game.h"
 
 // Define globals from Main.h
