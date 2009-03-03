@@ -29,7 +29,10 @@ int main( /* int argc, char *argv[] */ )
 	/*** Start of initialization of global variables ***/
 
 	Silence = true;
-	Logging = false;
+	Logging = true;
+
+	const int BOARD_SIZE = 10; // Size of the board to play
+	const int GAME_COUNT = 10; // Number of games to play
 
 	/*** End of initialization of global variables ***/
 
@@ -54,11 +57,11 @@ int main( /* int argc, char *argv[] */ )
 	/*** Start of main simulation ***/
 
 	// Build the board and print the data
-	SinkPlayer *Player1 = new SinkPlayer(10, 10);
-	ShooterPlayer *Player2 = new ShooterPlayer(10, 10);
+	SinkPlayer *Player1 = new SinkPlayer(BOARD_SIZE, BOARD_SIZE);
+	ShooterPlayer *Player2 = new ShooterPlayer(BOARD_SIZE, BOARD_SIZE);
 
-	// Setup a game (10x10 board, 10,000 rounds)
-	Game SampleGame((Player*)Player1, (Player*)Player2, 10, 10, 10000);
+	// Setup a game (10x10 board, 1,000 rounds)
+	Game SampleGame((Player*)Player1, (Player*)Player2, BOARD_SIZE, BOARD_SIZE, GAME_COUNT);
 
 	// Start game
 	int p1, p2;

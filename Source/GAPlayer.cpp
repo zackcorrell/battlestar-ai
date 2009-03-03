@@ -26,11 +26,6 @@ void GAPlayer::Reset()
 	// Nothing to do...
 }
 
-void GAPlayer::Setup(queue<Ship> *Ships)
-{
-	// Nothing to do...
-}
-
 void GAPlayer::Shoot(int *x, int *y)
 {
 	// Nothing to do...

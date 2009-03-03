@@ -70,9 +70,6 @@ public:
 	void Reset();
 
 	// Required to implement
-	void Setup(queue<Ship> *Ships);
-
-	// Required to implement
 	void Shoot(int *x, int *y);
 
 	// Required to implement

@@ -29,16 +29,64 @@ enum Direction { North, East, South, West };
 // Define a ship structure
 struct Ship
 {
-	ShipType ship;			// The ship type
-	int x, y;				// Ship position
-	Direction direction;	// Ship direction
+	// Constructor (Defaults to invalid data, so make sure you pass some params)
+	Ship(ShipType type = Destroyer, int x = 0, int y = 0, Direction direction = North)
+	{
+		// Save ship type
+		Type = type;
+
+		// Initialize ship position
+		for(int i = 0; i < (int)Type; i++)
+		{
+			// North
+			if(direction == North)
+			{ this->x[i] = x; this->y[i] = y - i; }
+
+			// East
+			else if(direction == East)
+			{ this->x[i] = x + i; this->y[i] = y; }
+
+			// South
+			else if(direction == South)
+			{ this->x[i] = x; this->y[i] = y + i; }
+
+			// West
+			else if(direction == West)
+			{ this->x[i] = x - i; this->y[i] = y; }
+		}
+
+		// Default hit state to false
+		for(int i = 0; i < (int)Type; i++)
+			Hit[i] = false;
+	}
+
+	// Returns true if the ship has sunk
+	bool IsSunk()
+	{
+		// For each hit position, return false if any part isn't sunk yet
+		for(int i = 0; i < (int)Type; i++)
+		{
+			if(Hit[i] == false)
+				return false;
+		}
+
+		// All pieces sunk
+		return true;
+	}
+
+	// Internal public data
+	ShipType Type;			// The ship type
+	int x[5], y[5];			// Ship positions (occupancy grid of (x,y) over length Type)
+	bool Hit[5];			// If true, that position has been hit
 };
 
 // Shot / board element state
-enum ShotState {
+enum ShotState
+{
 	// Before events:
 	StateEmpty,				// No shot state
 	StateShip,				// There is a ship, but still hidden, at this location
+
 	// After events:
 	StateMiss,				// There is just water in this location
 	StateHit,				// There is a ship, and it has been hit, at this location

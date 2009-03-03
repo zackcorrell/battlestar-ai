@@ -7,7 +7,7 @@
  + Jeremy Bridon jbridon@psu.edu
  
  File: Player.h
- Desc: A pure virtual class that describes the basic functions
+ Desc: A base class that describes the basic functions
        needed to implement for a player (AI or user based). This
 	   file also includes all ship descriptions and board event
 	   enumerations. This class is called by the Game manager.
@@ -26,6 +26,7 @@
 // Includes
 #include "Util.h"
 #include "Ships.h"
+#include "Board.h"
 
 class Player
 {
@@ -41,22 +42,26 @@ public:
 	char* GetName();
 
 	// Need to implement: Reset for a new game
-	virtual void Reset() = 0;
+	virtual void Reset();
 
-	// Need to implement: First called when a new game is created, returns a queue of ships and position pairs
-	virtual void Setup(queue<Ship> *Ships) = 0;
+	// Need to implement: Given a valid Ship buffer of ShipCount size, fill in with valid ships
+	// Default behavior: Random
+	virtual void Setup(Ship *Ships, int ShipCount);
 
 	// Need to implement: Shoot a target an x and y position and shoot
-	virtual void Shoot(int *x, int *y) = 0;
+	virtual void Shoot(int *x, int *y);
 
 	// Result of shot; The result of the shot is returned. Called right after a Shoot is called
-	virtual void ShootResult(int x, int y, ShotState state) = 0;
+	virtual void ShootResult(int x, int y, ShotState state);
+
+	// Result of enemy's shot; It gives the result of when the enemy shoots at you
+	virtual void EnemyResult(int x, int y, ShotState state);
 
 protected:
 
 	// Add a given queue to the placement board
 	// Assumes the given list is from low to high ship length
-	void AddShipsStat(queue<Ship> Ships);
+	void AddShipsStat(Ship *Ships, int ShipCount);
 
 	// Print ship stat
 	void PrintStat();

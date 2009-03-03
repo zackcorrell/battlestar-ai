@@ -34,7 +34,7 @@ Game::Game(Player* PlayerA, Player* PlayerB, int BoardWidth, int BoardHeight, in
 
 Game::~Game()
 {
-	// Nothing to do...
+	// Nothing to release
 }
 
 void Game::RunAll(int *Player0Score, int *Player1Score)
@@ -89,15 +89,15 @@ int Game::Run()
 	for(int i = 0; i < 2; i++)
 	{
 		// Create a ship queue
-		queue<Ship> ShipList;
+		Ship ShipList[5];
 
-		// Call reset and then setup
+		// Call reset and then setup for 5 ships
 		Players[i]->Reset();
-		Players[i]->Setup(&ShipList);
+		Players[i]->Setup(ShipList, 5);
 
 		// Setup the game board
 		Boards[i] = new Board(BoardWidth, BoardHeight);
-		Boards[i]->AddShips(&ShipList);
+		Boards[i]->AddShips(ShipList, 5);
 	}
 
 	// Keep tracking the winner and the number of turns per this game
@@ -117,35 +117,53 @@ int Game::Run()
 			Printf(">> (%d)[%s]'s board:\n", i, Players[i]->GetName());
 			Boards[i]->Print();
 
-			// Player i shoots
-			int x, y;
-			Players[i]->Shoot(&x, &y);
-
-			// Retrieve state of the enemy's board
-			ShotState State = Boards[ (i + 1) % 2 ]->GetState(x, y);
-
-			// If we have nothing, return a miss
-			if(State == StateEmpty)
+			// Let the current player shoot the amount of times they have in ships
+			int ShipCount = 5 - Boards[i]->GetSunkCount();
+			for(int j = 0; j < ShipCount; j++)
 			{
-				Boards[ (i + 1) % 2 ]->SetState(x, y, StateMiss);
-				State = StateMiss;
-			}
-			else if(State == StateShip)
-			{
-				Boards[ (i + 1) % 2 ]->SetState(x, y, StateHit);
-				State = StateHit;
-			}
+				// Player i shoots the ammount of ships they have
+				int x, y;
+				Players[i]->Shoot(&x, &y);
 
-			// Player i gets result
-			Players[i]->ShootResult(x, y, State);
+				// Retrieve state of the enemy's board
+				ShotState State = Boards[ (i + 1) % 2 ]->GetState(x, y);
 
-			// If the opposite's board has no ships left, it's this player (i) that wins
-			if(Boards[(i + 1) % 2]->AllSunk())
-				winner = i;
+				// If we have nothing, return a miss
+				if(State == StateEmpty)
+				{
+					Boards[ (i + 1) % 2 ]->SetState(x, y, StateMiss);
+					State = StateMiss;
+				}
+				else if(State == StateShip)
+				{
+					Boards[ (i + 1) % 2 ]->SetState(x, y, StateHit);
+					State = StateHit;
+
+					// Tell the board we hit one of it's ships (So they can sink)
+					Boards[ (i + 1) % 2 ]->HitShip(x, y);
+				}
+
+				// Player i gets result
+				Players[i]->ShootResult(x, y, State);
+
+				// Player i + 1 also gets the result
+				Players[ (i + 1) % 2]->EnemyResult(x, y, State);
+
+				// If the opposite's board has no ships left, it's this player (i) that wins
+				if(Boards[(i + 1) % 2]->GetSunkCount() == 5)
+				{
+					// Post winner
+					winner = i;
+					break;
+				}
+			}
+			// End of shooting
 		}
+		// End two player's playing
 	}
 
-	// If we want to, lets show the final boards
+	// Lets print off the final boards
+	Printf(">> There has been a winner! Printing last boards...\n\n");
 	for(int i = 0; i < 2; i++)
 	{
 		Printf(">> (%d)[%s]'s board:\n", i, Players[i]->GetName());

@@ -27,7 +27,7 @@ Player::Player(char* Name, int BoardWidth, int BoardHeight)
 	this->BoardWidth = BoardWidth;
 	this->BoardHeight = BoardHeight;
 
-	// Allocate placement board
+	// Allocate placement board (For use with stat measurements)
 	for(int i = 0; i < 5; i++)
 	{
 		PlacementBoard[i] = new int[BoardWidth * BoardHeight];
@@ -55,56 +55,92 @@ char* Player::GetName()
 	return PlayerName;
 }
 
-void Player::AddShipsStat(queue<Ship> Ships)
+void Player::Reset()
 {
-	// Warning: This assumes the given queue goes from low to high lengths
-	int index = 0;
-	while(!Ships.empty())
-	{		
+	// Should be implemented by the child class...
+}
+
+void Player::Setup(Ship *Ships, int ShipCount)
+{
+	// Validate input
+	if(Ships == NULL)
+	{
+		Printf("Invalid Ships pointer given to Setup(...).\n");
+		exit(-1);
+	}
+
+	// Default behavior is randomization
+	for(int i = 1; i <= ShipCount; i++)
+	{
+		// Choose the appropriate type
+		int length = i;
+		if(i == 1)
+			length = 2;
+		else if(i == 2)
+			length = 3;
+
+		// Choose a random direction
+		Direction dir = (Direction)(rand() % 4);
+
+		// Choose a random starting position
+		int x = rand() % BoardWidth;
+		int y = rand() % BoardHeight;
+
+		// Create the ship and place into memory
+		Ship ship((ShipType)length, x, y, dir);
+		Ships[i - 1] = ship;
+
+		// Validate if this new ship is any good
+		if( Board::ValidateShips(Ships, i, BoardWidth, BoardHeight) == false)
+			i--;
+	}
+
+	// Add placement to placement history (For stats)
+	AddShipsStat(Ships, ShipCount);
+}
+
+void Player::Shoot(int *x, int *y)
+{
+	// Should be implemented by the child class...
+}
+
+void Player::ShootResult(int x, int y, ShotState state)
+{
+	// Should be implemented by the child class...
+}
+
+void Player::EnemyResult(int x, int y, ShotState state)
+{
+	// Should be implemented by the child class...
+}
+
+void Player::AddShipsStat(Ship *Ships, int ShipCount)
+{
+	// Check for valid ships list
+	if(Ships == NULL)
+	{
+		Printf("Invalid Ships pointer given in AddShipsStat(...).\n");
+		exit(-1);
+	}
+
+	// For each ship
+	for(int i = 0; i < ShipCount; i++)
+	{
 		// Get the current ship
-		Ship TempShip = Ships.front();
-		Ships.pop();
+		Ship TempShip = Ships[i];
 
 		// For the ship length
-		for(int i = 0; i < (int)TempShip.ship; i++)
+		for(int j = 0; j < (int)TempShip.Type; j++)
 		{
-			// Get base position
-			int x = TempShip.x, y = TempShip.y;
-
-			// Offset appropriately
-			switch(TempShip.direction)
-			{
-
-			// Grow ship towards north
-			case North:
-				y -= i;
-				break;
-
-			// Grow ship towards north
-			case East:
-				x += i;
-				break;
-
-			// Grow ship towards north
-			case South:
-				y += i;
-				break;
-
-			// Grow ship towards north
-			case West:
-				x -= i;
-				break;
-
-			default: break;
-			}
+			// Get position
+			int x = TempShip.x[j], y = TempShip.y[j];
 
 			// Grow stat
-			PlacementBoard[index][y * BoardWidth + x]++;
+			PlacementBoard[i][y * BoardWidth + x]++;
 		}
-
-		// Grow index
-		index++;
 	}
+
+	// All ships processed...
 }
 
 void Player::PrintStat()

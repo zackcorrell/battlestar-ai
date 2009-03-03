@@ -33,38 +33,6 @@ void ShooterPlayer::Reset()
 		Board[i] = false;
 }
 
-void ShooterPlayer::Setup(queue<Ship> *Ships)
-{
-	// Randomly choose ship positions
-	Ship TempShip;
-	for(int i = 1; i <= 5; i++)
-	{
-		// Choose the appropriate type
-		TempShip.ship = (ShipType)i;
-		if(i == 1)
-			TempShip.ship = (ShipType)2;
-		else if(i == 2)
-			TempShip.ship = (ShipType)3;
-
-		// Choose a random direction
-		TempShip.direction = (Direction)(rand() % 4);
-
-		// Choose a random position
-		TempShip.x = rand() % BoardWidth;
-		TempShip.y = rand() % BoardHeight;
-
-		// Validate if this new ship is any good
-		if( Board::ValidateShip(Ships, &TempShip, BoardWidth, BoardHeight) )
-			Ships->push(TempShip);
-		// Try again
-		else
-			i--;
-	}
-
-	// Add placement to placement history (For stats)
-	AddShipsStat(*Ships);
-}
-
 void ShooterPlayer::Shoot(int *x, int *y)
 {
 	// If we are attempting to target...

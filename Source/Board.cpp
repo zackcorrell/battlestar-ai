@@ -35,20 +35,42 @@ Board::~Board()
 	delete[] BoardData;
 }
 
-void Board::AddShips(queue<Ship> *Ships)
+void Board::AddShips(Ship *ShipsList, int ShipCount)
 {
-	// Validate given pointer
-	if(Ships == NULL)
+	// Validate ShipsList
+	if(ShipsList == NULL)
 	{
-		Printf("The given ships list is null.\n");
+		Printf("Invalid ShipsList pointer given in AddShips(...).\n");
 		exit(-1);
 	}
 
-	// Validate ship placement and place to board data
-	if(ValidateShip(Ships, NULL, BoardWidth, BoardHeight, BoardData) == false)
+	// Validate ship placement
+	if(ValidateShips(ShipsList, ShipCount, BoardWidth, BoardHeight) == false)
 	{
-		Printf("The given ship has invalid placement.\n");
+		Printf("Invalid ShipsList list.\n");
 		exit(-1);
+	}
+
+	// For each ship
+	for(int i = 0; i < ShipCount; i++)
+	{
+		// Get the current ship
+		Ship TempShip = ShipsList[i];
+
+		// Place ship into list
+		this->ShipsList[i] = TempShip;
+
+		// Place onto board
+		// For each ship's element
+		for(int j = 0; j < (int)ShipsList[i].Type; j++)
+		{
+			// Get position
+			int x = ShipsList[i].x[j];
+			int y = ShipsList[i].y[j];
+
+			// Place ship
+			BoardData[y * BoardWidth + x] = StateShip;
+		}
 	}
 }
 
@@ -78,19 +100,44 @@ void Board::SetState(int x, int y, ShotState State)
 	BoardData[y * BoardWidth + x] = State;
 }
 
-bool Board::AllSunk()
+void Board::HitShip(int x, int y)
 {
-	// Does there exist any square that is a "Ship"
-	bool AllSunk = true;
-	for(int i = 0; i < BoardWidth * BoardHeight && AllSunk; i++)
+	// For each ship
+	for(int i = 0; i < 5; i++) // 5 == ship count
 	{
-		// There is still a ship piece on board
-		if(BoardData[i] == StateShip)
-			AllSunk = false;
+		// For each ship's length
+		for(int j = 0; j < (int)ShipsList[i].Type; j++)
+		{
+			// Get position
+			int shipx = ShipsList[i].x[j];
+			int shipy = ShipsList[i].y[j];
+
+			// If the ship has been hit, set it's sink flag to true at that index
+			if(shipx == x && shipy == y)
+			{
+				ShipsList[i].Hit[j] = true;
+				return;
+			}
+		}
 	}
 
-	// Return valid
-	return AllSunk;
+	// Nothing found, just return
+}
+
+int Board::GetSunkCount()
+{
+	// Sunk count
+	int Sunk = 0;
+
+	// For each ship
+	for(int i = 0; i < 5; i++)
+	{
+		if(ShipsList[i].IsSunk())
+			Sunk++;
+	}
+
+	// Return sunk count
+	return Sunk;
 }
 
 void Board::Print()
@@ -101,6 +148,7 @@ void Board::Print()
 	// Print table
 	for(int y = 0; y < BoardHeight; y++)
 	{
+		// Print side line
 		Printf("[%c]", 'A' + y);
 		for(int x = 0; x < BoardWidth; x++)
 		{
@@ -118,101 +166,53 @@ void Board::Print()
 		}
 		Printf("\n");
 	}
-	
+
 	// print legent
 	Printf("Legend: ' ' is water; 'o' is a miss\n");
 	Printf("        'x' is a hit; '#' is a ship\n\n");
 }
 
-bool Board::ValidateShip(queue<Ship> *ShipList, Ship *NewShip, int Width, int Height, ShotState* GivenBuffer)
+bool Board::ValidateShips(Ship *ShipsList, int ShipCount, int Width, int Height)
 {
-	// Validate data
-	if(ShipList == NULL)
+	// Return invalid if the given pointer is null
+	if(ShipsList == NULL)
 		return false;
 
-	// Copy over the ships queue
-	queue<Ship> Ships = *ShipList;
+	// Allocate board size
+	ShotState *Board = new ShotState[Width * Height];
 
-	// Allocate a new board (only if needed)
-	ShotState* BoardData;
-	if(GivenBuffer == NULL)
-		BoardData = new ShotState[Width * Height];
-	else
-		BoardData = GivenBuffer;
-
-	// Initialize board
+	// Initialize the board
 	for(int i = 0; i < Width * Height; i++)
-		BoardData[i] = StateEmpty;
+		Board[i] = StateEmpty;
+
+	// The return data
+	bool IsValid = true;
 
 	// For each ship
-	bool stop = false;
-	while(!stop)
+	for(int i = 0; i < ShipCount && IsValid; i++)
 	{
-		// Target ship to write
-		Ship myShip;
+		// For each ship's length
+		for(int j = 0; j < (int)ShipsList[i].Type; j++)
+		{
+			// Get position
+			int x = ShipsList[i].x[j];
+			int y = ShipsList[i].y[j];
 
-		// Get ship data
-		if(!Ships.empty())
-		{
-			// Pop off queue
-			myShip = Ships.front();
-			Ships.pop();
-		}
-		else
-		{
-			// Now that all ships are placed, test this last ship
-			if(NewShip == NULL)
+			// If out of bounds or a ship already exists here...
+			if(x < 0 || x >= Width || y < 0 || y >= Height || Board[y * Width + x] == StateShip)
 			{
-				if(GivenBuffer == NULL)
-					delete [] BoardData;
-				return true; // Valid
+				IsValid = false;
+				break;
 			}
 
-			// Copy over given ship for last ship check
-			myShip = *NewShip;
-			stop = true;
-		}
-
-		// Place ship
-		for(int i = 0; i < (int)myShip.ship; i++)
-		{
-			// Get base position
-			int x = myShip.x, y = myShip.y;
-
-			// Offset appropriately
-			switch(myShip.direction)
-			{
-
-			// Grow ship towards north
-			case North: y -= i; break;
-
-			// Grow ship towards north
-			case East: x += i; break;
-
-			// Grow ship towards north
-			case South: y += i; break;
-
-			// Grow ship towards north
-			case West: x -= i; break;
-
-			default: break;
-			}
-
-			// Out of bounds or on an existance ship (collision)
-			if(x < 0 || x >= Width || y < 0 || y >= Height || BoardData[y * Width + x] == StateShip)
-			{
-				if(GivenBuffer == NULL)
-					delete [] BoardData;
-				return false;
-			}
-
-			// Place ship piece
-			BoardData[y * Width + x] = StateShip;
+			// Place ship
+			Board[y * Width + x] = StateShip;
 		}
 	}
 
-	// Release the board and return validation
-	if(GivenBuffer == NULL)
-		delete [] BoardData;
-	return true;
+	// Release board
+	delete [] Board;
+
+	// Return validation data
+	return IsValid;
 }

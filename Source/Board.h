@@ -29,8 +29,8 @@ public:
 	// Destructor
 	~Board();
 
-	// Add ships
-	void AddShips(queue<Ship> *Ships);
+	// Add ships onto board
+	void AddShips(Ship *ShipsList, int ShipCount);
 
 	// Get a board state
 	ShotState GetState(int x, int y);
@@ -38,23 +38,28 @@ public:
 	// Set a board state
 	void SetState(int x, int y, ShotState State);
 
-	// Returns true if this board has all ships sunk
-	bool AllSunk();
+	// Hit a ship (Will update the ShipsList)
+	void HitShip(int x, int y);
+
+	// Returns the number of sunk ships
+	int GetSunkCount();
 
 	// Print data to screen
 	void Print();
 
 	// Helpfull static function to determine ship-ship collisions
-	// Returns true if the ships list and newship (if given) don't collidare and are in the board size
-	// Send NULL to *NewShip if you just want to validate just the queue set
-	// If the given buffer is not null, this function will write to that memory
-	static bool ValidateShip(queue<Ship> *ShipList, Ship* NewShip, int Width, int Height, ShotState* GivenBuffer = NULL);
+	// Params: *TempShip is an array of ShipCount size, width and height are the board's width and height
+	// Returns true if the given ship is valid within this board
+	static bool ValidateShips(Ship *ShipsList, int ShipCount, int Width, int Height);
 
 private:
 
 	// Board data
 	int BoardWidth, BoardHeight;
 	ShotState *BoardData;
+
+	// Ship list
+	Ship ShipsList[5];
 };
 
 // End of inclusion guard

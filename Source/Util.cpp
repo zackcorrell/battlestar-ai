@@ -27,7 +27,7 @@ int Printf(const char * format,...)
 		i = vfprintf(LoggingFile, format, ap);
 
 	// If we are not in silence, print to stdio
-	if( !Logging && !Silence )
+	if( !Silence )
 		i = vprintf(format, ap);
 
 	return i;
