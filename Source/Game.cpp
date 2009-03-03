@@ -57,6 +57,10 @@ void Game::RunAll(int *Player0Score, int *Player1Score)
 	else
 		GameWinner = -1; // Tie
 
+	// Turn out output just for the bellow info
+	bool SavedState = Silence;
+	Silence = false;
+
 	// If tie,
 	if(GameWinner == -1)
 		Printf(">> There has been a tie.\n");
@@ -65,6 +69,8 @@ void Game::RunAll(int *Player0Score, int *Player1Score)
 
 	// Final scores
 	Printf(">> Final scores: (0)%d vs (1)%d.\n", Scores[0], Scores[1]);
+
+	Silence = SavedState;
 
 	// Post back scores
 	*Player0Score = Scores[0];

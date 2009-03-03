@@ -12,8 +12,9 @@
 ***************************************************************/
 
 #include "Util.h"
-#include "DumbPlayer.h"
-#include "ShooterPlayer.h"
+#include "DumbPlayer.h" // Randomization
+#include "SinkPlayer.h" // Randomization with sinking-intelligence
+#include "ShooterPlayer.h" // Intelligent shooting without sinking-intelligence
 #include "Game.h"
 
 // Define globals from Main.h
@@ -26,7 +27,7 @@ int main( /* int argc, char *argv[] */ )
 {
 	/*** Start of initialization of global variables ***/
 
-	Silence = false;
+	Silence = true;
 	Logging = false;
 
 	/*** End of initialization of global variables ***/
@@ -52,11 +53,11 @@ int main( /* int argc, char *argv[] */ )
 	/*** Start of main simulation ***/
 
 	// Build the board and print the data
-	ShooterPlayer *Player1 = new ShooterPlayer(10, 10);
-	DumbPlayer *Player2 = new DumbPlayer(10, 10);
+	SinkPlayer *Player1 = new SinkPlayer(10, 10);
+	ShooterPlayer *Player2 = new ShooterPlayer(10, 10);
 
-	// Setup a game (10x10 board, 10 rounds)
-	Game SampleGame((Player*)Player1, (Player*)Player2, 10, 10, 10);
+	// Setup a game (10x10 board, 10,000 rounds)
+	Game SampleGame((Player*)Player1, (Player*)Player2, 10, 10, 10000);
 
 	// Start game
 	int p1, p2;
