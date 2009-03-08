@@ -11,7 +11,7 @@
 #include "DumbPlayer.h"
 
 DumbPlayer::DumbPlayer(int BoardWidth, int BoardHeight)
-	: Player("DumbPlayer AI", BoardWidth, BoardHeight)
+	: Player("DumbPlayer Hand-Coded", BoardWidth, BoardHeight)
 {
 	// Allocate "hit" board (No need to init, that is done in Reset())
 	Board = new bool[BoardWidth * BoardHeight];

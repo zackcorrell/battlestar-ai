@@ -20,9 +20,6 @@
 #include "Player.h"
 #include "Board.h"
 
-// An enum of the current targeting 
-enum TargetingState { Searching, Targeting, Locked };
-
 class SinkPlayer : public Player
 {
 public:

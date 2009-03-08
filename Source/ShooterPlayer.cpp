@@ -11,7 +11,7 @@
 #include "ShooterPlayer.h"
 
 ShooterPlayer::ShooterPlayer(int BoardWidth, int BoardHeight)
-	: Player("ShooterPlayer AI", BoardWidth, BoardHeight)
+	: Player("ShooterPlayer Hand-Coded", BoardWidth, BoardHeight)
 {
 	// Allocate "hit" board (No need to init, that is done in Reset())
 	Board = new bool[BoardWidth * BoardHeight];

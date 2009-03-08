@@ -15,6 +15,7 @@
 #include "DumbPlayer.h" // Randomization
 #include "SinkPlayer.h" // Randomization with sinking-intelligence
 #include "ShooterPlayer.h" // Intelligent shooting without sinking-intelligence
+#include "JerPlayer.h" // Intelligent shooting with intelligent sinking
 #include "GAPlayer.h" // Genetic algorithm approach
 #include "Game.h"
 
@@ -32,7 +33,7 @@ int main( /* int argc, char *argv[] */ )
 	Logging = true;
 
 	const int BOARD_SIZE = 10; // Size of the board to play
-	const int GAME_COUNT = 10; // Number of games to play
+	const int GAME_COUNT = 1000; // Number of games to play
 
 	/*** End of initialization of global variables ***/
 
@@ -52,13 +53,14 @@ int main( /* int argc, char *argv[] */ )
 	}
 
 	// Seed the rand
-	srand((int)clock());
+	//srand((int)clock());
 
 	/*** Start of main simulation ***/
 
 	// Build the board and print the data
-	SinkPlayer *Player1 = new SinkPlayer(BOARD_SIZE, BOARD_SIZE);
-	ShooterPlayer *Player2 = new ShooterPlayer(BOARD_SIZE, BOARD_SIZE);
+	JerPlayer *Player1 = new JerPlayer(BOARD_SIZE, BOARD_SIZE);
+	SinkPlayer *Player2 = new SinkPlayer(BOARD_SIZE, BOARD_SIZE);
+	//ShooterPlayer *Player2 = new ShooterPlayer(BOARD_SIZE, BOARD_SIZE);
 
 	// Setup a game (10x10 board, 1,000 rounds)
 	Game SampleGame((Player*)Player1, (Player*)Player2, BOARD_SIZE, BOARD_SIZE, GAME_COUNT);
