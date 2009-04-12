@@ -15,8 +15,9 @@
 #ifndef __MAIN_H_
 #define __MAIN_H_
 
-// Global silent boolean
+// Global silent/verbose boolean
 extern bool Silence;
+extern bool Verbose;
 
 // Global logging boolean
 extern bool Logging;

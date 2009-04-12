@@ -114,8 +114,12 @@ int Game::Run()
 		for(int i = 0; i < 2 && winner == -1; i++)
 		{
 			// Print out player i's board
-			Printf(">> (%d)[%s]'s board:\n", i, Players[i]->GetName());
-			Boards[i]->Print();
+			// Only print if verbose
+			if(Verbose)
+			{
+				Printf(">> (%d)[%s]'s board:\n", i, Players[i]->GetName());
+				Boards[i]->Print();
+			}
 
 			// Let the current player shoot the amount of times they have in ships
 			int ShipCount = 5 - Boards[i]->GetSunkCount();
@@ -174,11 +178,11 @@ int Game::Run()
 	for(int i = 0; i < 2; i++)
 		delete Boards[i];
 
-	// Grow game count
-	TotalGames++;
-
 	// Print winner
 	Printf(">> Round %d winner is: (%d)[%s]\n", TotalGames, winner, Players[winner]->GetName());
+
+	// Grow game count
+	TotalGames++;
 
 	// Warning prevention
 	return winner;

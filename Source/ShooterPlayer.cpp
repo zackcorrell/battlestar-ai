@@ -71,7 +71,7 @@ void ShooterPlayer::Shoot(int *x, int *y)
 				break;
 		}
 	}
-	// If we are searching for the direction...
+	// HIT ALL FOUR DIRS
 	else if(HitState == 1)
 	{
 		// Default x and y

@@ -39,8 +39,7 @@ Player::Player(char* Name, int BoardWidth, int BoardHeight)
 Player::~Player()
 {
 	// Print out game stats (if not silent)
-	if(!Silence)
-		PrintStat();
+	PrintStat();
 
 	// Release player name
 	delete[] PlayerName;

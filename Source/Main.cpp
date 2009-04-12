@@ -11,16 +11,37 @@
  
 ***************************************************************/
 
-#include "Util.h"
-#include "DumbPlayer.h" // Randomization
-#include "SinkPlayer.h" // Randomization with sinking-intelligence
-#include "ShooterPlayer.h" // Intelligent shooting without sinking-intelligence
-#include "JerPlayer.h" // Intelligent shooting with intelligent sinking
-#include "GAPlayer.h" // Genetic algorithm approach
+/***   CONFIGURATION   ***/ /**********************************/
+
+// Player types (Name of class from header included below)
+#define PLAYER_1_TYPE SmartRandom
+#define PLAYER_2_TYPE SmartRandom
+
+// Board type
+#define BOARD_SIZE 10
+#define GAME_COUNT 1000
+
+// Global flags
+#define IS_SILENCE_ON false
+#define IS_VERBOSE_ON false
+#define IS_LOGGING_ON true
+
+/*** END CONFIGURATION ***/ /**********************************/
+
+// Game and util includes
 #include "Game.h"
+#include "Util.h"
+
+// Player includes
+#include "DumbPlayer.h"  // Randomization
+#include "SinkPlayer.h"  // Randomization with sinking-intelligence
+#include "ShooterPlayer.h"  // Intelligent shooting without sinking-intelligence
+#include "SmartRandom.h"  // Intelligent shooting with sinking-intelligence
+#include "GAPlayer.h"  // Genetic algorithm approach
 
 // Define globals from Main.h
 bool Silence;
+bool Verbose;
 bool Logging;
 FILE* LoggingFile;
 
@@ -29,11 +50,8 @@ int main( /* int argc, char *argv[] */ )
 {
 	/*** Start of initialization of global variables ***/
 
-	Silence = true;
-	Logging = true;
-
-	const int BOARD_SIZE = 10; // Size of the board to play
-	const int GAME_COUNT = 1000; // Number of games to play
+	Silence = IS_SILENCE_ON;
+	Logging = IS_LOGGING_ON;
 
 	/*** End of initialization of global variables ***/
 
@@ -53,16 +71,15 @@ int main( /* int argc, char *argv[] */ )
 	}
 
 	// Seed the rand
-	//srand((int)clock());
+	srand((int)clock());
 
 	/*** Start of main simulation ***/
 
 	// Build the board and print the data
-	JerPlayer *Player1 = new JerPlayer(BOARD_SIZE, BOARD_SIZE);
-	SinkPlayer *Player2 = new SinkPlayer(BOARD_SIZE, BOARD_SIZE);
-	//ShooterPlayer *Player2 = new ShooterPlayer(BOARD_SIZE, BOARD_SIZE);
+	PLAYER_1_TYPE *Player1 = new PLAYER_1_TYPE(BOARD_SIZE, BOARD_SIZE);
+	PLAYER_2_TYPE *Player2 = new PLAYER_2_TYPE(BOARD_SIZE, BOARD_SIZE);
 
-	// Setup a game (10x10 board, 1,000 rounds)
+	// Setup a game
 	Game SampleGame((Player*)Player1, (Player*)Player2, BOARD_SIZE, BOARD_SIZE, GAME_COUNT);
 
 	// Start game
