@@ -22,7 +22,7 @@
 #define GAME_COUNT 1000
 
 // Global flags
-#define IS_SILENCE_ON false
+#define IS_SILENCE_ON true
 #define IS_VERBOSE_ON false
 #define IS_LOGGING_ON true
 
