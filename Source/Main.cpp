@@ -14,8 +14,8 @@
 /***   CONFIGURATION   ***/ /**********************************/
 
 // Player types (Name of class from header included below)
-#define PLAYER_1_TYPE SmartRandom
-#define PLAYER_2_TYPE SmartRandom
+#define PLAYER_1_TYPE GAPlayer
+#define PLAYER_2_TYPE GAPlayer
 
 // Board type
 #define BOARD_SIZE 10

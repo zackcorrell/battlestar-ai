@@ -29,7 +29,12 @@
 #include "Board.h"
 
 // An enum of the current targeting 
-enum TargetingState { Searching, Targeting, Locked };
+enum TargetingState
+{
+	Searching = 0,
+	Targeting,
+	Locked
+};
 
 // Base player class
 class Player

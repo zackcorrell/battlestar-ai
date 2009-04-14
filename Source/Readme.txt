@@ -9,7 +9,7 @@ AI to the Game object.
 -- Build --
 
 This application runs on both WIN32 and Unix/Unix-Like systems.
-This has been tested with GCC and VS2008.
+This has been tested with GCC on a 32bit machine and VS2008.
 
 To build via the make file, type:
 
