@@ -18,6 +18,7 @@
 // Includes
 #include "Util.h"
 #include "Player.h" // Included for "TargetingState"
+#include "Board.h" // For simulations
 
 // Maximum gene pool size
 #define GA_MAX_POOL 20
@@ -78,14 +79,17 @@ public:
 	// Move all nop-instructions down
 	void Clean();
 
-	// Fitness value of this gene
-	int FitnessValue();
-
 	// Run the current gene; Returns on interrupt and posts/recieves data via params
 	GARunState Run(int *DataX, int *DataY, bool Hit);
 
+	// Fitness value of the given gene
+	static int FitnessValue(GASinkingGene *Gene);
+
 	// Breed two genes together and produce and post into the given gene data
 	static void Breed(GASinkingGene *GeneA, GASinkingGene *GeneB);
+
+	// Run through a given game, returning the number of shots
+	static int Simulate(GASinkingGene *Gene, int Width, int Height, Ship *ShipsList, int ShipCount);
 
 private:
 
