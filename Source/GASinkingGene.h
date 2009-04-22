@@ -32,8 +32,11 @@
 // The amount of enemy boards to save
 #define GA_BOARD_SAVE_COUNT 10
 
+// The amount of simulations to cary out in a fitness function for the GA sinking gene
+#define GA_SIMULATION_COUNT 10
+
 // The amount of instructions we run before we consider this a "lame" gene
-#define GA_FAILURE_COUNT 100
+#define GA_FAILURE_COUNT 1000
 
 // Gene state (For state machine design)
 typedef TargetingState GAState;
@@ -41,22 +44,22 @@ typedef TargetingState GAState;
 // Gene instruction enumeration
 enum GAInstruction
 {
-	Target = 0,	// Place a valid shot into TargetPos
-	Shoot,		// Shoot at said position
-	MoveFwd,	// Move forward in the current direction
-	RandDir,	// Random direction
-	VertDir,	// Shoot at a vertical direction
-	HorzDir,	// Shoot at a horizontal direction
-	SavePos,	// Save a position
-	LoadPos,	// Load a position
-	SetTrue,	// Set tempflag to true
-	SetFalse,	// Set tempflag to false
-	IfHit,		// If targethit to true
-	IfMiss,		// If targethit to false
-	IfTrue,		// If temphit to true
-	IfFalse,	// If temphit to false
-	Jump,		// Jumps to the next state
-	Nop,		// No operation
+	Target = 0,	// 0  Place a valid shot into TargetPos
+	Shoot,		// 1  Shoot at said position
+	MoveFwd,	// 2  Move forward in the current direction
+	RandDir,	// 3  Random direction
+	VertDir,	// 4  Shoot at a vertical direction
+	HorzDir,	// 5  Shoot at a horizontal direction
+	SavePos,	// 6  Save a position
+	LoadPos,	// 7  Load a position
+	SetTrue,	// 8  Set tempflag to true
+	SetFalse,	// 9  Set tempflag to false
+	IfHit,		// 10 If targethit to true
+	IfMiss,		// 11 If targethit to false
+	IfTrue,		// 12 If temphit to true
+	IfFalse,	// 13 If temphit to false
+	Jump,		// 14 Jumps to the next state
+	Nop,		// 16 No operation
 };
 
 // GA Run state; A method of handeling internal intterupts to wait for external data to be recieved..

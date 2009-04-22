@@ -61,6 +61,15 @@ void Player::Reset()
 
 void Player::Setup(Ship *Ships, int ShipCount)
 {
+	// Setup function passes onto the public static setup function that's pretty generic
+	SetupStatic(Ships, ShipCount, BoardWidth, BoardHeight);
+
+	// Add placement to placement history (For stats)
+	AddShipsStat(Ships, ShipCount);
+}
+
+void Player::SetupStatic(Ship *Ships, int ShipCount, int BoardWidth, int BoardHeight)
+{
 	// Validate input
 	if(Ships == NULL)
 	{
@@ -93,9 +102,6 @@ void Player::Setup(Ship *Ships, int ShipCount)
 		if( Board::ValidateShips(Ships, i, BoardWidth, BoardHeight) == false)
 			i--;
 	}
-
-	// Add placement to placement history (For stats)
-	AddShipsStat(Ships, ShipCount);
 }
 
 void Player::Shoot(int *x, int *y)

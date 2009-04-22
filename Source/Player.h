@@ -57,6 +57,9 @@ public:
 	// Default behavior: Random
 	virtual void Setup(Ship *Ships, int ShipCount);
 
+	// Nice little static global
+	static void SetupStatic(Ship *Ships, int ShipCount, int BoardWidth, int BoardHeight);
+
 	// Need to implement: Shoot a target an x and y position and shoot
 	virtual void Shoot(int *x, int *y);
 
