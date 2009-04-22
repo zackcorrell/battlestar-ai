@@ -14,7 +14,7 @@
 /***   CONFIGURATION   ***/ /**********************************/
 
 // Player types (Name of class from header included below)
-#define PLAYER_1_TYPE GAPlayer
+#define PLAYER_1_TYPE DumbPlayer
 #define PLAYER_2_TYPE GAPlayer
 
 // Board type
@@ -71,7 +71,7 @@ int main( /* int argc, char *argv[] */ )
 	}
 
 	// Seed the rand
-	srand((int)clock());
+	srand((unsigned int)clock());
 
 	/*** Start of main simulation ***/
 

@@ -19,10 +19,13 @@
 
 // Includes
 #include <stdio.h>
+#include <iostream>
 #include <cstdlib>
 #include <cstdarg>
 #include <queue>
 #include <time.h>
+#include <fstream>
+#include <iomanip>
 
 #include "Main.h"
 
@@ -31,6 +34,9 @@ using namespace std;
 // Overload the print function to print appropriately
 // If logging is on, print to log file, else if silence is on, don't print to standard io
 int Printf(const char *format, ...);
+
+// Choose a random double from [0, to m]
+double GetRand(double m);
 
 // End of inclusion
 #endif

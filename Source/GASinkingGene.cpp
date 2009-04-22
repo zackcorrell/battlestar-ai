@@ -91,7 +91,7 @@ int GASinkingGene::FitnessValue(GASinkingGene *Gene)
 	// Save the number of total instructions ran through
 	for(int i = 0; i < 10; i++)
 	{
-		
+		// JEREMY WAS HERE
 	}
 
 	// Return fitness value
@@ -518,7 +518,7 @@ int GASinkingGene::Simulate(GASinkingGene *Gene, int Width, int Height, Ship *Sh
 		else if(State == SetShot)
 		{
 			// If out of bounds, just say the shot failed
-			if(x < 0 || x >= Width || y < 0 or y >= Height)
+			if(x < 0 || x >= Width || y < 0 || y >= Height)
 				ShotSuccessful = false;
 
 			// Apply the given (x,y) shots

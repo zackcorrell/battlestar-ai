@@ -11,7 +11,7 @@
 // Include
 #include "Util.h"
 
-int Printf(const char * format,...)
+int Printf(const char * format, ...)
 {
 	// Save the list of parameters
 	va_list ap;
@@ -33,3 +33,7 @@ int Printf(const char * format,...)
 	return i;
 }
 
+double GetRand(double m)
+{
+	return double( ( rand() / double(RAND_MAX) ) * m);
+}

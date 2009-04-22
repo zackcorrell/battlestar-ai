@@ -18,6 +18,7 @@
 
 #include "Player.h"
 #include "GASinkingGene.h"
+#include "GAPlacement.h"
 
 // Player class
 class GAPlayer : public Player
@@ -31,6 +32,9 @@ public:
 
 	// Required to implement
 	void Reset();
+
+	// Intelligent ship placement
+	void Setup(Ship *Ships, int ShipCount);
 
 	// Required to implement
 	void Shoot(int *x, int *y);
