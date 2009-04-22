@@ -54,7 +54,7 @@ void GASinkingGene::Clean()
 	}
 }
 
-int GASinkingGene::FitnessValue(GASinkingGene *Gene)
+int GASinkingGene::FitnessValue(GASinkingGene Gene)
 {
 	// Run through a number of sample games...
 	int Total = 0;
@@ -62,102 +62,118 @@ int GASinkingGene::FitnessValue(GASinkingGene *Gene)
 	// Run through gene and make sure we don't have a failure under some random cases
 	for(int i = 0; i < GA_SIMULATION_COUNT; i++)
 	{
-		// Reset internal registers and program counter
-		Gene->ResetRegisters();
+		// Run a simulation
+		int SimValue = Simulate( &Gene );
 
-		// Create a board game with random ship placement
-		Board SampleBoard(10, 10);
-
-		// Place ships
-		Ship Ships[5];
-		Player::SetupStatic(Ships, 5, 10, 10);
-		SampleBoard.AddShips(Ships, 5); // NEED TO SAVE A HISTORY OF ENEMY BOARD PLACEMENT
-
-		// x and y positions for shooting at or returning a shot at position
-		int tempx = 0, tempy = 0;
-		bool HasHit = false;
-
-		// Play a game, but only itterate through 1000 times
-		for(int test = 0; test <= GA_FAILURE_COUNT; test++)
-		{
-			// If we are at the last itteration, lets just give up :(
-			if(test == GA_FAILURE_COUNT)
-				return INT_MAX;
-
-			// Random test run; if we have an internal faulure just quit
-			GARunState State = Gene->Run(&tempx, &tempy, HasHit);
-
-			// If the run state failed
-			if( State == GeneFailure )
-				return INT_MAX;
-
-			// Else, if we are requesting a shot to be placed, just give a random spot
-			else if( State == GetShot )
-			{
-				// Non-repeating value
-				while(true)
-				{
-					tempx = rand() % 10;
-					tempy = rand() % 10;
-					if(tempx < 0)
-						tempx *= -1;
-					if(tempy < 0)
-						tempy *= -1;
-
-					// If we have not yet shot this position, shoot it
-					if(SampleBoard.GetState(tempx, tempy) == StateEmpty || SampleBoard.GetState(tempx, tempy) == StateShip)
-						break;
-				}
-			}
-
-			// Else, we are going to actually shoot
-			else if( State == SetShot )
-			{
-				// Grow the amount of shots taken
-				Total++;
-
-				// Wrap out x and y points
-				tempx %= 10;
-				tempy %= 10;
-				if(tempx < 0)
-					tempx *= -1;
-				if(tempy < 0)
-					tempy *= -1;
-
-				// Place shot
-				ShotState BoardState = SampleBoard.GetState(tempx, tempy);
-
-				// If we have nothing, return a miss
-				if(BoardState == StateEmpty)
-				{
-					SampleBoard.SetState(tempx, tempy, StateMiss);
-					HasHit = false;
-				}
-				else if(BoardState == StateShip)
-				{
-					SampleBoard.SetState(tempx, tempy, StateHit);
-					HasHit = true;
-					SampleBoard.HitShip(tempx, tempy);
-				}
-
-				// If end game, break out and say we are done!
-				if(SampleBoard.GetSunkCount() == 5)
-					break;
-			}
-		} // End of for loop
+		// If sim value is int_max, thus must be bad, so just return the bad value
+		if( SimValue == INT_MAX )
+			return INT_MAX;
+		// Else, sim whent well, lets take the shot count
+		else
+			Total += SimValue;
 	}
 
 	// Return fitness value
 	return Total;
 }
 
+int GASinkingGene::Simulate(GASinkingGene *Gene)
+{
+	// Reset internal registers and program counter
+	Gene->ResetRegisters();
+
+	// Create a board game with random ship placement
+	Board SampleBoard(10, 10);
+
+	// Place ships randomly, SHOULD LOAD FROM HISTORY OF OPPONENT
+	Ship Ships[5];
+	Player::SetupStatic(Ships, 5, 10, 10);
+	SampleBoard.AddShips(Ships, 5);
+
+	// Simulation variables
+	int Total = 0;
+	int tempx = 0, tempy = 0;
+	bool HasHit = false;
+
+	// Keep playing until all 5 ships are sunk OR we went over the simulation count
+	for(int sim = 0; sim <= GA_SIMULATION_COUNT; sim++)
+	{
+		// If sim count hit the counter bounds, break out for the error return
+		if( sim == GA_SIMULATION_COUNT )
+			return INT_MAX;
+
+		// Check if we sunk all ships
+		if( SampleBoard.GetSunkCount() >= 5 )
+			return Total;
+
+		// Run through the program until an event
+		GARunState State = Gene->Run(&tempx, &tempy, HasHit);
+
+		// If state failed
+		if( State == GeneFailure )
+			return INT_MAX;
+
+		// Ask for a shot, place it into the next run call
+		else if( State == GetShot )
+		{
+			// Non-repeating value
+			while(true)
+			{
+				tempx = rand() % 10;
+				tempy = rand() % 10;
+				if(tempx < 0)
+					tempx *= -1;
+				if(tempy < 0)
+					tempy *= -1;
+
+				// If we have not yet shot this position, shoot it
+				if(SampleBoard.GetState(tempx, tempy) == StateEmpty || SampleBoard.GetState(tempx, tempy) == StateShip)
+					break;
+			}
+		}
+
+		// Place a shot onto the board
+		else if( State == SetShot )
+		{
+			// We take another shot
+			Total++;
+
+			// Wrap out x and y points and check for negatives
+			tempx %= 10;
+			tempy %= 10;
+			if(tempx < 0)
+				tempx *= -1;
+			if(tempy < 0)
+				tempy *= -1;
+
+			// Place shot
+			ShotState BoardState = SampleBoard.GetState(tempx, tempy);
+
+			// If we have nothing, return a miss
+			if(BoardState == StateEmpty)
+			{
+				SampleBoard.SetState(tempx, tempy, StateMiss);
+				HasHit = false;
+			}
+			else if(BoardState == StateShip)
+			{
+				SampleBoard.SetState(tempx, tempy, StateHit);
+				HasHit = true;
+				SampleBoard.HitShip(tempx, tempy);
+			}
+		}
+
+		// End of while loop
+	}
+
+	// Return error
+	return INT_MAX;
+}
+
 GARunState GASinkingGene::Run(int *DataX, int *DataY, bool Hit)
 {
 	// If we do get a correct hit
-	if(Hit)
-		TargetHit = true;
-	else
-		TargetHit = false;
+	TargetHit = Hit;
 
 	// Keep looping only up to GA_FAILURE_COUNT
 	for(int counter = 0; counter <= GA_FAILURE_COUNT; counter++)
@@ -201,7 +217,8 @@ GARunState GASinkingGene::Run(int *DataX, int *DataY, bool Hit)
 			*DataX = TargetPos[0];
 			*DataY = TargetPos[1];
 
-			// Grow counter and say we've placed a shot
+			// Grow counter (so we don't run through the same code)
+			// and say we've placed a shot
 			GrowCounter();
 			return SetShot;
 		break;
@@ -249,6 +266,7 @@ GARunState GASinkingGene::Run(int *DataX, int *DataY, bool Hit)
 
 			// Post direction
 			TargetDir = (Direction)dir;
+			DirUsed[dir] = true; // We are now using this direction
 		break;
 
 		// Choose a vertical direction, as best as possible
@@ -293,6 +311,7 @@ GARunState GASinkingGene::Run(int *DataX, int *DataY, bool Hit)
 
 			// Post direction
 			TargetDir = (Direction)dir;
+			DirUsed[dir] = true; // We are now using this direction
 		break;
 
 		// Choose a horizontal direction, as best as possible
@@ -337,6 +356,7 @@ GARunState GASinkingGene::Run(int *DataX, int *DataY, bool Hit)
 
 			// Post direction
 			TargetDir = (Direction)dir;
+			DirUsed[dir] = true; // We are now using this direction
 		break;
 
 		// Save position
@@ -464,7 +484,7 @@ GARunState GASinkingGene::Run(int *DataX, int *DataY, bool Hit)
 		GrowCounter();
 	}
 
-	// Return error
+	// Return error since we went over our max instruction count run
 	return GeneFailure;
 }
 
@@ -518,95 +538,6 @@ void GASinkingGene::Breed(GASinkingGene *GeneA, GASinkingGene *GeneB)
 	// Clean out the given genes..
 	GeneA->Clean();
 	GeneB->Clean();
-}
-
-int GASinkingGene::Simulate(GASinkingGene *Gene, int Width, int Height, Ship *ShipsList, int ShipCount)
-{
-	// Create a new board
-	Board SampleBoard(Width, Height);
-
-	// Place ships
-	SampleBoard.AddShips(ShipsList, ShipCount);
-
-	// Simulation variables
-	int Total = 0;
-	int x, y;
-	int IndexX = 0, IndexY = 0;
-	bool ShotSuccessful = false;
-
-	// Keep playing until the board is complete
-	while(SampleBoard.GetSunkCount() == ShipCount)
-	{
-		// Run through the program until an event
-		GARunState State = Gene->Run(&x, &y, false);
-
-		// Ask for a shot, place it into the next run call
-		if(State == GetShot)
-		{
-			// We take another shot
-			Total++;
-
-			// Place shot into x and y
-			x = IndexX;
-			y = IndexY;
-
-			// Only place in an unshot zone
-			while(true)
-			{
-				// Grow for next round
-				IndexX++;
-				if(IndexX >= Width)
-				{
-					IndexX = 0;
-					IndexY++;
-				}
-
-				// If y is out of bounds, then we went too far and this gene is bad
-				if(IndexY >= Height)
-					return INT_MAX;
-
-				// If it's valid, break
-				if(SampleBoard.GetState(x, y) == StateEmpty)
-					break;
-			}
-		}
-		// Place a shot onto the board
-		else if(State == SetShot)
-		{
-			// If out of bounds, just say the shot failed
-			if(x < 0 || x >= Width || y < 0 || y >= Height)
-				ShotSuccessful = false;
-
-			// Apply the given (x,y) shots
-			else
-			{
-				// Retrieve state of the enemy's board
-				ShotState State = SampleBoard.GetState(x, y);
-
-				// If we have nothing, return a miss
-				if(State == StateEmpty)
-				{
-					// Set state to missed
-					SampleBoard.SetState(x, y, StateMiss);
-					ShotSuccessful = false;
-				}
-				// If we hit a ship
-				else if(State == StateShip)
-				{
-					// Set state to shot as well as 
-					SampleBoard.SetState(x, y, StateHit);
-					SampleBoard.HitShip(x, y);
-					ShotSuccessful = true;
-				}
-			}
-		}
-		// Gene failure
-		else
-			return INT_MAX;
-	}
-
-	// Return total counts
-	return Total;
 }
 
 void GASinkingGene::GrowCounter()

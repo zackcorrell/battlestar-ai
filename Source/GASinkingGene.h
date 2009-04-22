@@ -33,10 +33,10 @@
 #define GA_BOARD_SAVE_COUNT 10
 
 // The amount of simulations to cary out in a fitness function for the GA sinking gene
-#define GA_SIMULATION_COUNT 10
+#define GA_SIMULATION_COUNT 100
 
 // The amount of instructions we run before we consider this a "lame" gene
-#define GA_FAILURE_COUNT 1000
+#define GA_FAILURE_COUNT 100
 
 // Gene state (For state machine design)
 typedef TargetingState GAState;
@@ -85,14 +85,14 @@ public:
 	// Run the current gene; Returns on interrupt and posts/recieves data via params
 	GARunState Run(int *DataX, int *DataY, bool Hit);
 
-	// Fitness value of the given gene
-	static int FitnessValue(GASinkingGene *Gene);
+	// Fitness value of the given gene (Takes a copy so the given isn't affected)
+	static int FitnessValue(GASinkingGene Gene);
+
+	// Run through a given game, returning the number of shots made (Does affect the given gene)
+	static int Simulate(GASinkingGene *Gene);
 
 	// Breed two genes together and produce and post into the given gene data
 	static void Breed(GASinkingGene *GeneA, GASinkingGene *GeneB);
-
-	// Run through a given game, returning the number of shots
-	static int Simulate(GASinkingGene *Gene, int Width, int Height, Ship *ShipsList, int ShipCount);
 
 private:
 

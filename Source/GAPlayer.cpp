@@ -24,7 +24,7 @@ GAPlayer::GAPlayer(int BoardWidth, int BoardHeight)
 				temp.Instructions[i][j] = (GAInstruction)(rand() % GA_TOTAL_INSTRUCTIONS);
 		}
 		temp.Clean();
-		if(GASinkingGene::FitnessValue(&temp) == 0)
+		if(GASinkingGene::FitnessValue(temp) == 0)
 			counter++;
 
 		printf("%d\t%d\n", j, counter);
