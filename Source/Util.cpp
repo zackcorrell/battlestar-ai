@@ -37,3 +37,9 @@ double GetRand(double m)
 {
 	return double( ( rand() / double(RAND_MAX) ) * m);
 }
+
+static inline double randFloat()
+{
+	return ((double)rand() / RAND_MAX);
+}
+

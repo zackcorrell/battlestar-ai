@@ -31,12 +31,17 @@
 
 using namespace std;
 
+#define PI (3.141592654)
+
 // Overload the print function to print appropriately
 // If logging is on, print to log file, else if silence is on, don't print to standard io
 int Printf(const char *format, ...);
 
 // Choose a random double from [0, to m]
 double GetRand(double m);
+
+// Returns a random double in [0, 1]
+static inline double randFloat();
 
 // End of inclusion
 #endif

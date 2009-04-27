@@ -3,6 +3,8 @@
 
 #include "gene.h"
 
+#define WAVECOUNT 10
+
 class ShootGenePool
 {
 	Gene pool[100];
