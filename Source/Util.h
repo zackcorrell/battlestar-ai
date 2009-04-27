@@ -42,7 +42,10 @@ int Printf(const char *format, ...);
 double GetRand(double m);
 
 // Returns a random double in [0, 1]
-static inline double randFloat();
+static inline double randFloat()
+{
+	return ((double)rand() / RAND_MAX);
+}
 
 // End of inclusion
 #endif

@@ -18,7 +18,7 @@
 
 class GAShoot
 {
-	shootGenePool genePool;
+	ShootGenePool genePool;
 
 public:
 

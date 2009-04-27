@@ -49,14 +49,6 @@ Gene ShootGenePool::best()
 	return pool[best];
 }
 
-void save(char* filename)
-{
-	FILE* file = fopen(filename);
-	for(int i = 0; i < 100; i++)
-		;
-	fclose(file);
-}
-
 Gene* ShootGenePool::getTopTen()
 {
 	Gene ten[10];
@@ -90,7 +82,7 @@ void ShootGenePool::sort()
 
 void ShootGenePool::save(char* filename)
 {
-	FILE* file = fopen(filename);
+	FILE* file = fopen(filename, "w");
 
 	for(int i = 0; i < 100; fprintf(file, "%s",  pool[i++].saveString()));
 
@@ -99,7 +91,7 @@ void ShootGenePool::save(char* filename)
 
 void ShootGenePool::load(char* filename)
 {
-	FILE* file = fopen(filename);
+	FILE* file = fopen(filename, "r");
 
 	char buf[128];
 	int waveCount = 0;
@@ -123,15 +115,6 @@ void ShootGenePool::load(char* filename)
 				tempWaves[waveCount++] = Harmonic(alpha, mu, beta, omega);
 			}
 		}
-	}
-}
-
-			
-
-
-
-
-
 	}
 
 	fclose(file);

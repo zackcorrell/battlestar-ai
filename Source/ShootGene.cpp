@@ -108,11 +108,11 @@ Gene Gene::cross(Gene* father, Gene* mother, bool mutate)
 
 char* Gene::saveString()
 {
-	char* string = "";
+	char string[1024];
 	for(int i = 0; i < WAVECOUNT; i++)
 	{
-		char vals;
-		sprintf(vals, "%f %d %f %d\n", waves[i].alpha, waves[i].mu, waves[i].beta, waves[i].omega)
+		char vals[16];
+		sprintf(vals, "%f %d %f %d\n", waves[i].alpha, waves[i].mu, waves[i].beta, waves[i].omega);
 		strcat(string, vals);
 	}
 	strcat(string, "\n");

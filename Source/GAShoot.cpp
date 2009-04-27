@@ -22,7 +22,7 @@ void GAShoot::runGenerations()
 {
 	genePool.advance();
 }
-void GAShoot::runGenerations(int n);
+void GAShoot::runGenerations(int n)
 {
 	for(int i = 0; i < n; i++)
 		genePool.advance();
