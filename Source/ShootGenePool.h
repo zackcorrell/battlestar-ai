@@ -1,3 +1,16 @@
+/***************************************************************
+ 
+ Battlestar-AI Battleship AI
+ Pennsylvania State University - CMPSC 442
+ 
+ This source file is developed and maintained by:
+ + Zach Gotsch <zkg5001@psu.edu>
+ 
+ File: ShootGenePool.h
+ Desc: Implements the Shooting GA.
+ 
+***************************************************************/
+
 #ifndef SHOOT_GENE_POOL_H
 #define SHOOT_GENE_POOL_H
 

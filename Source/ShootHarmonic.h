@@ -1,3 +1,16 @@
+/***************************************************************
+ 
+ Battlestar-AI Battleship AI
+ Pennsylvania State University - CMPSC 442
+ 
+ This source file is developed and maintained by:
+ + Zach Gotsch <zkg5001@psu.edu>
+ 
+ File: ShootHarmonic.h
+ Desc: Harmonic class (sin + cos) used in ShootGene.
+ 
+***************************************************************/
+
 #ifndef HARMONIC_H
 #define HARMONIC_H
 

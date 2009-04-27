@@ -1,3 +1,13 @@
+/***************************************************************
+ 
+ Battlestar-AI Battleship AI
+ Pennsylvania State University - CMPSC 442
+ 
+ This source file is developed and maintained by:
+ + Zach Gotsch <zkg5001@psu.edu>
+ 
+***************************************************************/
+
 #include "ShootGene.h"
 
 double* Gene::getDist()
