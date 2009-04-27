@@ -4,7 +4,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <cmath>
-#include "globals.h"
+#include "Util.h"
 
 bool DFT(int direction, int m, double* x1, double* y1);
 int* selectTop(double* arr);

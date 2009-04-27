@@ -4,7 +4,7 @@
 #include <cstdlib>
 #include <limits.h>
 #include <cmath>
-#include "globals.h"
+#include "Util.h"
 
 #define STEP (100 / (2.0 * PI))
 

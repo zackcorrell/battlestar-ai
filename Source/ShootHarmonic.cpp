@@ -1,4 +1,4 @@
-#include "harmonic.h"
+#include "ShootHarmonic.h"
 
 double* Harmonic::getDist()
 {

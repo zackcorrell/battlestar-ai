@@ -1,9 +1,7 @@
 #ifndef SHOOT_GENE_POOL_H
 #define SHOOT_GENE_POOL_H
 
-#include "gene.h"
-
-#define WAVECOUNT 10
+#include "ShootGene.h"
 
 class ShootGenePool
 {

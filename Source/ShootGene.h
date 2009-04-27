@@ -3,9 +3,9 @@
 
 #include <cstdio>
 #include <cstring>
-#include "globals.h"
-#include "harmonic.h"
-#include "fourier.h"
+#include "Util.h"
+#include "ShootHarmonic.h"
+#include "ShootFourier.h"
 
 #define MAX_OF_SCALED_SIN_PLUS_COS 1//0.235586 //computed earlier
 #define MUTATION_RATE 0.5

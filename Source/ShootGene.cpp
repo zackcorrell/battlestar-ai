@@ -1,4 +1,4 @@
-#include "gene.h"
+#include "ShootGene.h"
 
 double* Gene::getDist()
 {

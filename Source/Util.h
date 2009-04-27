@@ -32,6 +32,7 @@
 using namespace std;
 
 #define PI (3.141592654)
+#define WAVECOUNT 10
 
 // Overload the print function to print appropriately
 // If logging is on, print to log file, else if silence is on, don't print to standard io

@@ -1,4 +1,4 @@
-#include "fourier.h"
+#include "ShootFourier.h"
 
 bool DFT(int direction, int m, double* x1, double* y1)
 {
