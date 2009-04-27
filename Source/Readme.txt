@@ -29,6 +29,13 @@ Create a new win32 C++ project, make sure the project is empty
 and is *not* using precompiled headers, and import the code. No
 special build flags are needed.
 
+-- Pre-Trained Data --
+
+Pre-trained data, for each GA component, uses several data files to save
+enemy-placement data over time. *.dat1 is used for placement. *.dat2 is
+used for shooting. *.dat3 is used for sinking. All default data is named as
+"Default.*"
+
 -- Usage --
 
 This is a simulation without any real-time interaction. Program

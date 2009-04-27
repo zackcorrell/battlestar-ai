@@ -27,13 +27,13 @@
 #define GA_MAX_INSTRUCTIONS 20
 
 // Total number of instructions
-#define GA_TOTAL_INSTRUCTIONS 16
+#define GA_TOTAL_INSTRUCTIONS 17
 
 // The amount of enemy boards to save
 #define GA_BOARD_SAVE_COUNT 10
 
 // The amount of simulations to cary out in a fitness function for the GA sinking gene
-#define GA_SIMULATION_COUNT 100
+#define GA_SIMULATION_COUNT 10000
 
 // The amount of instructions we run before we consider this a "lame" gene
 #define GA_FAILURE_COUNT 100
@@ -50,16 +50,39 @@ enum GAInstruction
 	RandDir,	// 3  Random direction
 	VertDir,	// 4  Shoot at a vertical direction
 	HorzDir,	// 5  Shoot at a horizontal direction
-	SavePos,	// 6  Save a position
-	LoadPos,	// 7  Load a position
-	SetTrue,	// 8  Set tempflag to true
-	SetFalse,	// 9  Set tempflag to false
-	IfHit,		// 10 If targethit to true
-	IfMiss,		// 11 If targethit to false
-	IfTrue,		// 12 If temphit to true
-	IfFalse,	// 13 If temphit to false
-	Jump,		// 14 Jumps to the next state
+	OppDir,		// 6  Flip direction
+	SavePos,	// 7  Save a position
+	LoadPos,	// 8  Load a position
+	SetTrue,	// 9  Set tempflag to true
+	SetFalse,	// 10  Set tempflag to false
+	IfHit,		// 11 If targethit to true
+	IfMiss,		// 12 If targethit to false
+	IfTrue,		// 13 If temphit to true
+	IfFalse,	// 14 If temphit to false
+	Jump,		// 15 Jumps to the next state
 	Nop,		// 16 No operation
+};
+
+// String list that's nice to use for outputting messages more clear
+static char GAInstructionStr[GA_TOTAL_INSTRUCTIONS][32] =
+{
+	"Target",
+	"Shoot",
+	"MoveFwd",
+	"RandDir",
+	"VertDir",
+	"HorzDir",
+	"OppDir",
+	"SavePos",
+	"LoadPos",
+	"SetTrue",
+	"SetFalse",
+	"IfHit",
+	"IfMiss",
+	"IfTrue",
+	"IfFalse",
+	"Jump",
+	"Nop",
 };
 
 // GA Run state; A method of handeling internal intterupts to wait for external data to be recieved..
@@ -68,6 +91,15 @@ enum GARunState
 	GetShot,	// Ask for a shot; Takes from x and y params on next call
 	SetShot,	// Place a shot; Posts x and y via params, for use now
 	GeneFailure,// Internal error; Gene is lame
+	Nothing,	// Do nothing
+};
+
+static char GARunStateStr[4][32] =
+{
+	"GetShot",
+	"SetShot",
+	"GeneFailure",
+	"Nothing",
 };
 
 // Gene register machine with instructions
@@ -79,22 +111,40 @@ public:
 	// Constructor
 	GASinkingGene();
 
+	// Destructor, write back out to memory
+	~GASinkingGene();
+
+	// Load from memory
+	void Load(char *EnemyName);
+
+	// Save this gene into memory
+	void Save(char *EnemyName);
+
 	// Move all nop-instructions down
 	void Clean();
 
 	// Run the current gene; Returns on interrupt and posts/recieves data via params
 	GARunState Run(int *DataX, int *DataY, bool Hit);
 
+	// Run through a single instruction
+	GARunState Step(GAInstruction op, int *DataX, int *DataY, bool Hit);
+
 	// Fitness value of the given gene (Takes a copy so the given isn't affected)
 	static int FitnessValue(GASinkingGene Gene);
-
-	// Run through a given game, returning the number of shots made (Does affect the given gene)
-	static int Simulate(GASinkingGene *Gene);
 
 	// Breed two genes together and produce and post into the given gene data
 	static void Breed(GASinkingGene *GeneA, GASinkingGene *GeneB);
 
+	// Reset registers
+	void ResetRegisters();
+
 private:
+
+	// Run through a given game, returning the number of shots made (Does affect the given gene)
+	static int Simulate(GASinkingGene *Gene);
+
+	// Grow the counter correctly
+	void GrowCounter();
 
 	// Registers
 	int TargetPos[2];		// Target position (x, y)
@@ -107,14 +157,6 @@ private:
 	int ProgramCounter;		// The index of the current instruction
 	GAState State;			// Current state of the program
 	bool DirUsed[4];		// Directions already used..
-
-	// Grow the counter correctly
-	void GrowCounter();
-
-	// Reset registers
-	void ResetRegisters();
-
-public:
 
 	// Program instructions
 	GAInstruction Instructions[3][GA_MAX_INSTRUCTIONS]; // For all three states

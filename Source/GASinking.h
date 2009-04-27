@@ -22,7 +22,7 @@
 #include "GASinkingGene.h"
 
 // Maximum gene pool size
-#define GA_MAX_POOL 20
+#define GA_MAX_POOL 20 // Multiple of 2
 
 // Sinking management
 class GASinking
@@ -30,7 +30,7 @@ class GASinking
 public:
 
 	// Build up gene pool
-	GASinking(int BoardWidth, int BoardHeight, char *OpponentName = NULL);
+	GASinking(int BoardWidth, int BoardHeight, char *OpponentName);
 
 	// Release all data and save best gene to drive
 	~GASinking();
@@ -42,6 +42,15 @@ public:
 	void Update();
 
 private:
+
+	// Gene pool
+	GASinkingGene GenePool[GA_MAX_POOL];
+
+	// Board size
+	int BoardWidth, BoardHeight;
+
+	// Enemy name
+	char OpponentName[128];
 
 };
 
