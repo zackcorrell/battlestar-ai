@@ -193,6 +193,7 @@ void GAPlacement::Setup(Ship *Ships, int ShipCount)
 			x,				// West
 		};
 		*/
+		///*
 		int Distance[4] =
 		{
 			int(GetShotDensity(x, y-0) + GetShotDensity(x, y-1) + GetShotDensity(x, y-2)),	// North
@@ -200,6 +201,7 @@ void GAPlacement::Setup(Ship *Ships, int ShipCount)
 			int(GetShotDensity(x, y+0) + GetShotDensity(x, y+1) + GetShotDensity(x, y+2)),	// South
 			int(GetShotDensity(x-0, y) + GetShotDensity(x-1, y) + GetShotDensity(x-2, y)),	// West
 		};
+		//*/
 
 		// Set the directions
 		Direction Dir[4];
