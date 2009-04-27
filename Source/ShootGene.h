@@ -58,6 +58,8 @@ public:
 	char* toString();
 
 	static Gene cross(Gene* father, Gene* mother, bool mutate);
+
+	char* saveString();
 }; 
 
 #endif

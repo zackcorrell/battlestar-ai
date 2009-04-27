@@ -8,7 +8,7 @@
  
 ***************************************************************/
 
-#include "GAshoot.h"
+#include "ShootGenePool.h"
 #include <assert.h>
 
 void ShootGenePool::advance()
@@ -49,6 +49,14 @@ Gene ShootGenePool::best()
 	return pool[best];
 }
 
+void save(char* filename)
+{
+	FILE* file = fopen(filename);
+	for(int i = 0; i < 100; i++)
+		;
+	fclose(file);
+}
+
 Gene* ShootGenePool::getTopTen()
 {
 	Gene ten[10];
@@ -78,4 +86,53 @@ void ShootGenePool::sort()
 		pool[i] = pool[best];
 		pool[best] = temp;
 	}
+}
+
+void ShootGenePool::save(char* filename)
+{
+	FILE* file = fopen(filename);
+
+	for(int i = 0; i < 100; fprintf(file, "%s",  pool[i++].saveString()));
+
+	fclose(file);
+}
+
+void ShootGenePool::load(char* filename)
+{
+	FILE* file = fopen(filename);
+
+	char buf[128];
+	int waveCount = 0;
+	int currentGene = 0;
+	Harmonic tempWaves[WAVECOUNT];
+
+	while(!feof(file))
+	{		
+		fgets(buf, 128, file);
+		if(strcmp(buf, "\n") == 0)
+		{
+			pool[currentGene++] = Gene(tempWaves);
+			waveCount = 0;
+		}
+		else
+		{
+			if(waveCount < WAVECOUNT)
+			{
+				int alpha, beta, mu, omega;
+				sscanf(buf, "%f %d %f %d", &alpha, &mu, &beta, &omega);
+				tempWaves[waveCount++] = Harmonic(alpha, mu, beta, omega);
+			}
+		}
+	}
+}
+
+			
+
+
+
+
+
+	}
+
+	fclose(file);
 }

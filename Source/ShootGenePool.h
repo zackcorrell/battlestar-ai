@@ -15,6 +15,7 @@
 #define SHOOT_GENE_POOL_H
 
 #include "ShootGene.h"
+#include <cstdio>
 
 class ShootGenePool
 {
@@ -38,6 +39,8 @@ public:
 
 	void advance();
 	Gene best();
+	void save(char* filename);
+	void load(char* filename);
 
 private:
 	Gene* getTopTen();

@@ -105,3 +105,16 @@ Gene Gene::cross(Gene* father, Gene* mother, bool mutate)
 
 	return Gene((father->magnitude + mother->magnitude) / 2, waves);
 }
+
+char* Gene::saveString()
+{
+	char* string = "";
+	for(int i = 0; i < WAVECOUNT; i++)
+	{
+		char vals;
+		sprintf(vals, "%f %d %f %d\n", waves[i].alpha, waves[i].mu, waves[i].beta, waves[i].omega)
+		strcat(string, vals);
+	}
+	strcat(string, "\n");
+	return string;
+}

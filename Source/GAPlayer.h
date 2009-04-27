@@ -19,6 +19,7 @@
 #include "Player.h"
 #include "GASinkingGene.h"
 #include "GAPlacement.h"
+#include "GAShoot.h"
 
 // Player class
 class GAPlayer : public Player
