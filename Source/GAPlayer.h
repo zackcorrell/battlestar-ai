@@ -26,7 +26,7 @@ class GAPlayer : public Player
 public:
 
 	// Required to implement
-	GAPlayer(int BoardWidth, int BoardHeight);
+	GAPlayer(char *EnemyName, int BoardWidth, int BoardHeight);
 
 	~GAPlayer();
 
@@ -42,7 +42,28 @@ public:
 	// Required to implement
 	void ShootResult(int x, int y, ShotState state);
 
+	// Required to implement
+	void EnemyResult(int x, int y, ShotState state);
+
 private:
+
+	// Ship placement
+	GAPlacement *Placement;
+
+	// Shooting logic
+	GAShoot *Shoot;
+
+	// Sinking logic
+	GASinking *Sinking;
+
+	// Shot placement (x, y)
+	int TargetX, TargetY;
+
+	// True if successful shot
+	bool TargetHit;
+
+	// Board for previous shots
+	bool *ShotBoard;
 
 };
 
