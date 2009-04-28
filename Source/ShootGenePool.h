@@ -16,7 +16,7 @@
 
 #include "ShootGene.h"
 #include <cstdio>
-#include "Board2.h" //todo:remove
+#include "board2.h" //todo:remove
 
 #define INCREMENT 10;
 
