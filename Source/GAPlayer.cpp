@@ -18,23 +18,22 @@ GAPlayer::GAPlayer(char *EnemyName, int BoardWidth, int BoardHeight)
 	for(int i = 0; i < BoardWidth * BoardHeight; i++)
 		ShotBoard[i] = false;
 
-	// Instance the three components
+	// Instance the placement
 	Placement = new GAPlacement(EnemyName, BoardWidth, BoardHeight);
 
-	// Save enemy name
+	// Instance shooting GA
 	Shooting = new GAShoot(EnemyName);
 
-	// Sinking logic
+	// Instance sinking GA
 	Sinking = new GASinking(BoardWidth, BoardHeight, EnemyName);
-	Sinking->Update(); // Let us create our gene pool
 
 	// Default shot states
 	TargetX = TargetY = 0;
 	TargetHit = false;
+	PostBack = false;
 
 	// Load up a first shot
-	Shooting->
-	
+	Shooting->getTarget(&TargetX, &TargetY);
 }
 
 GAPlayer::~GAPlayer()
@@ -42,6 +41,9 @@ GAPlayer::~GAPlayer()
 	// Delete (To force out some writes)
 	delete Placement;
 	delete Shooting;
+
+	// Update to test out and save out new genes
+	Sinking->Update();
 	delete Sinking;
 }
 
@@ -58,20 +60,36 @@ void GAPlayer::Setup(Ship *Ships, int ShipCount)
 
 void GAPlayer::Shoot(int *x, int *y)
 {
-	/*
 	// Keep looping until we would like to place a shot
 	while(true)
 	{
 		// Run through the program until an event
-		GARunState State = Gene->Run(&TargetX, &tempy, HasHit);
+		GARunState State = Sinking->Run(&TargetX, &TargetY, TargetHit);
+
+		// If something freaks out..
+		if( State == GeneFailure )
+		{
+			// Reset internals and use this standard gene
+			delete Sinking;
+			Sinking = new GASinking(10, 10, "Default");
+		}
 
 		// Ask for a shot, place it into the next run call
-		if( State == GetShot )
+		else if( State == GetShot )
 		{
 			// Non-repeating value
 			while(true)
 			{
 				// Get a valid position
+				Shooting->getTarget(&TargetX, &TargetY);
+
+				// Safety check
+				TargetX %= 10;
+				TargetY %= 10;
+
+				// If we have yet to shoot here, break
+				if( ShotBoard[ TargetY * 10 + TargetX ] == false )
+					break;
 			}
 		}
 
@@ -82,87 +100,46 @@ void GAPlayer::Shoot(int *x, int *y)
 			TargetX %= 10;
 			TargetY %= 10;
 
-			// Place shot
-			ShotState BoardState = SampleBoard.GetState(TargetX, TargetY);
-
-			// If we have nothing, return a miss
-			if(BoardState == StateShip)
+			// If we have yet to post data
+			if(!PostBack)
 			{
-				SampleBoard.SetState(tempx, tempy, StateHit);
-				SampleBoard.HitShip(tempx, tempy);
-				HasHit = true;
-
-				// We take another shot
-				//ShotCount++;
+				// Place shot (by returning from this function)
+				PostBack = true;
+				break;
 			}
-			else if(BoardState == StateMiss)
-			{
-				// Already shot here, and nothing
-				HasHit = false;
-			}
-			else if(BoardState == StateHit)
-			{
-				// If we have already hit a ship here, lets walk through
-				// to the next valid position (if any exists)
-
-				// Save direction
-				Direction dir = Gene->TargetDir;
-				int x = Gene->TargetPos[0];
-				int y = Gene->TargetPos[1];
-
-				// Keep moving in that direction until we read a non-shot zone
-				while(x >= 0 && y >= 0 && x < 10 && y < 10)
-				{
-					// If this area is non-shot or a ship, then break
-					if(SampleBoard.GetState(x, y) == StateEmpty || SampleBoard.GetState(x, y) == StateShip)
-						break;
-
-					// Move
-					if(dir == North)
-						y--;
-					else if(dir == East)
-						x++;
-					else if(dir == South)
-						y++;
-					else
-						x--;
-				}
-
-				// If the position is still valid, actually shoot it
-				if(x >= 0 && y >= 0 && x < 10 && y < 10)
-				{
-					// Post back to gene
-					Gene->TargetPos[0] = x;
-					Gene->TargetPos[1] = y;
-
-					// Post back to board
-					SampleBoard.SetState(x, y, StateHit);
-					SampleBoard.HitShip(x, y);
-					HasHit = true;
-
-					// We take another shot
-					//ShotCount++;
-				}
-				// Else, invalid, just let it die
-				else
-					HasHit = false;
-			}
+			// We have gotten our data back
 			else
 			{
-				// Normal miss condition
-				SampleBoard.SetState(tempx, tempy, StateMiss);
-				HasHit = false;
+				// No post-back yet
+				PostBack = false;
+
+				// If we have already hit a position
+				if( ShotBoard[TargetY * 10 + TargetX] == true && TargetHit == false )
+				{
+					
+				}
 			}
 		}
-	*/
+
+	} // <- End of loop
 
 	// Actually shoot at position
-	SetShot(*x, *y);
+	*x = TargetX;
+	*y = TargetY;
+	Shooting->SetShot(TargetX, TargetY);
+	ShotBoard[TargetY * 10 + TargetX] = true;
 }
 
 void GAPlayer::ShootResult(int x, int y, ShotState state)
 {
-	// 
+	// Save the hit into the shooting and sinking algorithm
+	if(state == StateHit)
+	{
+		TargetHit = true;
+		//Shooting->SaveHit(x, y);
+	}
+	else
+		TargetHit = false;
 }
 
 void GAPlayer::EnemyResult(int x, int y, ShotState state)
