@@ -85,11 +85,13 @@ void ShootGenePool::save(char* filename)
 {
 	FILE* file = fopen(filename, "w");
 
-	fprintf(file, "%f\n\n", targetAvg);
+	fprintf(file, "%.4f\n\n", targetAvg);
 
-	for(int i = 0; i < 100; fprintf(file, "%f\n", target[i++]));
+	for(int i = 0; i < 100; fprintf(file, "%.4f\n", target[i++]));
+	fprintf(file, "\n");
 
-	for(int i = 0; i < 100; fprintf(file, "%s",  pool[i++].saveString()));
+	for(int i = 0; i < 100; i++)
+		fprintf(file, "%s\n",  pool[i].saveString());
 
 	fclose(file);
 }

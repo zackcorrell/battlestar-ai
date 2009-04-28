@@ -10,7 +10,10 @@
 
 #include "GAShoot.h"	
 
-GAShoot::GAShoot(double* target) : genePool(target), board() {}
+GAShoot::GAShoot(double* target) : genePool(target), board()
+{
+	strcpy(EnemyName, "Default");
+}
 GAShoot::GAShoot(char* EnemyName) : genePool(), board()
 {
 	// Save enemy name
@@ -25,6 +28,7 @@ GAShoot::GAShoot(char* EnemyName) : genePool(), board()
 		genePool.load("Default.dat2");
 	else
 		genePool.load(Temp);
+	runGenerations(25);
 }
 
 GAShoot::~GAShoot()
