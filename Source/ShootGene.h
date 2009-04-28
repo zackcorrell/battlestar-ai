@@ -21,7 +21,7 @@
 #include "ShootFourier.h"
 
 #define MAX_OF_SCALED_SIN_PLUS_COS 10000 //0.235586 //computed earlier
-#define MUTATION_RATE 0.1
+#define MUTATION_RATE 0.1 //.25
 
 class Gene
 {

@@ -21,6 +21,12 @@ class GAShoot
 {
 	ShootGenePool genePool;
 
+	// Enemy name
+	char EnemyName[128];
+
+	// Enemy shot placement
+	Board2 board;
+
 public:
 
 	GAShoot(double* target);
@@ -46,12 +52,9 @@ public:
 	double* bestDist();
 
 	Gene getPerfect();
+	Gene getBest();
 
-	// Enemy name
-	char EnemyName[128];
-
-	// Enemy shot placement
-	Board2 board;
+	void saveHit(int x, int y);
 };
 
 #endif

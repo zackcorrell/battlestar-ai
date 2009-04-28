@@ -25,7 +25,7 @@ double* Gene::getDist()
 }
 
 double Gene::fitness(double* dist)
-{
+{/*
 	double* sin = getDist(); 
 
 	double meansin = 0, meandist = 0;
@@ -52,7 +52,26 @@ double Gene::fitness(double* dist)
 	}
 
 	delete[] sin;
-	return numer / denom;
+	return numer / denom;*/
+
+	//SSD
+	double* repr = getDist();
+
+	double distMax = 0, reprMax = 0;
+	for(int i = 0; i < 100; i++)
+	{
+		if(dist[i] > distMax)
+			distMax = dist[i];
+		if(repr[i] > reprMax)
+			reprMax = repr[i];
+	}
+	for(int i = 0; i < 100; dist[i] /= distMax, repr[i++] /= reprMax);
+
+	double ssd = 0;
+	for(int i = 0; i < 100; i++)
+		ssd -= pow((repr[i] - dist[i]), 2.0);
+
+	return ssd;
 }
 
 char* Gene::toString()
@@ -62,6 +81,7 @@ char* Gene::toString()
 		sprintf(buf, "%sHarmonic %d: %.2fsin(%dx) + %.2fcos(%dx)\n", buf, i+1, waves[i].alpha, waves[i].mu, waves[i].beta, waves[i].omega);
 	return buf;*/
 	char buf[1024] = "";
+	printf("Magnitude: %f\n", this->magnitude); 
 	for(int i = 0; i < WAVECOUNT; i++)
 	{
 		sprintf(buf, "Harmonic %d: %.2fsin(%dx) + %.2fcos(%dx)\n", i+1, waves[i].alpha, waves[i].mu, waves[i].beta, waves[i].omega);
@@ -103,7 +123,9 @@ Gene Gene::cross(Gene* father, Gene* mother, bool mutate)
 		waves[i] = Harmonic(alpha, mu, beta, omega);
 	}
 
-	return Gene((father->magnitude + mother->magnitude) / 2, waves);
+	double magnitude = mutate && randFloat() <= MUTATION_RATE ? randFloat() * (father->magnitude + mother->magnitude) : ((father->magnitude + mother->magnitude) / 2);
+
+	return Gene(magnitude, waves);
 }
 
 char* Gene::saveString()

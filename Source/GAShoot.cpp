@@ -79,3 +79,12 @@ Gene GAShoot::getPerfect()
 {
 	return genePool.getPerfect();
 }
+Gene GAShoot::getBest()
+{
+	return genePool.best();
+}
+
+void GAShoot::saveHit(int x, int y);
+{
+	genePool.saveHit(int x, int y);
+}

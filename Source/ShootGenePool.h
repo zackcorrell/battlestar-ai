@@ -18,6 +18,8 @@
 #include <cstdio>
 #include "Board2.h" //todo:remove
 
+#define INCREMENT 10;
+
 class ShootGenePool
 {
 	Gene pool[100];
@@ -36,7 +38,7 @@ public:
 		targetAvg /= 100;
 		
 		for(int i = 0; i < 100; i++)
-			pool[i] = /*Gene(10);*/ Gene(targetAvg);
+			pool[i] = Gene(/*randFloat() * */targetAvg);
 		//TODO add 20 genes spanning the space
 	}
 
@@ -51,6 +53,8 @@ public:
 	double* bestDist();
 
 	Gene getPerfect();
+
+	void saveHit(int x, int y);
 
 private:
 	Gene* getTopTen();
