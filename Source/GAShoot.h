@@ -37,7 +37,7 @@ public:
 	void getTarget(int *x, int *y);
 
 	// Say that this was a shot-at position
-	void SetShot(int x, int y);
+	void setShot(int x, int y);
 
 	//Run generations of the GA
 	void runGeneration(); //Run one generation

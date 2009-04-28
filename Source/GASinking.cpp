@@ -138,3 +138,8 @@ GARunState GASinking::Run(int *DataX, int *DataY, bool Hit)
 	// Use the top, best, gene
 	return GenePool[0]->Run(DataX, DataY, Hit);
 }
+
+GASinkingGene *GASinking::GetBest()
+{
+	return GenePool[0];
+}

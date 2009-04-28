@@ -68,9 +68,6 @@ private:
 	// Board for previous shots
 	bool *ShotBoard;
 
-	// Use for controling post-back information
-	bool PostBack;
-
 };
 
 // End of inclusion guard

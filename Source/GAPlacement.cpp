@@ -21,7 +21,7 @@ GAPlacement::GAPlacement(char *EnemyName, int BoardWidth, int BoardHeight)
 	Height = BoardHeight;
 
 	// Form the file name
-	sprintf(FileName, "%s_Placement.dat", EnemyName);
+	sprintf(FileName, "%s.dat1", EnemyName);
 
 	// Attempt to load file
 	ifstream File(FileName);
@@ -32,12 +32,15 @@ GAPlacement::GAPlacement(char *EnemyName, int BoardWidth, int BoardHeight)
 	// File failed, load default data
 	if(File.fail())
 	{
-		// Load default data..
-		// TODO!
+		ifstream Default("Default.dat1");
 
 		// Set all data to weights of 1.0
 		for(int i = 0; i < Width * Height; i++)
-			BoardData[i] = 10.0;
+		{
+			Default >> BoardData[i];
+			BoardData[i] += HIT_UNIT;
+		}
+		Default.close();
 	}
 
 	// File loaded, load data from file

@@ -14,8 +14,8 @@
 /***   CONFIGURATION   ***/ /**********************************/
 
 // Player types (Name of class from header included below)
-#define PLAYER_1_TYPE DumbPlayer
-#define PLAYER_2_TYPE GAPlayer
+#define PLAYER_1_TYPE GAPlayer
+#define PLAYER_2_TYPE DumbPlayer
 
 // Board type
 #define BOARD_SIZE 10
@@ -23,7 +23,7 @@
 
 // Global flags
 #define IS_SILENCE_ON false
-#define IS_VERBOSE_ON false
+#define IS_VERBOSE_ON true
 #define IS_LOGGING_ON true
 
 /*** END CONFIGURATION ***/ /**********************************/
@@ -79,7 +79,7 @@ int main( /* int argc, char *argv[] */ )
 	/*** Start of main simulation ***/
 
 	// Build the board and print the data
-	PLAYER_1_TYPE *Player1 = new PLAYER_1_TYPE(BOARD_SIZE, BOARD_SIZE);
+	GAPlayer *Player1 = new GAPlayer("jgb5034", BOARD_SIZE, BOARD_SIZE);
 	PLAYER_2_TYPE *Player2 = new PLAYER_2_TYPE(BOARD_SIZE, BOARD_SIZE);
 
 	// Setup a game

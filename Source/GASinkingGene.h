@@ -144,7 +144,7 @@ public:
 	// Reset registers
 	void ResetRegisters();
 
-private:
+//private:
 
 	// Run through a given game, returning the number of shots made (Does affect the given gene)
 	static int Simulate(GASinkingGene *Gene, Ship *Ships, int ShipCount);

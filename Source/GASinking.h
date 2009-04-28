@@ -48,6 +48,9 @@ public:
 	// and if it is a post-shot status update, fill out the given params correctly
 	GARunState Run(int *DataX, int *DataY, bool Hit);
 
+	// Get a pointer to the best gene
+	GASinkingGene *GetBest();
+
 private:
 
 	// Gene pool

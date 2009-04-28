@@ -44,7 +44,7 @@ void GAShoot::getTarget(int *x, int *y)
 	genePool.getTarget(x, y, &board);
 }
 
-void GAShoot::SetShot(int x, int y)
+void GAShoot::setShot(int x, int y)
 {
 	board.set(x, y, 1);
 }

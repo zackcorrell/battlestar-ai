@@ -30,7 +30,6 @@ GAPlayer::GAPlayer(char *EnemyName, int BoardWidth, int BoardHeight)
 	// Default shot states
 	TargetX = TargetY = 0;
 	TargetHit = false;
-	PostBack = false;
 
 	// Load up a first shot
 	Shooting->getTarget(&TargetX, &TargetY);
@@ -100,33 +99,56 @@ void GAPlayer::Shoot(int *x, int *y)
 			TargetX %= 10;
 			TargetY %= 10;
 
-			// If we have yet to post data
-			if(!PostBack)
+			// If we have already hit a position
+			if( ShotBoard[TargetY * 10 + TargetX] == true && TargetHit == false )
 			{
-				// Place shot (by returning from this function)
-				PostBack = true;
-				break;
-			}
-			// We have gotten our data back
-			else
-			{
-				// No post-back yet
-				PostBack = false;
+				// If we have already hit a ship here, lets walk through
+				// to the next valid position (if any exists)
 
-				// If we have already hit a position
-				if( ShotBoard[TargetY * 10 + TargetX] == true && TargetHit == false )
+				// Save direction
+				Direction dir = Sinking->GetBest()->TargetDir;
+				int x = Sinking->GetBest()->TargetPos[0];
+				int y = Sinking->GetBest()->TargetPos[1];
+
+				// Keep moving in that direction until we read a non-shot zone
+				while(x >= 0 && y >= 0 && x < 10 && y < 10)
 				{
-					
+					// If this area is non-shot or a ship, then break
+					if(ShotBoard[TargetY * 10 + TargetX] == false)
+						break;
+
+					// Move
+					if(dir == North)
+						y--;
+					else if(dir == East)
+						x++;
+					else if(dir == South)
+						y++;
+					else
+						x--;
+				}
+
+				// If the position is still valid, actually shoot it
+				if(x >= 0 && y >= 0 && x < 10 && y < 10)
+				{
+					// Post back to gene
+					Sinking->GetBest()->TargetPos[0] = x;
+					Sinking->GetBest()->TargetPos[1] = y;
+					TargetX = x;
+					TargetY = y;
 				}
 			}
+
+			// Break out to set shot position
+			break;
 		}
 
 	} // <- End of loop
 
 	// Actually shoot at position
-	*x = TargetX;
-	*y = TargetY;
-	Shooting->SetShot(TargetX, TargetY);
+	*x = TargetX % 10;
+	*y = TargetY % 10;
+	Shooting->setShot(TargetX, TargetY);
 	ShotBoard[TargetY * 10 + TargetX] = true;
 }
 
@@ -136,7 +158,7 @@ void GAPlayer::ShootResult(int x, int y, ShotState state)
 	if(state == StateHit)
 	{
 		TargetHit = true;
-		//Shooting->SaveHit(x, y);
+		Shooting->saveHit(x, y);
 	}
 	else
 		TargetHit = false;
