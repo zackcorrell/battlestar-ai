@@ -91,7 +91,7 @@ void ShootGenePool::save(char* filename)
 	fprintf(file, "\n");
 
 	for(int i = 0; i < 100; i++)
-		fprintf(file, "%s\n",  pool[i].saveString());
+		fputs(pool[i].saveString(), file);//fprintf(file, "%s\n",  pool[i].saveString());
 
 	fclose(file);
 }
@@ -105,8 +105,8 @@ void ShootGenePool::load(char* filename)
 	int currentGene = 0;
 	Harmonic tempWaves[WAVECOUNT];
 
-	fscanf(file, "%f\n", &targetAvg); //get avg
-	fgets(buf, 128, file);
+	fscanf(file, "%f\n", &targetAvg); //get target avg
+	//fgets(buf, 128, file);
 
 	for(int i = 0; i < 100; fscanf(file, "%f\n", target + i++))
 
