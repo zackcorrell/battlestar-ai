@@ -30,6 +30,9 @@ GASinking::GASinking(int BoardWidth, int BoardHeight, char *OpponentName)
 
 GASinking::~GASinking()
 {
+	// Save the best
+	GenePool[0]->Save(OpponentName);
+
 	// Release all genes
 	for(int i = 0; i < GA_MAX_POOL; i++)
 		delete GenePool[i];
@@ -76,7 +79,6 @@ void GASinking::Update()
 	else
 	{
 		// Ships list
-		Ship Ships[5];
 		int Type, direction, x, y;
 
 		// Read in 5 ships..
@@ -93,10 +95,6 @@ void GASinking::Update()
 	// Save the top two, release the rest, and place the rest as copies of the top two
 	for(int i = 2; i < GA_MAX_POOL; i += 2)
 	{
-		// Release this pair
-		delete GenePool[i + 0];
-		delete GenePool[i + 1];
-
 		// Copy the first two into this pisition
 		memcpy((void*)(GenePool[i + 0]), (void*)(GenePool[0]), sizeof(GASinkingGene));
 		memcpy((void*)(GenePool[i + 1]), (void*)(GenePool[1]), sizeof(GASinkingGene));
@@ -117,7 +115,7 @@ void GASinking::Update()
 	for(int j = 0; j < 2; j++)
 	{
 		// Find the best
-		for(int i = j; i < GA_MAX_POOL; i++)
+		for(int i = 0; i < GA_MAX_POOL; i++)
 		{
 			// Select the best
 			if(BestFitness > Fitness[i])
@@ -128,7 +126,10 @@ void GASinking::Update()
 		}
 
 		// Once we have the best move it to the top
+		Fitness[BestIndex] = INT_MAX;
 		memcpy((void*)(GenePool[j]), (void*)(GenePool[BestIndex]), sizeof(GASinkingGene));
+		BestFitness = INT_MAX;
+		BestIndex = 0;
 	}
 }
 

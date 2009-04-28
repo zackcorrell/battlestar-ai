@@ -36,10 +36,13 @@
 #define GA_SIMULATION_COUNT 1000
 
 // The amount of sum game count
-#define GA_GAME_SIMULATION_COUNT 100
+#define GA_GAME_SIMULATION_COUNT 1000
 
 // The amount of instructions we run before we consider this a "lame" gene
 #define GA_FAILURE_COUNT 100
+
+// The mutation rate (from 0 - 100)
+#define GA_MUTATION_RATE 10
 
 // Gene state (For state machine design)
 typedef TargetingState GAState;

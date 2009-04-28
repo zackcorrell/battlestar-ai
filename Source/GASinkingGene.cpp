@@ -36,14 +36,17 @@ void GASinkingGene::Load(char* EnemyName)
 	strcat(FileName, ".dat3");
 
 	// Load enemy data file
-	ifstream File(FileName);
+	ifstream *File = new ifstream(FileName);
 
 	// If file failed to load, load default file
-	if(File.fail())
-		File.open("Default.dat3");
+	if(File->fail())
+	{
+		delete File;
+		File = new ifstream("Default.dat3");
+	}
 
 	// If we still fail, just quit
-	if(File.fail())
+	if(File->fail())
 	{
 		printf("Could not locate default gene for GASinkingGene.\n");
 		exit(-1);
@@ -55,13 +58,13 @@ void GASinkingGene::Load(char* EnemyName)
 		for(int j = 0; j < 20; j++)
 		{
 			int temp;
-			File >> temp;
+			*File >> temp;
 			Instructions[i][j] = (GAInstruction)temp;
 		}
 	}
 
 	// Release file
-	File.close();
+	delete File;
 }
 
 void GASinkingGene::Save(char* EnemyName)
@@ -478,11 +481,21 @@ int GASinkingGene::FitnessValue(GASinkingGene Gene, Ship *Ships, int ShipCount)
 	for(int i = 0; i < GA_GAME_SIMULATION_COUNT; i++)
 	{
 		// Run a simulation
-		int SimValue = Simulate( &Gene, Ships, ShipCount );
+		// If even, run the given ships, else, run random ships
+		int SimValue;
+		if(i % 2 == 0)
+			SimValue = Simulate( &Gene, Ships, ShipCount );
+		else
+		{
+			Ship RandShips[5];
+			Player::SetupStatic(RandShips, 5, 10, 10);
+			SimValue = Simulate( &Gene, RandShips, 5 );
+		}
 
 		// If sim value is int_max, thus must be bad, so just return the bad value
 		if( SimValue == INT_MAX )
 			return INT_MAX;
+
 		// Else, sim whent well, lets take the shot count
 		else
 			Total += SimValue;
@@ -497,9 +510,9 @@ void GASinkingGene::Breed(GASinkingGene *GeneA, GASinkingGene *GeneB)
 	// For each chunk of code, choose a random size from 1 to half it's size
 	int ChunkSize[3] = 
 	{
-		1 + rand() % GA_MAX_INSTRUCTIONS,
-		1 + rand() % GA_MAX_INSTRUCTIONS,
-		1 + rand() % GA_MAX_INSTRUCTIONS,
+		1 + rand() % (GA_MAX_INSTRUCTIONS / 2 + 1),
+		1 + rand() % (GA_MAX_INSTRUCTIONS / 2 + 1),
+		1 + rand() % (GA_MAX_INSTRUCTIONS / 2 + 1),
 	};
 
 	// For each chunk of code, choose a random position that is valid
@@ -527,15 +540,19 @@ void GASinkingGene::Breed(GASinkingGene *GeneA, GASinkingGene *GeneB)
 	// Apply a 10% chance of mutation of a single instruction randomly chosen per section
 	for(int i = 0; i < 3; i++)
 	{
-		if( (rand() % 100) < 10 )
+		for(int j = 0; j < GA_MAX_INSTRUCTIONS; j++)
 		{
-			int PosA = rand() % GA_MAX_INSTRUCTIONS + i * GA_MAX_INSTRUCTIONS;
-			GAInstruction OpA = (GAInstruction)(rand() % GA_TOTAL_INSTRUCTIONS);
-			GeneA->Instructions[i][PosA] = OpA;
+			if( (rand() % 100) < GA_MUTATION_RATE )
+			{
+				GAInstruction OpA = (GAInstruction)(rand() % GA_TOTAL_INSTRUCTIONS);
+				GeneA->Instructions[i][j] = OpA;
+			}
 
-			int PosB = rand() % GA_MAX_INSTRUCTIONS + i * GA_MAX_INSTRUCTIONS;
-			GAInstruction OpB = (GAInstruction)(rand() % GA_TOTAL_INSTRUCTIONS);
-			GeneB->Instructions[i][PosB] = OpB;
+			if( (rand() % 100) < GA_MUTATION_RATE )
+			{
+				GAInstruction OpB = (GAInstruction)(rand() % GA_TOTAL_INSTRUCTIONS);
+				GeneB->Instructions[i][j] = OpB;
+			}
 		}
 	}
 
@@ -558,6 +575,7 @@ int GASinkingGene::Simulate(GASinkingGene *Gene, Ship *Ships, int ShipCount)
 	// Simulation variables
 	int ShotCount = 0;
 	int tempx = 0, tempy = 0;
+	int walkx = 0, walky = 0; // Walk through the possible shot placements
 	bool HasHit = false;
 
 	// Keep playing until all 5 ships are sunk OR we went over the sim count
@@ -567,10 +585,11 @@ int GASinkingGene::Simulate(GASinkingGene *Gene, Ship *Ships, int ShipCount)
 		if( SampleBoard.GetSunkCount() >= 5 )
 			return ShotCount;
 		else if( sim == GA_SIMULATION_COUNT )
-			return ShotCount;
+			return INT_MAX;
 
 		// Run through the program until an event
 		GARunState State = Gene->Run(&tempx, &tempy, HasHit);
+		ShotCount++;
 
 		// If state failed
 		if( State == GeneFailure )
@@ -582,12 +601,26 @@ int GASinkingGene::Simulate(GASinkingGene *Gene, Ship *Ships, int ShipCount)
 			// Non-repeating value
 			while(true)
 			{
-				tempx = rand() % 10;
-				tempy = rand() % 10;
+				// Reset value if needed
+				if(walkx == 10)
+				{
+					walky++;
+					walkx = 0;
+				}
+
+				// Wrap around y
+				walky %= 10;
 
 				// If we have not yet shot this position, shoot it
-				if(SampleBoard.GetState(tempx, tempy) == StateEmpty || SampleBoard.GetState(tempx, tempy) == StateShip)
+				if(SampleBoard.GetState(walkx, walky) == StateEmpty || SampleBoard.GetState(walkx, walky) == StateShip)
+				{
+					tempx = walkx;
+					tempy = walky;
 					break;
+				}
+
+				// Grow position
+				walkx++;
 			}
 		}
 
@@ -597,10 +630,6 @@ int GASinkingGene::Simulate(GASinkingGene *Gene, Ship *Ships, int ShipCount)
 			// Wrap out x and y points and check for negatives
 			tempx %= 10;
 			tempy %= 10;
-			if(tempx < 0)
-				tempx *= -1;
-			if(tempy < 0)
-				tempy *= -1;
 
 			// Place shot
 			ShotState BoardState = SampleBoard.GetState(tempx, tempy);
@@ -613,7 +642,7 @@ int GASinkingGene::Simulate(GASinkingGene *Gene, Ship *Ships, int ShipCount)
 				HasHit = true;
 
 				// We take another shot
-				ShotCount++;
+				//ShotCount++;
 			}
 			else if(BoardState == StateMiss)
 			{
@@ -661,7 +690,7 @@ int GASinkingGene::Simulate(GASinkingGene *Gene, Ship *Ships, int ShipCount)
 					HasHit = true;
 
 					// We take another shot
-					ShotCount++;
+					//ShotCount++;
 				}
 				// Else, invalid, just let it die
 				else
@@ -674,6 +703,8 @@ int GASinkingGene::Simulate(GASinkingGene *Gene, Ship *Ships, int ShipCount)
 				HasHit = false;
 			}
 		}
+
+		// End of loop
 	}
 
 	// Return error
