@@ -17,6 +17,14 @@
 #include "ShootGenePool.h"
 #include "Board2.h" //todo:remove
 
+//Last Ditch
+#include "Game.h"
+#include "DumbPlayer.h"  // Randomization
+#include "SinkPlayer.h"  // Randomization with sinking-intelligence
+#include "ShooterPlayer.h"  // Intelligent shooting without sinking-intelligence
+#include "SmartRandom.h"  // Intelligent shooting with sinking-intelligence
+#include "GAPlayer.h"  // Genetic algorithm approach
+
 class GAShoot
 {
 	ShootGenePool genePool;

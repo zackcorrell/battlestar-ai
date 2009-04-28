@@ -10,6 +10,8 @@
 
 #include "ShootGenePool.h"
 #include <assert.h>
+#include <iostream>
+using namespace std;
 
 void ShootGenePool::advance()
 {
@@ -98,17 +100,49 @@ void ShootGenePool::save(char* filename)
 
 void ShootGenePool::load(char* filename)
 {
+	ifstream in;
+	in.open(filename);
+	char buf[256];
+	while(1)
+		in.getline(buf, 256);
+
+	in >> targetAvg;
+	
+	for(int i = 0; i < 100; i++)
+		in >> target[i];
+
+	for(int g = 0; g < 100; g++)
+	{
+		double mag;
+		in >> mag;
+
+		Harmonic tempWaves[WAVECOUNT];
+		for(int i = 0; i < WAVECOUNT; i++)
+		{
+			float a, b; int m, o;
+			cin >> a >> m >> b >> o;
+			tempWaves[i] = Harmonic(a, m, b, o);
+		}
+
+		pool[g] = Gene(mag, tempWaves);
+	}
+
+	in.close();
+}
+/*
+
 	FILE* file = fopen(filename, "r");
 
 	char buf[128];
 	int waveCount = 0;
 	int currentGene = 0;
 	Harmonic tempWaves[WAVECOUNT];
+	double magnitude;
 
-	fscanf(file, "%f\n", &targetAvg); //get target avg
-	//fgets(buf, 128, file);
+	fgets(buf, 128, file);
+	sscanf(buf, "%f\n", &targetAvg); //get target avg
 
-	for(int i = 0; i < 100; fscanf(file, "%f\n", target + i++))
+	for(int i = 0; i < 100; fscanf(file, "%f\n", target + i++));
 
 	while(!feof(file))
 	{		
@@ -116,10 +150,15 @@ void ShootGenePool::load(char* filename)
 		if(strcmp(buf, "\n") == 0)
 		{
 			pool[currentGene++] = Gene(tempWaves);
-			waveCount = 0;
+			waveCount = -1;
 		}
 		else
 		{
+			if(waveCount = -1)
+			{
+				sscanf(buf, "%f", &magnitude);
+				waveCount++;
+			}
 			if(waveCount < WAVECOUNT)
 			{
 				int alpha, beta, mu, omega;
@@ -130,7 +169,7 @@ void ShootGenePool::load(char* filename)
 	}
 
 	fclose(file);
-}
+}*/
 
 void ShootGenePool::getTarget(int* x, int* y, Board2* board)
 {

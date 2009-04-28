@@ -20,6 +20,8 @@
 #include "GAShoot.h"       // Shooting logic
 #include "GASinking.h" // Sinking logic
 
+class GAShoot;
+
 // Player class
 class GAPlayer : public Player
 {
