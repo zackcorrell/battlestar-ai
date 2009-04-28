@@ -17,9 +17,6 @@ void ShootGenePool::advance()
 
 	memcpy(nextGen, getTopTen(), 10 * sizeof(Gene));
 
-	//for(int i = 0; i < 10; i++)
-	//	printf("%f\n", nextGen[i].fitness(target));
-
 	int nextIndex = 10;
 
 	for(int mutate = 0; mutate < 2; mutate++)
@@ -28,6 +25,10 @@ void ShootGenePool::advance()
 				nextGen[nextIndex++] = Gene::cross(&nextGen[i], &nextGen[j], mutate);
 
 	assert(nextGen[0].fitness(target) == best().fitness(target));
+
+	//for(int i = 0; i < 100; i++)
+	//	printf("%f\n", nextGen[i].fitness(target));
+	//printf("\n");
 
 	memcpy(pool, nextGen, 100 * sizeof(Gene));
 }
@@ -84,6 +85,10 @@ void ShootGenePool::save(char* filename)
 {
 	FILE* file = fopen(filename, "w");
 
+	fprintf(file, "%f\n\n", targetAvg);
+
+	for(int i = 0; i < 100; fprintf(file, "%f\n", target[i++]));
+
 	for(int i = 0; i < 100; fprintf(file, "%s",  pool[i++].saveString()));
 
 	fclose(file);
@@ -97,6 +102,11 @@ void ShootGenePool::load(char* filename)
 	int waveCount = 0;
 	int currentGene = 0;
 	Harmonic tempWaves[WAVECOUNT];
+
+	fscanf(file, "%f\n", &targetAvg); //get avg
+	fgets(buf, 128, file);
+
+	for(int i = 0; i < 100; fscanf(file, "%f\n", target + i++))
 
 	while(!feof(file))
 	{		
@@ -118,4 +128,99 @@ void ShootGenePool::load(char* filename)
 	}
 
 	fclose(file);
+}
+
+void ShootGenePool::getTarget(int* x, int* y, Board2* board)
+{
+	double* dist = best().getDist();
+	for(int i = 0; i < 100; i++)
+	{
+		if(board->at(i % 10, i / 10) == 1)
+			dist[i] = 0; //set shot places to zero
+	}
+	double total = 0;
+	for(int i = 0; i < 100; total += dist[i++]); //calculate total
+	for(int i = 0; i < 100; dist[i++] /= total); //scale by total
+	for(int i = 1; i < 100; dist[i] += dist[(i++)-1]); //turn into increasing array
+	double rand = randFloat();
+	*x = 9, *y = 9;
+	for(int i = 0; /*dist[i] < rand &&*/ i < 99; i++)
+	{
+		if(dist[i] > rand)
+		{
+			*x = i % 10;
+			*y = i / 10;
+			break;
+		}
+	}
+	board->set(*x, *y, 1);
+	delete[] dist;
+
+	//todo implement fucking filter
+}
+
+double ShootGenePool::bestFitness()
+{
+	return best().fitness(target);
+}
+
+double* ShootGenePool::bestDist()
+{
+	return best().getDist();
+}
+
+Gene ShootGenePool::getPerfect()
+{
+	double real[100];
+	double imaginary[100];
+
+	memcpy(real, target, 100 * sizeof(double));
+	for(int i = 0; i < 100; imaginary[i++] = 0);
+
+	DFT(1, 100, real, imaginary);
+
+	double copy[100];
+	double high = 0; int highindex = 0;
+	int highsine[WAVECOUNT];
+	int highcosine[WAVECOUNT];
+
+	memcpy(copy, real, 100 * sizeof(double));
+	for(int i = 0; i < WAVECOUNT; i++)
+	{
+		for(int j = 1; j < 50; j++)
+		{
+			if(abs(copy[j]) > high)
+			{
+				high = abs(copy[j]);
+				highindex = j;
+			}
+		}
+		highcosine[i] = highindex;
+		copy[highindex] = 0;
+		high = 0, highindex = 0;
+	}
+
+	memcpy(copy, imaginary, 100 * sizeof(double));
+	for(int i = 0; i < WAVECOUNT; i++)
+	{
+		for(int j = 1; j < 50; j++)
+		{
+			if(abs(copy[j]) > high)
+			{
+				high = abs(copy[j]);
+				highindex = j;
+			}
+		}
+		highsine[i] = highindex;
+		copy[highindex] = 0;
+		high = 0, highindex = 0;
+	}
+
+	Harmonic tempWaves[WAVECOUNT];
+	for(int i = 0; i < WAVECOUNT; i++)
+		tempWaves[i] = Harmonic(-2*imaginary[highsine[i]], highsine[i], 2*real[highcosine[i]], highcosine[i]);
+	Gene fourfit(targetAvg, tempWaves);
+	printf("\nPerfect: %f\n", fourfit.fitness(target));
+
+	return fourfit;
 }

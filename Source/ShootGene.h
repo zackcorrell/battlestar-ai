@@ -20,8 +20,8 @@
 #include "ShootHarmonic.h"
 #include "ShootFourier.h"
 
-#define MAX_OF_SCALED_SIN_PLUS_COS 1//0.235586 //computed earlier
-#define MUTATION_RATE 0.5
+#define MAX_OF_SCALED_SIN_PLUS_COS 10000 //0.235586 //computed earlier
+#define MUTATION_RATE 0.1
 
 class Gene
 {

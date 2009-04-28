@@ -16,31 +16,41 @@
 
 #include "ShootGene.h"
 #include <cstdio>
+#include "Board2.h" //todo:remove
 
 class ShootGenePool
 {
 	Gene pool[100];
 	double target[100];
+	double targetAvg;
 
 public:
+	ShootGenePool() {}
 	ShootGenePool(double* target)
 	{
 		memcpy(this->target, target, 100 * sizeof(double));
 
-		double avg = 0;
+		targetAvg = 0;
 		for(int i = 0; i < 100; i++)
-			avg += target[i];
-		avg /= 100;
-
+			targetAvg += target[i];
+		targetAvg /= 100;
+		
 		for(int i = 0; i < 100; i++)
-			pool[i] = Gene(avg);
-		//TODO
+			pool[i] = /*Gene(10);*/ Gene(targetAvg);
+		//TODO add 20 genes spanning the space
 	}
 
 	void advance();
 	Gene best();
 	void save(char* filename);
 	void load(char* filename);
+	
+	void getTarget(int* x, int* y, Board2* board);
+
+	double bestFitness();
+	double* bestDist();
+
+	Gene getPerfect();
 
 private:
 	Gene* getTopTen();

@@ -15,6 +15,7 @@
 #define GA_SHOOT_H
 
 #include "ShootGenePool.h"
+#include "Board2.h" //todo:remove
 
 class GAShoot
 {
@@ -22,19 +23,25 @@ class GAShoot
 
 public:
 
-	GAShoot();
+	GAShoot(double* target);
 	GAShoot(char* filename);
 
-	//provides getrandom (int* int*)
-	void getTarget(int *x, int *y);
+	//Get a random square based on the data
+	void getTarget(int *x, int *y, Board2* board);
 
-	//provides runGenerations
-	void runGenerations();
+	//Run generations of the GA
+	void runGeneration(); //Run one generation
 	void runGenerations(int n);
 
-	//provides save/load
+	//Save and load data
 	void save(char* filename);
 	void load(char* filename);
+
+	//Print Best Fitness
+	double bestFitness();
+	double* bestDist();
+
+	Gene getPerfect();
 };
 
 #endif

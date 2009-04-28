@@ -10,15 +10,23 @@
 
 #include "GAShoot.h"	
 
-void GAShoot::getTarget(int *x, int *y)
+GAShoot::GAShoot(double* target) : genePool(target) {}
+GAShoot::GAShoot(char* filename) : genePool()
 {
+	genePool.load(filename);
+}
+
+void GAShoot::getTarget(int *x, int *y, Board2* board)
+{
+	genePool.getTarget(x, y, board);
+	
 	//todo: implement
-	*x = 0;
-	*y = 0;
+	//*x = 0;
+	//*y = 0;
 }
 
 //provides runGenerations
-void GAShoot::runGenerations()
+void GAShoot::runGeneration()
 {
 	genePool.advance();
 }
@@ -36,4 +44,18 @@ void GAShoot::save(char* filename)
 void GAShoot::load(char* filename)
 {
 	genePool.load(filename);
+}
+
+double GAShoot::bestFitness()
+{
+	return genePool.bestFitness();
+}
+double* GAShoot::bestDist()
+{
+	return genePool.bestDist();
+}
+
+Gene GAShoot::getPerfect()
+{
+	return genePool.getPerfect();
 }
