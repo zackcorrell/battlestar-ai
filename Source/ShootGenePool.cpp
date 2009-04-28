@@ -26,7 +26,7 @@ void ShootGenePool::advance()
 			for(int j = i+1; j < 10; j++)
 				nextGen[nextIndex++] = Gene::cross(&nextGen[i], &nextGen[j], mutate);
 
-	assert(nextGen[0].fitness(target) == best().fitness(target));
+	//assert(nextGen[0].fitness(target) == best().fitness(target));
 
 	//for(int i = 0; i < 100; i++)
 	//	printf("%f\n", nextGen[i].fitness(target));
@@ -131,6 +131,7 @@ void ShootGenePool::load(char* filename)
 	}
 
 	in.close();
+	sort();
 }
 /*
 
