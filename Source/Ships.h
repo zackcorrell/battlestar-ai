@@ -32,8 +32,14 @@ struct Ship
 	// Constructor (Defaults to invalid data, so make sure you pass some params)
 	Ship(ShipType type = Destroyer, int x = 0, int y = 0, Direction direction = North)
 	{
+		SetData(type, x, y, direction);
+	}
+
+	void SetData(ShipType type = Destroyer, int x = 0, int y = 0, Direction direction = North)
+	{
 		// Save ship type
 		Type = type;
+		this->direction = direction;
 
 		// Initialize ship position
 		for(int i = 0; i < (int)Type; i++)
@@ -76,6 +82,7 @@ struct Ship
 
 	// Internal public data
 	ShipType Type;			// The ship type
+	Direction direction;	// Ship direction
 	int x[5], y[5];			// Ship positions (occupancy grid of (x,y) over length Type)
 	bool Hit[5];			// If true, that position has been hit
 };

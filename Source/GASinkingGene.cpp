@@ -15,8 +15,10 @@ GASinkingGene::GASinkingGene()
 	// Reset registers
 	ResetRegisters();
 
-	// Clean up the internal code
-	Clean();
+	// Set all instructions to nops
+	for(int i = 0; i < 3; i++)
+		for(int j = 0; j < GA_MAX_INSTRUCTIONS; j++)
+			Instructions[i][j] = Nop;
 }
 
 GASinkingGene::~GASinkingGene()
@@ -135,12 +137,11 @@ GARunState GASinkingGene::Run(int *DataX, int *DataY, bool Hit)
 		GAInstruction Op = Instructions[(int)State][ProgramCounter];
 
 		// Run a single instruction
-		GARunState State = Step(Op, DataX, DataY, Hit);
-		if(State != Nothing)
-			return State;
+		GARunState ReturnState = Step(Op, DataX, DataY, Hit);
 
-		// Grow counter correctly
-		GrowCounter();
+		// Return if needed
+		if(ReturnState != Nothing)
+			return ReturnState;
 	}
 
 	// Return error since we went over our max instruction count run
@@ -191,23 +192,27 @@ GARunState GASinkingGene::Step(GAInstruction op, int *DataX, int *DataY, bool Hi
 	case MoveFwd:
 		if(TargetDir == North)
 		{
-			if(TargetPos[1] > 0)
-				TargetPos[1]--;
+			TargetPos[1]--;
+			if(TargetPos[1] < 0)
+				TargetPos[1] = 9;
 		}
 		else if(TargetDir == East)
 		{
-			if(TargetPos[0] < 9)
-				TargetPos[0]++;
+			TargetPos[0]++;
+			if(TargetPos[0] >= 10)
+				TargetPos[0] = 0;
 		}
 		else if(TargetDir == South)
 		{
-			if(TargetPos[1] < 9)
-				TargetPos[1]++;
+			TargetPos[1]++;
+			if(TargetPos[1] >= 10)
+				TargetPos[1] = 0;
 		}
-		else
+		else // West
 		{
-			if(TargetPos[0] > 0)
-				TargetPos[0]--;
+			TargetPos[0]--;
+			if(TargetPos[0] < 0)
+				TargetPos[0] = 9;
 		}
 	break;
 
@@ -457,20 +462,23 @@ GARunState GASinkingGene::Step(GAInstruction op, int *DataX, int *DataY, bool Hi
 
 	}
 
+	// Grow counter correctly
+	GrowCounter();
+
 	// Nothing to do
 	return Nothing;
 }
 
-int GASinkingGene::FitnessValue(GASinkingGene Gene)
+int GASinkingGene::FitnessValue(GASinkingGene Gene, Ship *Ships, int ShipCount)
 {
 	// Run through a number of sample games...
 	int Total = 0;
 
 	// Run through gene and make sure we don't have a failure under some random cases
-	for(int i = 0; i < GA_SIMULATION_COUNT; i++)
+	for(int i = 0; i < GA_GAME_SIMULATION_COUNT; i++)
 	{
 		// Run a simulation
-		int SimValue = Simulate( &Gene );
+		int SimValue = Simulate( &Gene, Ships, ShipCount );
 
 		// If sim value is int_max, thus must be bad, so just return the bad value
 		if( SimValue == INT_MAX )
@@ -536,35 +544,30 @@ void GASinkingGene::Breed(GASinkingGene *GeneA, GASinkingGene *GeneB)
 	GeneB->Clean();
 }
 
-int GASinkingGene::Simulate(GASinkingGene *Gene)
+int GASinkingGene::Simulate(GASinkingGene *Gene, Ship *Ships, int ShipCount)
 {
 	// Reset internal registers and program counter
 	Gene->ResetRegisters();
 
 	// Create a board game with random ship placement
-	Board SampleBoard(10, 10);
+	Board SampleBoard(WIDTH, LENGTH);
 
-	// Place ships randomly, SHOULD LOAD FROM HISTORY OF OPPONENT
-	Ship Ships[5];
-	Player::SetupStatic(Ships, 5, 10, 10);
-	SampleBoard.AddShips(Ships, 5);
+	// Place ships randomly
+	SampleBoard.AddShips(Ships, ShipCount);
 
 	// Simulation variables
-	int Total = 0;
+	int ShotCount = 0;
 	int tempx = 0, tempy = 0;
 	bool HasHit = false;
 
-	// Keep playing until all 5 ships are sunk OR we went over the simulation count
-	int sim = 0;
-	while(true)//for(int sim = 0; sim <= GA_SIMULATION_COUNT; sim++)
+	// Keep playing until all 5 ships are sunk OR we went over the sim count
+	for(int sim = 0; sim <= GA_SIMULATION_COUNT; sim++)
 	{
-		// If sim count hit the counter bounds, break out for the error return
-		if( sim == GA_SIMULATION_COUNT )
-			return INT_MAX;
-
 		// Check if we sunk all ships
 		if( SampleBoard.GetSunkCount() >= 5 )
-			return Total;
+			return ShotCount;
+		else if( sim == GA_SIMULATION_COUNT )
+			return ShotCount;
 
 		// Run through the program until an event
 		GARunState State = Gene->Run(&tempx, &tempy, HasHit);
@@ -581,10 +584,6 @@ int GASinkingGene::Simulate(GASinkingGene *Gene)
 			{
 				tempx = rand() % 10;
 				tempy = rand() % 10;
-				if(tempx < 0)
-					tempx *= -1;
-				if(tempy < 0)
-					tempy *= -1;
 
 				// If we have not yet shot this position, shoot it
 				if(SampleBoard.GetState(tempx, tempy) == StateEmpty || SampleBoard.GetState(tempx, tempy) == StateShip)
@@ -595,9 +594,6 @@ int GASinkingGene::Simulate(GASinkingGene *Gene)
 		// Place a shot onto the board
 		else if( State == SetShot )
 		{
-			// We take another shot
-			Total++;
-
 			// Wrap out x and y points and check for negatives
 			tempx %= 10;
 			tempy %= 10;
@@ -613,35 +609,71 @@ int GASinkingGene::Simulate(GASinkingGene *Gene)
 			if(BoardState == StateShip)
 			{
 				SampleBoard.SetState(tempx, tempy, StateHit);
-				HasHit = true;
 				SampleBoard.HitShip(tempx, tempy);
+				HasHit = true;
+
+				// We take another shot
+				ShotCount++;
 			}
 			else if(BoardState == StateMiss)
 			{
-				Total--;
+				// Already shot here, and nothing
 				HasHit = false;
 			}
 			else if(BoardState == StateHit)
 			{
 				// If we have already hit a ship here, lets walk through
 				// to the next valid position (if any exists)
-				
+
+				// Save direction
+				Direction dir = Gene->TargetDir;
+				int x = Gene->TargetPos[0];
+				int y = Gene->TargetPos[1];
+
+				// Keep moving in that direction until we read a non-shot zone
+				while(x >= 0 && y >= 0 && x < 10 && y < 10)
+				{
+					// If this area is non-shot or a ship, then break
+					if(SampleBoard.GetState(x, y) == StateEmpty || SampleBoard.GetState(x, y) == StateShip)
+						break;
+
+					// Move
+					if(dir == North)
+						y--;
+					else if(dir == East)
+						x++;
+					else if(dir == South)
+						y++;
+					else
+						x--;
+				}
+
+				// If the position is still valid, actually shoot it
+				if(x >= 0 && y >= 0 && x < 10 && y < 10)
+				{
+					// Post back to gene
+					Gene->TargetPos[0] = x;
+					Gene->TargetPos[1] = y;
+
+					// Post back to board
+					SampleBoard.SetState(x, y, StateHit);
+					SampleBoard.HitShip(x, y);
+					HasHit = true;
+
+					// We take another shot
+					ShotCount++;
+				}
+				// Else, invalid, just let it die
+				else
+					HasHit = false;
 			}
 			else
 			{
+				// Normal miss condition
 				SampleBoard.SetState(tempx, tempy, StateMiss);
 				HasHit = false;
 			}
 		}
-
-		// End of while loop
-		printf("State: %s, ", GARunStateStr[int(State)]);
-		if(State == SetShot)
-			printf("(%d, %d)\n", tempx, tempy);
-		else
-			printf("\n");
-		SampleBoard.Print();
-		int temp = 0;
 	}
 
 	// Return error

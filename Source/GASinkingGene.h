@@ -33,7 +33,10 @@
 #define GA_BOARD_SAVE_COUNT 10
 
 // The amount of simulations to cary out in a fitness function for the GA sinking gene
-#define GA_SIMULATION_COUNT 10000
+#define GA_SIMULATION_COUNT 1000
+
+// The amount of sum game count
+#define GA_GAME_SIMULATION_COUNT 100
 
 // The amount of instructions we run before we consider this a "lame" gene
 #define GA_FAILURE_COUNT 100
@@ -130,7 +133,7 @@ public:
 	GARunState Step(GAInstruction op, int *DataX, int *DataY, bool Hit);
 
 	// Fitness value of the given gene (Takes a copy so the given isn't affected)
-	static int FitnessValue(GASinkingGene Gene);
+	static int FitnessValue(GASinkingGene Gene, Ship *Ships, int ShipCount);
 
 	// Breed two genes together and produce and post into the given gene data
 	static void Breed(GASinkingGene *GeneA, GASinkingGene *GeneB);
@@ -141,7 +144,7 @@ public:
 private:
 
 	// Run through a given game, returning the number of shots made (Does affect the given gene)
-	static int Simulate(GASinkingGene *Gene);
+	static int Simulate(GASinkingGene *Gene, Ship *Ships, int ShipCount);
 
 	// Grow the counter correctly
 	void GrowCounter();

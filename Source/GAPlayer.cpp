@@ -77,6 +77,7 @@ GAPlayer::GAPlayer(int BoardWidth, int BoardHeight)
 	for(int j = 0; j < INT_MAX; j++)
 	{
 		GASinkingGene temp;
+		temp.Load("Default");
 		/*
 		for(int i = 0; i < 3; i++)
 		{
@@ -86,7 +87,9 @@ GAPlayer::GAPlayer(int BoardWidth, int BoardHeight)
 		temp.Clean();
 		*/
 		int Value;
-		if( (Value = GASinkingGene::FitnessValue(temp)) < INT_MAX)
+		Ship Ships[5];
+		Player::SetupStatic(Ships, 5, 10, 10);
+		if( (Value = GASinkingGene::FitnessValue(temp, Ships, 5)) < INT_MAX)
 			counter++;
 
 		printf("%d\t%d\n", j, counter);

@@ -17,9 +17,9 @@
 #define __GAPLAYER_H_
 
 #include "Player.h"
-#include "GASinkingGene.h"
-#include "GAPlacement.h"
-#include "GAShoot.h"
+#include "GAPlacement.h"   // Ship placement
+#include "GAShoot.h"       // Shooting logic
+#include "GASinkingGene.h" // Sinking logic
 
 // Player class
 class GAPlayer : public Player
