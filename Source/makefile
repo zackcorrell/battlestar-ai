@@ -2,12 +2,11 @@
 # http://code.google.com/p/battlestar-ai/
 
 # Include source and header files:
-SRC = Board.cpp  DumbPlayer.cpp  Game.cpp  GAPlayer.h  Main.cpp  Player.cpp ShooterPlayer.cpp  SinkPlayer.cpp  SmartRandom.cpp  Util.cpp
-HDR = Board.h    DumbPlayer.h    Game.h    GAPlayer.h  Main.h    Player.h   ShooterPlayer.h    SinkPlayer.h    SmartRandom.h    Util.h   Ships.h
+SRC = Board.cpp DumbPlayer.cpp Game.cpp GAPlacement.cpp GAPlayer.cpp GAShoot.cpp GASinking.cpp GASinkingGene.cpp Main.cp Player.cpp ShooterPlayer.cpp ShootFourier.cpp ShootGene.cpp ShootGenePool.cpp ShootHarmonic.cpp SinkPlayer.cpp SmartRandom.cpp Util.cpp
 
 # Build all:
 all: $(SRC) $(HDR)
-	g++ -m32 -Wall -Wextra $(SRC) -o battlestar-ai
+	g++ -m32 -Wall -Wextra -lm $(SRC) -o battlestar-ai
 
 # Clean all:
 clean:
