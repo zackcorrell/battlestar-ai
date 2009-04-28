@@ -10,8 +10,8 @@
 
 #include "GAShoot.h"	
 
-GAShoot::GAShoot(double* target) : genePool(target) {}
-GAShoot::GAShoot(char* EnemyName) : genePool()
+GAShoot::GAShoot(double* target) : genePool(target), board() {}
+GAShoot::GAShoot(char* EnemyName) : genePool(), board()
 {
 	// Save enemy name
 	strcpy(this->EnemyName, EnemyName);
@@ -27,7 +27,7 @@ GAShoot::GAShoot(char* EnemyName) : genePool()
 		genePool.load(Temp);
 }
 
-GAShoot::~GASoot()
+GAShoot::~GAShoot()
 {
 	char Temp[128];
 	strcpy(Temp, EnemyName);
@@ -84,7 +84,12 @@ Gene GAShoot::getBest()
 	return genePool.best();
 }
 
-void GAShoot::saveHit(int x, int y);
+void GAShoot::saveHit(int x, int y)
 {
-	genePool.saveHit(int x, int y);
+	genePool.saveHit(x, y);
+}
+
+void GAShoot::printBoard()
+{
+	board.print();
 }

@@ -55,6 +55,8 @@ public:
 	Gene getBest();
 
 	void saveHit(int x, int y);
+
+	void printBoard();
 };
 
 #endif
