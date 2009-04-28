@@ -15,7 +15,7 @@
 #define GA_SHOOT_H
 
 #include "ShootGenePool.h"
-#include "Board2.h" //todo:remove
+#include "board2.h" //todo:remove
 
 class GAShoot
 {
