@@ -47,11 +47,14 @@ public:
 
 private:
 
+	// Enemy name
+	char EnemyName[128];
+
 	// Ship placement
 	GAPlacement *Placement;
 
 	// Shooting logic
-	GAShoot *Shoot;
+	GAShoot *Shooting;
 
 	// Sinking logic
 	GASinking *Sinking;

@@ -21,8 +21,8 @@ GAPlayer::GAPlayer(char *EnemyName, int BoardWidth, int BoardHeight)
 	// Instance the three components
 	Placement = new GAPlacement(EnemyName, BoardWidth, BoardHeight);
 
-	// Shooting logic
-	//Shoot = new GAShoot();
+	// Save enemy name
+	Shooting = new GAShoot(EnemyName);
 
 	// Sinking logic
 	Sinking = new GASinking(BoardWidth, BoardHeight, EnemyName);
@@ -31,13 +31,17 @@ GAPlayer::GAPlayer(char *EnemyName, int BoardWidth, int BoardHeight)
 	// Default shot states
 	TargetX = TargetY = 0;
 	TargetHit = false;
+
+	// Load up a first shot
+	Shooting->
+	
 }
 
 GAPlayer::~GAPlayer()
 {
 	// Delete (To force out some writes)
 	delete Placement;
-	delete Shoot;
+	delete Shooting;
 	delete Sinking;
 }
 
@@ -54,6 +58,7 @@ void GAPlayer::Setup(Ship *Ships, int ShipCount)
 
 void GAPlayer::Shoot(int *x, int *y)
 {
+	/*
 	// Keep looping until we would like to place a shot
 	while(true)
 	{
@@ -149,11 +154,15 @@ void GAPlayer::Shoot(int *x, int *y)
 				HasHit = false;
 			}
 		}
+	*/
+
+	// Actually shoot at position
+	SetShot(*x, *y);
 }
 
 void GAPlayer::ShootResult(int x, int y, ShotState state)
 {
-	// ...
+	// 
 }
 
 void GAPlayer::EnemyResult(int x, int y, ShotState state)

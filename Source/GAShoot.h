@@ -24,10 +24,14 @@ class GAShoot
 public:
 
 	GAShoot(double* target);
-	GAShoot(char* filename);
+	GAShoot(char* EnemyName);
+	~GAShoot();
 
 	//Get a random square based on the data
-	void getTarget(int *x, int *y, Board2* board);
+	void getTarget(int *x, int *y);
+
+	// Say that this was a shot-at position
+	void SetShot(int x, int y);
 
 	//Run generations of the GA
 	void runGeneration(); //Run one generation
@@ -42,6 +46,12 @@ public:
 	double* bestDist();
 
 	Gene getPerfect();
+
+	// Enemy name
+	char EnemyName[128];
+
+	// Enemy shot placement
+	Board2 board;
 };
 
 #endif
