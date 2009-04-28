@@ -32,7 +32,7 @@
 #include "Game.h"
 #include "Util.h"
 
-#include "Board2.h"
+#include "board2.h"
 
 // Player includes
 

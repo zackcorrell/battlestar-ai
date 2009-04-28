@@ -67,7 +67,7 @@ void ShootGenePool::sort()
 {
 	for(int i = 0; i < 10; i++)
 	{
-		double bestFitness = -9999999999;
+		double bestFitness = -99999.0;
 		int best = i;
 		for(int j = i; j < 100; j++)
 		{
