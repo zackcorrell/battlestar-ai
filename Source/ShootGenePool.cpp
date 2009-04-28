@@ -103,8 +103,8 @@ void ShootGenePool::load(char* filename)
 	ifstream in;
 	in.open(filename);
 	char buf[256];
-	while(1)
-		in.getline(buf, 256);
+	//while(1)
+	//	in.getline(buf, 256);
 
 	in >> targetAvg;
 	
@@ -120,7 +120,10 @@ void ShootGenePool::load(char* filename)
 		for(int i = 0; i < WAVECOUNT; i++)
 		{
 			float a, b; int m, o;
-			cin >> a >> m >> b >> o;
+			in >> a; in.get();
+			in >> m; in.get();
+			in >> b; in.get();
+			in >> o;
 			tempWaves[i] = Harmonic(a, m, b, o);
 		}
 

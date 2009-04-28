@@ -16,51 +16,21 @@ GAShoot::GAShoot(double* target) : genePool(target), board()
 }
 GAShoot::GAShoot(char* EnemyName) : genePool(), board()
 {
-	/*// Save enemy name
+	// Save enemy name
 	strcpy(this->EnemyName, EnemyName);
 
 	// Test if there is already a log for this enemy
 	char Temp[128];
 	strcpy(Temp, EnemyName);
 	strcat(Temp, ".dat2");
-	ofstream File(Temp);
-	if(File.fail())
+	FILE* fp = fopen(Temp, "r");
+	if(fp == NULL)
 		genePool.load("Default.dat2");
 	else
-		genePool.load(Temp);*/
+		genePool.load(Temp);
+	fclose(fp);
 
-	////Begin last-ditch code
-	double linearizedCount[100];
-	for(int i = 0; i < 100; linearizedCount[i++] = 0);
-
-	Ship Ships[5];
-	for(int i = 0; i < 100000; i++)
-	{
-		Player::SetupStatic(Ships, 5, 10, 10);
-		Board b(10, 10);
-		b.AddShips(Ships, 5);
-
-		for(int j =  0; j < 100; j++)
-		{
-			if(b.GetState(j % 10, j / 10) == StateShip)
-				linearizedCount[j] += 1;
-		}
-	}
-	
-	double step = 100 / (2 * PI);
-	for(int i = 0; i < 100; i++)
-	{
-		linearizedCount[i] = sin(i/step) + cos(i/step) + 20;
-	}
-
-	for(int i = 0; i < 100; linearizedCount[i++] /= 10000);
-
-
-	double target[100];
-	memcpy(target, linearizedCount, 100 * sizeof(double));
 	runGenerations(25);
-
-	genePool = ShootGenePool(target);
 }
 
 GAShoot::~GAShoot()
