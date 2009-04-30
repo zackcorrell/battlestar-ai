@@ -174,7 +174,7 @@ void ShootGenePool::getTarget(int* x, int* y, Board2* board)
 
 	for(int i = 0; i < 100; i++)
 	{
-		if(board->at(i / 10, i % 10) == 1)
+		if(board->at(i % 10, i / 10) == 1)
 			dist[i] = 0; //set shot places to zero
 	}
 	double total = 0;
@@ -187,8 +187,8 @@ void ShootGenePool::getTarget(int* x, int* y, Board2* board)
 	{
 		if(dist[i] > rand)
 		{
-			*x = i / 10;
-			*y = i % 10;
+			*x = i % 10;
+			*y = i / 10;
 
 			break;
 		}
@@ -267,5 +267,5 @@ Gene ShootGenePool::getPerfect()
 
 void ShootGenePool::saveHit(int x, int y)
 {
-	target[x*10+y] += INCREMENT;
+	target[x+y*10] += INCREMENT;
 }
