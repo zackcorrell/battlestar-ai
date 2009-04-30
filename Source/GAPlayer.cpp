@@ -17,6 +17,7 @@ GAPlayer::GAPlayer(char *EnemyName, int BoardWidth, int BoardHeight)
 	ShotBoard = new bool[BoardWidth * BoardHeight];
 	for(int i = 0; i < BoardWidth * BoardHeight; i++)
 		ShotBoard[i] = false;
+	strcpy(this->EnemyName, EnemyName);
 
 	// Instance the placement
 	Placement = new GAPlacement(EnemyName, BoardWidth, BoardHeight);
@@ -25,7 +26,7 @@ GAPlayer::GAPlayer(char *EnemyName, int BoardWidth, int BoardHeight)
 	Shooting = new GAShoot(EnemyName);
 
 	// Instance sinking GA
-	Sinking = new GASinking(BoardWidth, BoardHeight, EnemyName);
+	Sinking = new GASinking(BoardWidth, BoardHeight, "Default");//EnemyName);
 
 	// Default shot states
 	TargetX = TargetY = 0;
@@ -41,11 +42,43 @@ GAPlayer::~GAPlayer()
 	// Update to test out and save out new genes
 	Sinking->Update();
 	delete Sinking;
+
+	// Release shot board
+	delete[] ShotBoard;
 }
 
 void GAPlayer::Reset()
 {
-	// Release
+	// Delete (To force out some writes)
+	delete Placement;
+	delete Shooting;
+
+	// Update to test out and save out new genes
+	Sinking->Update();
+	delete Sinking;
+
+	// Release shot board
+	delete[] ShotBoard;
+
+
+
+	// Instance a placement board
+	ShotBoard = new bool[BoardWidth * BoardHeight];
+	for(int i = 0; i < BoardWidth * BoardHeight; i++)
+		ShotBoard[i] = false;
+
+	// Instance the placement
+	Placement = new GAPlacement(EnemyName, BoardWidth, BoardHeight);
+
+	// Instance shooting GA
+	Shooting = new GAShoot(EnemyName);
+
+	// Instance sinking GA
+	Sinking = new GASinking(BoardWidth, BoardHeight, "Default");
+
+	// Default shot states
+	TargetX = TargetY = 0;
+	TargetHit = false;
 }
 
 void GAPlayer::Setup(Ship *Ships, int ShipCount)
@@ -68,25 +101,14 @@ void GAPlayer::Shoot(int *x, int *y)
 			// Reset internals and use this standard gene
 			delete Sinking;
 			Sinking = new GASinking(10, 10, "Default");
+			continue; // Pop back to the top
 		}
 
 		// Ask for a shot, place it into the next run call
 		else if( State == GetShot )
 		{
-			// Non-repeating value
-			while(true)
-			{
-				// Get a valid position
-				Shooting->getTarget(&TargetX, &TargetY);
-
-				// Safety check
-				TargetX %= 10;
-				TargetY %= 10;
-
-				// If we have yet to shoot here, break
-				if( ShotBoard[ TargetY * 10 + TargetX ] == false )
-					break;
-			}
+			// Get a valid position
+			Shooting->getTarget(&TargetX, &TargetY);
 		}
 
 		// Place a shot onto the board
@@ -145,8 +167,8 @@ void GAPlayer::Shoot(int *x, int *y)
 	// Actually shoot at position
 	*x = TargetX % 10;
 	*y = TargetY % 10;
-	Shooting->setShot(TargetX, TargetY);
-	ShotBoard[TargetY * 10 + TargetX] = true;
+	Shooting->setShot(*x, *y);
+	ShotBoard[(*y) * 10 + (*x)] = true;
 }
 
 void GAPlayer::ShootResult(int x, int y, ShotState state)

@@ -18,7 +18,7 @@
 #include <cstdio>
 #include "board2.h" //todo:remove
 
-#define INCREMENT 10;
+#define INCREMENT 1;
 
 class ShootGenePool
 {

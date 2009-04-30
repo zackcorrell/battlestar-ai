@@ -69,6 +69,10 @@ void GASinkingGene::Load(char* EnemyName)
 
 void GASinkingGene::Save(char* EnemyName)
 {
+	// Don't save if it's the default data file
+	if(strcmp(EnemyName, "Default") == 0)
+		return;
+
 	// Form name
 	char FileName[128];
 	strcpy(FileName, EnemyName);

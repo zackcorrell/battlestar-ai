@@ -75,9 +75,14 @@ void ShootGenePool::save(char* filename)
 {
 	FILE* file = fopen(filename, "w");
 
-	fprintf(file, "%.4f\n\n", targetAvg);
+	double avg = 0.0;
+	for(int i = 0; i < 100; i++)
+		avg += target[i];
+	targetAvg = avg / 100.0;
 
-	for(int i = 0; i < 100; fprintf(file, "%.4f\n", target[i++]));
+	fprintf(file, "%f\n\n", targetAvg);
+
+	for(int i = 0; i < 100; fprintf(file, "%f\n", target[i++]));
 	fprintf(file, "\n");
 
 	for(int i = 0; i < 100; i++)
@@ -156,13 +161,32 @@ void ShootGenePool::getTarget(int* x, int* y, Board2* board)
 
 	delete[] dist;
 	
-	//Begin fucking filter
-	if((*x % 2 == 0 && *y % 2 == 0) || (*x % 2 == 1 && *y % 2 == 1))
-		getTarget(x, y, board);
+	// Begin filter
+	// If filter has already been filled out as best as possible
+	bool IsFilled = true;
+	for(int tempy = 0; tempy < 10 && IsFilled; tempy++)
+	{
+		for(int tempx = 0; tempx < 10 && IsFilled; tempx++)
+		{
+			if((tempx % 2 == 0 && tempy % 2 == 0) || (tempx % 2 == 1 && tempy % 2 == 1))
+				if(board->at(tempx, tempy) == 0) // If we have a space to fill...
+					IsFilled = false;
+		}
+	}
+
+	// If we found lets just search again (recursively)
+	if(IsFilled)
+	{
+		if((*x % 2 == 0 && *y % 2 == 0) || (*x % 2 == 1 && *y % 2 == 1))
+			getTarget(x, y, board);
+	}
+	else
+	{
+		if((*x % 2 == 0 && *y % 2 == 1) || (*x % 2 == 1 && *y % 2 == 0))
+			getTarget(x, y, board);
+	}
 
 	board->set(*x, *y, 1);
-
-	//todo implement fucking filter
 }
 
 double ShootGenePool::bestFitness()

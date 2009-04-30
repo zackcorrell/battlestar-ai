@@ -24,7 +24,7 @@ double* Gene::getDist()
 	return dist;
 }
 
-double Gene::fitness(double* dist)
+double Gene::fitness(double* target)
 {/*
 	double* sin = getDist(); 
 
@@ -53,6 +53,10 @@ double Gene::fitness(double* dist)
 
 	delete[] sin;
 	return numer / denom;*/
+
+	// Copy data
+	double dist[100];
+	memcpy(dist, target, 100 * sizeof(double));
 
 	//SSD
 	double* repr = getDist();

@@ -15,16 +15,16 @@
 
 // Player types (Name of class from header included below)
 #define PLAYER_1_TYPE GAPlayer
-#define PLAYER_2_TYPE DumbPlayer
+#define PLAYER_2_TYPE SmartRandom
 
 // Board type
 #define BOARD_SIZE 10
-#define GAME_COUNT 1000
+#define GAME_COUNT 25
 
 // Global flags
 #define IS_SILENCE_ON false
 #define IS_VERBOSE_ON true
-#define IS_LOGGING_ON true
+#define IS_LOGGING_ON false
 
 /*** END CONFIGURATION ***/ /**********************************/
 
@@ -54,6 +54,7 @@ int main( /* int argc, char *argv[] */ )
 	/*** Start of initialization of global variables ***/
 
 	Silence = IS_SILENCE_ON;
+	Verbose = IS_VERBOSE_ON;
 	Logging = IS_LOGGING_ON;
 
 	/*** End of initialization of global variables ***/

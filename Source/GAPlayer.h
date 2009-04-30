@@ -65,7 +65,7 @@ private:
 	// True if successful shot
 	bool TargetHit;
 
-	// Board for previous shots
+	// Previous shot placement
 	bool *ShotBoard;
 
 };
