@@ -34,7 +34,7 @@ GAShoot::GAShoot(char* EnemyName) : genePool(), board()
 		genePool.load(Temp);
 	}
 
-	runGenerations(0); // Please set this back to 25
+	runGenerations(25);
 }
 
 GAShoot::~GAShoot()

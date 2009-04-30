@@ -165,4 +165,7 @@ void GAPlayer::EnemyResult(int x, int y, ShotState state)
 {
 	// Tell our placement algorithm how our enemy shot
 	Placement->EnemyShootsAt(x, y);
+
+	// Tell our shooting algorithm our sucess
+	Shooting->saveHit(x, y);
 }
