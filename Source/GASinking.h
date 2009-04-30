@@ -18,7 +18,7 @@
 // Includes
 #include "Util.h"
 #include "Ships.h"
-#include "Board.h"
+#include "Board1.h"
 #include "GASinkingGene.h"
 
 // Sinking management
@@ -27,13 +27,13 @@ class GASinking
 public:
 
 	// Build up gene pool
-	GASinking(int BoardWidth, int BoardHeight, char *OpponentName);
+	GASinking(int Board1Width, int Board1Height, char *OpponentName);
 
 	// Release all data and save best gene to drive
 	~GASinking();
 
 	// Save enemy board placement (Used for gene fitness management)
-	void SaveEnemyBoard(Ship *ShipsList, int ShipCount);
+	void SaveEnemyBoard1(Ship *ShipsList, int ShipCount);
 
 	// Update the entire gene pool by applying our gene-fitness and breeding functions
 	// Prepare our main gene for the next round
@@ -53,8 +53,8 @@ private:
 	// Gene pool
 	GASinkingGene *GenePool[GA_MAX_POOL];
 
-	// Board size
-	int BoardWidth, BoardHeight;
+	// Board1 size
+	int Board1Width, Board1Height;
 
 	// Enemy name
 	char OpponentName[128];

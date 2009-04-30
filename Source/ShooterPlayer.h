@@ -20,14 +20,14 @@
 
 // Includes
 #include "Player.h"
-#include "Board.h"
+#include "Board1.h"
 
 class ShooterPlayer : public Player
 {
 public:
 
 	// Required to implement
-	ShooterPlayer(int BoardWidth, int BoardHeight);
+	ShooterPlayer(int Board1Width, int Board1Height);
 
 	~ShooterPlayer();
 
@@ -42,8 +42,8 @@ public:
 
 private:
 
-	// Board to prevent shooting at the same position
-	bool *Board;
+	// Board1 to prevent shooting at the same position
+	bool *Board1;
 
 	// The list of the last successful shots
 	int HitState;				// State of targeting: 0 is searching, 1 is going through all N,E,S,W

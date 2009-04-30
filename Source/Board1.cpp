@@ -8,34 +8,34 @@
  
 ***************************************************************/
 
-#include "Board.h"
+#include "Board1.h"
 
-Board::Board(int BoardWidth, int BoardHeight)
+Board1::Board1(int Board1Width, int Board1Height)
 {
 	// Allocate board space
-	BoardData = new ShotState[BoardWidth * BoardHeight];
-	if(BoardData == NULL)
+	Board1Data = new ShotState[Board1Width * Board1Height];
+	if(Board1Data == NULL)
 	{
 		Printf("The board count not be allocated.\n");
 		exit(-1);
 	}
 
 	// Save size
-	this->BoardWidth = BoardWidth;
-	this->BoardHeight = BoardHeight;
+	this->Board1Width = Board1Width;
+	this->Board1Height = Board1Height;
 
 	// Initialize the board
-	for(int i = 0; i < BoardWidth * BoardHeight; i++)
-		BoardData[i] = StateEmpty;
+	for(int i = 0; i < Board1Width * Board1Height; i++)
+		Board1Data[i] = StateEmpty;
 }
 
-Board::~Board()
+Board1::~Board1()
 {
 	// Release board
-	delete[] BoardData;
+	delete[] Board1Data;
 }
 
-void Board::AddShips(Ship *ShipsList, int ShipCount)
+void Board1::AddShips(Ship *ShipsList, int ShipCount)
 {
 	// Validate ShipsList
 	if(ShipsList == NULL)
@@ -45,7 +45,7 @@ void Board::AddShips(Ship *ShipsList, int ShipCount)
 	}
 
 	// Validate ship placement
-	if(ValidateShips(ShipsList, ShipCount, BoardWidth, BoardHeight) == false)
+	if(ValidateShips(ShipsList, ShipCount, Board1Width, Board1Height) == false)
 	{
 		Printf("Invalid ShipsList list.\n");
 		exit(-1);
@@ -69,38 +69,38 @@ void Board::AddShips(Ship *ShipsList, int ShipCount)
 			int y = ShipsList[i].y[j];
 
 			// Place ship
-			BoardData[y * BoardWidth + x] = StateShip;
+			Board1Data[y * Board1Width + x] = StateShip;
 		}
 	}
 }
 
-ShotState Board::GetState(int x, int y)
+ShotState Board1::GetState(int x, int y)
 {
 	// Validate position
-	if(x < 0 || x >= BoardWidth || y < 0 || y >= BoardHeight)
+	if(x < 0 || x >= Board1Width || y < 0 || y >= Board1Height)
 	{
 		Printf("The given target for GetState(...) is out of bounds.\n");
 		exit(-1);
 	}
 
 	// Get current state
-	return BoardData[y * BoardWidth + x];
+	return Board1Data[y * Board1Width + x];
 }
 
-void Board::SetState(int x, int y, ShotState State)
+void Board1::SetState(int x, int y, ShotState State)
 {
 	// Validate position
-	if(x < 0 || x >= BoardWidth || y < 0 || y >= BoardHeight)
+	if(x < 0 || x >= Board1Width || y < 0 || y >= Board1Height)
 	{
 		Printf("The given target for SetState(...) is out of bounds.\n");
 		exit(-1);
 	}
 
 	// Save the state
-	BoardData[y * BoardWidth + x] = State;
+	Board1Data[y * Board1Width + x] = State;
 }
 
-void Board::HitShip(int x, int y)
+void Board1::HitShip(int x, int y)
 {
 	// For each ship
 	for(int i = 0; i < 5; i++) // 5 == ship count
@@ -124,7 +124,7 @@ void Board::HitShip(int x, int y)
 	// Nothing found, just return
 }
 
-int Board::GetSunkCount()
+int Board1::GetSunkCount()
 {
 	// Sunk count
 	int Sunk = 0;
@@ -140,20 +140,20 @@ int Board::GetSunkCount()
 	return Sunk;
 }
 
-void Board::Print()
+void Board1::Print()
 {
 	// Print top line
 	Printf("   [0][1][2][3][4][5][6][7][8][9]\n");
 
 	// Print table
-	for(int y = 0; y < BoardHeight; y++)
+	for(int y = 0; y < Board1Height; y++)
 	{
 		// Print side line
 		Printf("[%c]", 'A' + y);
-		for(int x = 0; x < BoardWidth; x++)
+		for(int x = 0; x < Board1Width; x++)
 		{
 			char output;
-			switch(BoardData[y * BoardWidth + x])
+			switch(Board1Data[y * Board1Width + x])
 			{
 				case StateShip:	output = '#'; break;
 				case StateMiss:	output = 'o'; break;
@@ -172,18 +172,18 @@ void Board::Print()
 	Printf("        'x' is a hit; '#' is a ship\n\n");
 }
 
-bool Board::ValidateShips(Ship *ShipsList, int ShipCount, int Width, int Height)
+bool Board1::ValidateShips(Ship *ShipsList, int ShipCount, int Width, int Height)
 {
 	// Return invalid if the given pointer is null
 	if(ShipsList == NULL)
 		return false;
 
 	// Allocate board size
-	ShotState *Board = new ShotState[Width * Height];
+	ShotState *Board1 = new ShotState[Width * Height];
 
 	// Initialize the board
 	for(int i = 0; i < Width * Height; i++)
-		Board[i] = StateEmpty;
+		Board1[i] = StateEmpty;
 
 	// The return data
 	bool IsValid = true;
@@ -199,19 +199,19 @@ bool Board::ValidateShips(Ship *ShipsList, int ShipCount, int Width, int Height)
 			int y = ShipsList[i].y[j];
 
 			// If out of bounds or a ship already exists here...
-			if(x < 0 || x >= Width || y < 0 || y >= Height || Board[y * Width + x] == StateShip)
+			if(x < 0 || x >= Width || y < 0 || y >= Height || Board1[y * Width + x] == StateShip)
 			{
 				IsValid = false;
 				break;
 			}
 
 			// Place ship
-			Board[y * Width + x] = StateShip;
+			Board1[y * Width + x] = StateShip;
 		}
 	}
 
 	// Release board
-	delete [] Board;
+	delete [] Board1;
 
 	// Return validation data
 	return IsValid;

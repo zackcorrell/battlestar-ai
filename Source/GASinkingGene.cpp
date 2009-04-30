@@ -573,10 +573,10 @@ int GASinkingGene::Simulate(GASinkingGene *Gene, Ship *Ships, int ShipCount)
 	Gene->ResetRegisters();
 
 	// Create a board game with random ship placement
-	Board SampleBoard(WIDTH, LENGTH);
+	Board1 SampleBoard1(WIDTH, LENGTH);
 
 	// Place ships randomly
-	SampleBoard.AddShips(Ships, ShipCount);
+	SampleBoard1.AddShips(Ships, ShipCount);
 
 	// Simulation variables
 	int ShotCount = 0;
@@ -588,9 +588,9 @@ int GASinkingGene::Simulate(GASinkingGene *Gene, Ship *Ships, int ShipCount)
 	for(int sim = 0; sim <= GA_SIMULATION_COUNT; sim++)
 	{
 		// Check if we sunk all ships
-		if( SampleBoard.GetSunkCount() >= ShipCount )
+		if( SampleBoard1.GetSunkCount() >= ShipCount )
 			return ShotCount;
-		else if( ShotCount > 220 && SampleBoard.GetSunkCount() < 3)
+		else if( ShotCount > 220 && SampleBoard1.GetSunkCount() < 3)
 			return INT_MAX;
 		else if( sim == GA_SIMULATION_COUNT )
 			return INT_MAX;
@@ -620,7 +620,7 @@ int GASinkingGene::Simulate(GASinkingGene *Gene, Ship *Ships, int ShipCount)
 				walky %= 10;
 
 				// If we have not yet shot this position, shoot it
-				if(SampleBoard.GetState(walkx, walky) == StateEmpty || SampleBoard.GetState(walkx, walky) == StateShip)
+				if(SampleBoard1.GetState(walkx, walky) == StateEmpty || SampleBoard1.GetState(walkx, walky) == StateShip)
 				{
 					tempx = walkx;
 					tempy = walky;
@@ -640,24 +640,24 @@ int GASinkingGene::Simulate(GASinkingGene *Gene, Ship *Ships, int ShipCount)
 			tempy %= 10;
 
 			// Place shot
-			ShotState BoardState = SampleBoard.GetState(tempx, tempy);
+			ShotState Board1State = SampleBoard1.GetState(tempx, tempy);
 
 			// If we have nothing, return a miss
-			if(BoardState == StateShip)
+			if(Board1State == StateShip)
 			{
-				SampleBoard.SetState(tempx, tempy, StateHit);
-				SampleBoard.HitShip(tempx, tempy);
+				SampleBoard1.SetState(tempx, tempy, StateHit);
+				SampleBoard1.HitShip(tempx, tempy);
 				HasHit = true;
 
 				// We take another shot
 				//ShotCount++;
 			}
-			else if(BoardState == StateMiss)
+			else if(Board1State == StateMiss)
 			{
 				// Already shot here, and nothing
 				HasHit = false;
 			}
-			else if(BoardState == StateHit)
+			else if(Board1State == StateHit)
 			{
 				// If we have already hit a ship here, lets walk through
 				// to the next valid position (if any exists)
@@ -671,7 +671,7 @@ int GASinkingGene::Simulate(GASinkingGene *Gene, Ship *Ships, int ShipCount)
 				while(x >= 0 && y >= 0 && x < 10 && y < 10)
 				{
 					// If this area is non-shot or a ship, then break
-					if(SampleBoard.GetState(x, y) == StateEmpty || SampleBoard.GetState(x, y) == StateShip)
+					if(SampleBoard1.GetState(x, y) == StateEmpty || SampleBoard1.GetState(x, y) == StateShip)
 						break;
 
 					// Move
@@ -693,8 +693,8 @@ int GASinkingGene::Simulate(GASinkingGene *Gene, Ship *Ships, int ShipCount)
 					Gene->TargetPos[1] = y;
 
 					// Post back to board
-					SampleBoard.SetState(x, y, StateHit);
-					SampleBoard.HitShip(x, y);
+					SampleBoard1.SetState(x, y, StateHit);
+					SampleBoard1.HitShip(x, y);
 					HasHit = true;
 
 					// We take another shot
@@ -707,7 +707,7 @@ int GASinkingGene::Simulate(GASinkingGene *Gene, Ship *Ships, int ShipCount)
 			else
 			{
 				// Normal miss condition
-				SampleBoard.SetState(tempx, tempy, StateMiss);
+				SampleBoard1.SetState(tempx, tempy, StateMiss);
 				HasHit = false;
 			}
 		}

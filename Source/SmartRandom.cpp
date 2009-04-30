@@ -10,24 +10,24 @@
 
 #include "SmartRandom.h"
 
-SmartRandom::SmartRandom(int BoardWidth, int BoardHeight)
-	: Player("SmartRandom Hand-Coded", BoardWidth, BoardHeight)
+SmartRandom::SmartRandom(int Board1Width, int Board1Height)
+	: Player("SmartRandom Hand-Coded", Board1Width, Board1Height)
 {
 	// Allocate "hit" board (No need to init, that is done in Reset())
-	Board = new bool[BoardWidth * BoardHeight];
+	Board1 = new bool[Board1Width * Board1Height];
 }
 
 SmartRandom::~SmartRandom()
 {
 	// Release "hit" board
-	delete [] Board;
+	delete [] Board1;
 }
 
 void SmartRandom::Reset()
 {
 	// Reset "hit" board
-	for(int i = 0; i < BoardWidth * BoardHeight; i++)
-		Board[i] = false;
+	for(int i = 0; i < Board1Width * Board1Height; i++)
+		Board1[i] = false;
 
 	// Set state to searching
 	State = Searching;
@@ -44,11 +44,11 @@ void SmartRandom::Shoot(int *x, int *y)
 		{
 			while(true)
 			{
-				targetx = rand() % BoardWidth;
-				targety = rand() % BoardHeight;
+				targetx = rand() % Board1Width;
+				targety = rand() % Board1Height;
 
 				// If we have not yet shot this position, shoot it
-				if(Board[targety * BoardWidth + targetx] == false)
+				if(Board1[targety * Board1Width + targetx] == false)
 					break;
 			}
 		}
@@ -58,7 +58,7 @@ void SmartRandom::Shoot(int *x, int *y)
 			while(true)
 			{
 				// Choose a random y
-				targety = rand() % BoardHeight;
+				targety = rand() % Board1Height;
 
 				// Select a corrected x such that: x is even when y is even and x is odd when y is odd
 				if(targety % 2 == 0)
@@ -66,7 +66,7 @@ void SmartRandom::Shoot(int *x, int *y)
 					// Find an even x
 					while(true)
 					{
-						targetx = rand() % BoardWidth;
+						targetx = rand() % Board1Width;
 						if(targetx % 2 == 0)
 							break;
 					}
@@ -76,14 +76,14 @@ void SmartRandom::Shoot(int *x, int *y)
 					// Find an odd x
 					while(true)
 					{
-						targetx = rand() % BoardWidth;
+						targetx = rand() % Board1Width;
 						if(targetx % 2 == 1)
 							break;
 					}
 				}
 
 				// If we have not yet shot this position, shoot it
-				if(Board[targety * BoardWidth + targetx] == false)
+				if(Board1[targety * Board1Width + targetx] == false)
 					break;
 			}
 		}
@@ -110,7 +110,7 @@ void SmartRandom::Shoot(int *x, int *y)
 				targetx--;
 
 			// If we are out of bounds, or we have already shot this position...
-			if(targetx < 0 || targetx >= BoardWidth || targety < 0 || targety >= BoardHeight || Board[targety * BoardWidth + targetx] == true)
+			if(targetx < 0 || targetx >= Board1Width || targety < 0 || targety >= Board1Height || Board1[targety * Board1Width + targetx] == true)
 			{
 				// Switch to the next direction
 				if(SearchDirection == North)
@@ -152,7 +152,7 @@ void SmartRandom::Shoot(int *x, int *y)
 				targetx--;
 
 			// If it's out of bounds, let's reset the position and flip points, else, break
-			if(targetx < 0 || targetx >= BoardWidth || targety < 0 || targety >= BoardHeight || Board[targety * BoardWidth + targetx] == true)
+			if(targetx < 0 || targetx >= Board1Width || targety < 0 || targety >= Board1Height || Board1[targety * Board1Width + targetx] == true)
 			{
 				// If we are done sinking the ship...
 				if(flipped)
@@ -191,7 +191,7 @@ void SmartRandom::Shoot(int *x, int *y)
 	*y = targety;
 
 	// Done with targeting...
-	Board[*y * BoardWidth + *x] = true; // Save spot shot at
+	Board1[*y * Board1Width + *x] = true; // Save spot shot at
 }
 
 void SmartRandom::ShootResult(int x, int y, ShotState state)
@@ -266,7 +266,7 @@ void SmartRandom::ShootResult(int x, int y, ShotState state)
 bool SmartRandom::CheckerFull()
 {
 	// For each row
-	for(int y = 0; y < BoardHeight; y++)
+	for(int y = 0; y < Board1Height; y++)
 	{
 		// If the row numer is even...
 		if(y % 2 == 0)
@@ -275,7 +275,7 @@ bool SmartRandom::CheckerFull()
 			for(int x = 0; x < 10; x +=2)
 			{
 				// If this position has yet to be shot..
-				if(Board[y * BoardWidth + x] == false)
+				if(Board1[y * Board1Width + x] == false)
 					return false;
 			}
 		}
@@ -285,7 +285,7 @@ bool SmartRandom::CheckerFull()
 			for(int x = 1; x < 10; x +=2)
 			{
 				// If this position has yet to be shot..
-				if(Board[y * BoardWidth + x] == false)
+				if(Board1[y * Board1Width + x] == false)
 					return false;
 			}
 		}

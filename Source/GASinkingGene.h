@@ -18,7 +18,7 @@
 // Includes
 #include "Util.h"
 #include "Player.h" // Included for "TargetingState"
-#include "Board.h" // For simulations
+#include "Board1.h" // For simulations
 
 // Maximum gene pool size
 #define GA_MAX_POOL 50

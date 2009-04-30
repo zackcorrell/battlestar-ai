@@ -10,11 +10,11 @@
 
 #include "GASinking.h"
 
-GASinking::GASinking(int BoardWidth, int BoardHeight, char *OpponentName)
+GASinking::GASinking(int Board1Width, int Board1Height, char *OpponentName)
 {
 	// Save size
-	this->BoardWidth = BoardWidth;
-	this->BoardHeight = BoardHeight;
+	this->Board1Width = Board1Width;
+	this->Board1Height = Board1Height;
 
 	// Copy over opponent name
 	strcpy(this->OpponentName, OpponentName);
@@ -38,7 +38,7 @@ GASinking::~GASinking()
 		delete GenePool[i];
 }
 
-void GASinking::SaveEnemyBoard(Ship *ShipsList, int ShipCount)
+void GASinking::SaveEnemyBoard1(Ship *ShipsList, int ShipCount)
 {
 	// Attempt to write out to a file formated as: abc123.dat4
 	char FileName[128];

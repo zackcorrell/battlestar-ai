@@ -10,11 +10,11 @@
 
 #include "ShooterPlayer.h"
 
-ShooterPlayer::ShooterPlayer(int BoardWidth, int BoardHeight)
-	: Player("ShooterPlayer Hand-Coded", BoardWidth, BoardHeight)
+ShooterPlayer::ShooterPlayer(int Board1Width, int Board1Height)
+	: Player("ShooterPlayer Hand-Coded", Board1Width, Board1Height)
 {
 	// Allocate "hit" board (No need to init, that is done in Reset())
-	Board = new bool[BoardWidth * BoardHeight];
+	Board1 = new bool[Board1Width * Board1Height];
 
 	// Default the last x and y shot
 	HitState = 0;
@@ -23,14 +23,14 @@ ShooterPlayer::ShooterPlayer(int BoardWidth, int BoardHeight)
 ShooterPlayer::~ShooterPlayer()
 {
 	// Release "hit" board
-	delete [] Board;
+	delete [] Board1;
 }
 
 void ShooterPlayer::Reset()
 {
 	// Reset "hit" board
-	for(int i = 0; i < BoardWidth * BoardHeight; i++)
-		Board[i] = false;
+	for(int i = 0; i < Board1Width * Board1Height; i++)
+		Board1[i] = false;
 }
 
 void ShooterPlayer::Shoot(int *x, int *y)
@@ -42,7 +42,7 @@ void ShooterPlayer::Shoot(int *x, int *y)
 		while(true)
 		{
 			// Choose a random y
-			*y = rand() % BoardHeight;
+			*y = rand() % Board1Height;
 
 			// Select a corrected x such that: x is even when y is even and x is odd when y is odd
 			if(*y % 2 == 0)
@@ -50,7 +50,7 @@ void ShooterPlayer::Shoot(int *x, int *y)
 				// Find an even x
 				while(true)
 				{
-					*x = rand() % BoardWidth;
+					*x = rand() % Board1Width;
 					if(*x % 2 == 0)
 						break;
 				}
@@ -60,14 +60,14 @@ void ShooterPlayer::Shoot(int *x, int *y)
 				// Find an odd x
 				while(true)
 				{
-					*x = rand() % BoardWidth;
+					*x = rand() % Board1Width;
 					if(*x % 2 == 1)
 						break;
 				}
 			}
 
 			// If we have not yet shot this position, shoot it
-			if(Board[*y * BoardWidth + *x] == false)
+			if(Board1[*y * Board1Width + *x] == false)
 				break;
 		}
 	}
@@ -78,7 +78,7 @@ void ShooterPlayer::Shoot(int *x, int *y)
 		*x = *y = -1;
 
 		// Save the x and y
-		while(*x < 0 || *x >= BoardWidth || *y < 0 || *y >= BoardHeight)
+		while(*x < 0 || *x >= Board1Width || *y < 0 || *y >= Board1Height)
 		{
 			*x = HitSource[0];
 			*y = HitSource[1];
@@ -106,7 +106,7 @@ void ShooterPlayer::Shoot(int *x, int *y)
 			HitDir++;
 
 			// We don't want to shoot the same spot..
-			if(Board[*y * BoardWidth + *x] == true)
+			if(Board1[*y * Board1Width + *x] == true)
 				*x = *y = -1; // Try again
 
 			// If we have done a full cycle and can't find another hit, go back to state 0 - searching
@@ -121,7 +121,7 @@ void ShooterPlayer::Shoot(int *x, int *y)
 	}
 
 	// Hit board
-	Board[*y * BoardWidth + *x] = true;
+	Board1[*y * Board1Width + *x] = true;
 }
 
 void ShooterPlayer::ShootResult(int x, int y, ShotState state)

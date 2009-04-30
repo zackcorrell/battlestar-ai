@@ -133,7 +133,7 @@ void ShootGenePool::load(char* filename)
 	sort();
 }
 
-void ShootGenePool::getTarget(int* x, int* y, Board2* board)
+void ShootGenePool::getTarget(int* x, int* y, Board12* board)
 {
 	double* dist = best().getDist();
 

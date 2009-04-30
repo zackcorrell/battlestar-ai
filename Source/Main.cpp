@@ -17,7 +17,7 @@
 #define PLAYER_1_TYPE GAPlayer
 #define PLAYER_2_TYPE SmartRandom
 
-// Board type
+// Board1 type
 #define BOARD_SIZE 10
 #define GAME_COUNT 25
 

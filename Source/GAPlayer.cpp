@@ -10,23 +10,23 @@
 
 #include "GAPlayer.h"
 
-GAPlayer::GAPlayer(char *EnemyName, int BoardWidth, int BoardHeight)
-	: Player("GAPlayer AI", BoardWidth, BoardHeight)
+GAPlayer::GAPlayer(char *EnemyName, int Board1Width, int Board1Height)
+	: Player("GAPlayer AI", Board1Width, Board1Height)
 {
 	// Instance a placement board
-	ShotBoard = new bool[BoardWidth * BoardHeight];
-	for(int i = 0; i < BoardWidth * BoardHeight; i++)
-		ShotBoard[i] = false;
+	ShotBoard1 = new bool[Board1Width * Board1Height];
+	for(int i = 0; i < Board1Width * Board1Height; i++)
+		ShotBoard1[i] = false;
 	strcpy(this->EnemyName, EnemyName);
 
 	// Instance the placement
-	Placement = new GAPlacement(EnemyName, BoardWidth, BoardHeight);
+	Placement = new GAPlacement(EnemyName, Board1Width, Board1Height);
 
 	// Instance shooting GA
 	Shooting = new GAShoot(EnemyName);
 
 	// Instance sinking GA
-	Sinking = new GASinking(BoardWidth, BoardHeight, "Default");
+	Sinking = new GASinking(Board1Width, Board1Height, "Default");
 
 	// Default shot states
 	TargetX = TargetY = 0;
@@ -44,7 +44,7 @@ GAPlayer::~GAPlayer()
 	delete Sinking;
 
 	// Release shot board
-	delete[] ShotBoard;
+	delete[] ShotBoard1;
 }
 
 void GAPlayer::Reset()
@@ -58,23 +58,23 @@ void GAPlayer::Reset()
 	delete Sinking;
 
 	// Release shot board
-	delete[] ShotBoard;
+	delete[] ShotBoard1;
 
 
 
 	// Instance a placement board
-	ShotBoard = new bool[BoardWidth * BoardHeight];
-	for(int i = 0; i < BoardWidth * BoardHeight; i++)
-		ShotBoard[i] = false;
+	ShotBoard1 = new bool[Board1Width * Board1Height];
+	for(int i = 0; i < Board1Width * Board1Height; i++)
+		ShotBoard1[i] = false;
 
 	// Instance the placement
-	Placement = new GAPlacement(EnemyName, BoardWidth, BoardHeight);
+	Placement = new GAPlacement(EnemyName, Board1Width, Board1Height);
 
 	// Instance shooting GA
 	Shooting = new GAShoot(EnemyName);
 
 	// Instance sinking GA
-	Sinking = new GASinking(BoardWidth, BoardHeight, "Default");
+	Sinking = new GASinking(Board1Width, Board1Height, "Default");
 
 	// Default shot states
 	TargetX = TargetY = 0;
@@ -119,7 +119,7 @@ void GAPlayer::Shoot(int *x, int *y)
 			TargetY %= 10;
 
 			// If we have already hit a position
-			if( ShotBoard[TargetY * 10 + TargetX] == true && TargetHit == false )
+			if( ShotBoard1[TargetY * 10 + TargetX] == true && TargetHit == false )
 			{
 				// If we have already hit a ship here, lets walk through
 				// to the next valid position (if any exists)
@@ -133,7 +133,7 @@ void GAPlayer::Shoot(int *x, int *y)
 				while(x >= 0 && y >= 0 && x < 10 && y < 10)
 				{
 					// If this area is non-shot or a ship, then break
-					if(ShotBoard[TargetY * 10 + TargetX] == false)
+					if(ShotBoard1[TargetY * 10 + TargetX] == false)
 						break;
 
 					// Move
@@ -168,7 +168,7 @@ void GAPlayer::Shoot(int *x, int *y)
 	*x = TargetX % 10;
 	*y = TargetY % 10;
 	Shooting->setShot(*x, *y);
-	ShotBoard[(*y) * 10 + (*x)] = true;
+	ShotBoard1[(*y) * 10 + (*x)] = true;
 }
 
 void GAPlayer::ShootResult(int x, int y, ShotState state)

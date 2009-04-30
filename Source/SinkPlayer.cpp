@@ -10,24 +10,24 @@
 
 #include "SinkPlayer.h"
 
-SinkPlayer::SinkPlayer(int BoardWidth, int BoardHeight)
-	: Player("SinkPlayer Hand-Coded", BoardWidth, BoardHeight)
+SinkPlayer::SinkPlayer(int Board1Width, int Board1Height)
+	: Player("SinkPlayer Hand-Coded", Board1Width, Board1Height)
 {
 	// Allocate "hit" board (No need to init, that is done in Reset())
-	Board = new bool[BoardWidth * BoardHeight];
+	Board1 = new bool[Board1Width * Board1Height];
 }
 
 SinkPlayer::~SinkPlayer()
 {
 	// Release "hit" board
-	delete [] Board;
+	delete [] Board1;
 }
 
 void SinkPlayer::Reset()
 {
 	// Reset "hit" board
-	for(int i = 0; i < BoardWidth * BoardHeight; i++)
-		Board[i] = false;
+	for(int i = 0; i < Board1Width * Board1Height; i++)
+		Board1[i] = false;
 
 	// Set state to searching
 	State = Searching;
@@ -41,11 +41,11 @@ void SinkPlayer::Shoot(int *x, int *y)
 	{
 		while(true)
 		{
-			targetx = rand() % BoardWidth;
-			targety = rand() % BoardHeight;
+			targetx = rand() % Board1Width;
+			targety = rand() % Board1Height;
 
 			// If we have not yet shot this position, shoot it
-			if(Board[targety * BoardWidth + targetx] == false)
+			if(Board1[targety * Board1Width + targetx] == false)
 				break;
 		}
 	}
@@ -71,7 +71,7 @@ void SinkPlayer::Shoot(int *x, int *y)
 				targetx--;
 
 			// If we are out of bounds, or we have already shot this position...
-			if(targetx < 0 || targetx >= BoardWidth || targety < 0 || targety >= BoardHeight || Board[targety * BoardWidth + targetx] == true)
+			if(targetx < 0 || targetx >= Board1Width || targety < 0 || targety >= Board1Height || Board1[targety * Board1Width + targetx] == true)
 			{
 				// Switch to the next direction
 				if(SearchDirection == North)
@@ -113,7 +113,7 @@ void SinkPlayer::Shoot(int *x, int *y)
 				targetx--;
 
 			// If it's out of bounds, let's reset the position and flip points, else, break
-			if(targetx < 0 || targetx >= BoardWidth || targety < 0 || targety >= BoardHeight || Board[targety * BoardWidth + targetx] == true)
+			if(targetx < 0 || targetx >= Board1Width || targety < 0 || targety >= Board1Height || Board1[targety * Board1Width + targetx] == true)
 			{
 				// If we are done sinking the ship...
 				if(flipped)
@@ -152,7 +152,7 @@ void SinkPlayer::Shoot(int *x, int *y)
 	*y = targety;
 
 	// Done with targeting...
-	Board[*y * BoardWidth + *x] = true; // Save spot shot at
+	Board1[*y * Board1Width + *x] = true; // Save spot shot at
 }
 
 void SinkPlayer::ShootResult(int x, int y, ShotState state)

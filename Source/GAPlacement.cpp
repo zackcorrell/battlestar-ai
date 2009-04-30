@@ -10,15 +10,15 @@
 
 #include "GAPlacement.h"
 
-GAPlacement::GAPlacement(char *EnemyName, int BoardWidth, int BoardHeight)
+GAPlacement::GAPlacement(char *EnemyName, int Board1Width, int Board1Height)
 {
 	// Valudate the enemy name
 	if(EnemyName == NULL)
 		EnemyName = "Default";
 
 	// Save width and height
-	Width = BoardWidth;
-	Height = BoardHeight;
+	Width = Board1Width;
+	Height = Board1Height;
 
 	// Form the file name
 	sprintf(FileName, "%s.dat1", EnemyName);
@@ -27,7 +27,7 @@ GAPlacement::GAPlacement(char *EnemyName, int BoardWidth, int BoardHeight)
 	ifstream File(FileName);
 
 	// Allocate the needed map
-	BoardData = new double[Width * Height];
+	Board1Data = new double[Width * Height];
 
 	// File failed, load default data
 	if(File.fail())
@@ -37,8 +37,8 @@ GAPlacement::GAPlacement(char *EnemyName, int BoardWidth, int BoardHeight)
 		// Set all data to weights of HIT_UNIT
 		for(int i = 0; i < Width * Height; i++)
 		{
-			Default >> BoardData[i];
-			BoardData[i] += HIT_UNIT;
+			Default >> Board1Data[i];
+			Board1Data[i] += HIT_UNIT;
 		}
 		Default.close();
 	}
@@ -48,7 +48,7 @@ GAPlacement::GAPlacement(char *EnemyName, int BoardWidth, int BoardHeight)
 	{
 		// Are we reading the same ammount of data?
 		for(int i = 0; i < Width * Height; i++)
-			File >> BoardData[i];
+			File >> Board1Data[i];
 	}
 }
 
@@ -59,10 +59,10 @@ GAPlacement::~GAPlacement()
 
 	// Write out the matrix data
 	for(int i = 0; i < Width * Height; i++)
-		File << setprecision(8) << BoardData[i] << " ";
+		File << setprecision(8) << Board1Data[i] << " ";
 
 	// Release data
-	delete [] BoardData;
+	delete [] Board1Data;
 }
 
 void GAPlacement::EnemyShootsAt(int x, int y)
@@ -91,11 +91,11 @@ void GAPlacement::Setup(Ship *Ships, int ShipCount)
 	// Find total sum of current shots
 	double TotalSum = 0.0;
 	for(int i = 0; i < Width * Height; i++)
-		TotalSum += 1.0 / BoardData[i];
+		TotalSum += 1.0 / Board1Data[i];
 
 	// Apply linearlization
 	for(int i = 0; i < Width * Height; i++)
-		Linearization[i] = (1.0 / BoardData[i]) / TotalSum;
+		Linearization[i] = (1.0 / Board1Data[i]) / TotalSum;
 
 	// Build the Random select table
 	// Element(i) = Element(0) + Element(1) + ... + Element(i - 1) + Element(i)
@@ -192,7 +192,7 @@ void GAPlacement::Setup(Ship *Ships, int ShipCount)
 			Ships[ i - 1 ] = ship;
 
 			// Validate if this new ship is any good, and if so, break out
-			if( Board::ValidateShips(Ships, i, Width, Height) == true )
+			if( Board1::ValidateShips(Ships, i, Width, Height) == true )
 			{
 				ValidShip = true;
 				break;
@@ -213,7 +213,7 @@ void GAPlacement::PlaceShot(int x, int y, double value)
 	// Check if out of bounds
 	if(x < 0 || x >= Width || y < 0 || y >= Height)
 		return;
-	BoardData[ y * Width + x ] += value;
+	Board1Data[ y * Width + x ] += value;
 }
 
 double GAPlacement::GetShotDensity(int x, int y)
@@ -221,5 +221,5 @@ double GAPlacement::GetShotDensity(int x, int y)
 	// Check if out of bounds
 	if(x < 0 || x >= Width || y < 0 || y >= Height)
 		return 0.0;
-	return BoardData[ y * Width + x ];
+	return Board1Data[ y * Width + x ];
 }

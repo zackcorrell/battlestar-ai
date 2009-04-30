@@ -18,14 +18,14 @@
 
 // Includes
 #include "Player.h"
-#include "Board.h"
+#include "Board1.h"
 
 class SinkPlayer : public Player
 {
 public:
 
 	// Required to implement
-	SinkPlayer(int BoardWidth, int BoardHeight);
+	SinkPlayer(int Board1Width, int Board1Height);
 
 	~SinkPlayer();
 
@@ -51,8 +51,8 @@ private:
 	// Direction we are searching
 	Direction SearchDirection;
 
-	// Board to prevent shooting at the same position
-	bool *Board;
+	// Board1 to prevent shooting at the same position
+	bool *Board1;
 
 };
 

@@ -26,7 +26,7 @@ class GAPlayer : public Player
 public:
 
 	// Required to implement
-	GAPlayer(char *EnemyName, int BoardWidth, int BoardHeight);
+	GAPlayer(char *EnemyName, int Board1Width, int Board1Height);
 
 	~GAPlayer();
 
@@ -66,7 +66,7 @@ private:
 	bool TargetHit;
 
 	// Previous shot placement
-	bool *ShotBoard;
+	bool *ShotBoard1;
 
 };
 

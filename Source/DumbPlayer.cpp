@@ -10,39 +10,39 @@
 
 #include "DumbPlayer.h"
 
-DumbPlayer::DumbPlayer(int BoardWidth, int BoardHeight)
-	: Player("DumbPlayer Hand-Coded", BoardWidth, BoardHeight)
+DumbPlayer::DumbPlayer(int Board1Width, int Board1Height)
+	: Player("DumbPlayer Hand-Coded", Board1Width, Board1Height)
 {
 	// Allocate "hit" board (No need to init, that is done in Reset())
-	Board = new bool[BoardWidth * BoardHeight];
+	Board1 = new bool[Board1Width * Board1Height];
 }
 
 DumbPlayer::~DumbPlayer()
 {
 	// Release "hit" board
-	delete [] Board;
+	delete [] Board1;
 }
 
 void DumbPlayer::Reset()
 {
 	// Reset "hit" board
-	for(int i = 0; i < BoardWidth * BoardHeight; i++)
-		Board[i] = false;
+	for(int i = 0; i < Board1Width * Board1Height; i++)
+		Board1[i] = false;
 }
 
 void DumbPlayer::Shoot(int *x, int *y)
 {
 	while(true)
 	{
-		*x = rand() % BoardWidth;
-		*y = rand() % BoardHeight;
+		*x = rand() % Board1Width;
+		*y = rand() % Board1Height;
 
 		// If we have not yet shot this position, shoot it
-		if(Board[*y * BoardWidth + *x] == false)
+		if(Board1[*y * Board1Width + *x] == false)
 			break;
 	}
 
-	Board[*y * BoardWidth + *x] = true;
+	Board1[*y * Board1Width + *x] = true;
 }
 
 void DumbPlayer::ShootResult(int x, int y, ShotState state)

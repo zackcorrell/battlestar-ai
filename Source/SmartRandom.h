@@ -19,14 +19,14 @@
 
 // Includes
 #include "Player.h"
-#include "Board.h"
+#include "Board1.h"
 
 class SmartRandom : public Player
 {
 public:
 
 	// Required to implement
-	SmartRandom(int BoardWidth, int BoardHeight);
+	SmartRandom(int Board1Width, int Board1Height);
 
 	~SmartRandom();
 
@@ -55,8 +55,8 @@ private:
 	// Direction we are searching
 	Direction SearchDirection;
 
-	// Board to prevent shooting at the same position
-	bool *Board;
+	// Board1 to prevent shooting at the same position
+	bool *Board1;
 
 };
 

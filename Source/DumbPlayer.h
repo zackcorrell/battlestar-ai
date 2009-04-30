@@ -17,14 +17,14 @@
 
 // Includes
 #include "Player.h"
-#include "Board.h"
+#include "Board1.h"
 
 class DumbPlayer : public Player
 {
 public:
 
 	// Required to implement
-	DumbPlayer(int BoardWidth, int BoardHeight);
+	DumbPlayer(int Board1Width, int Board1Height);
 
 	~DumbPlayer();
 
@@ -39,8 +39,8 @@ public:
 
 private:
 
-	// Board to prevent shooting at the same position
-	bool *Board;
+	// Board1 to prevent shooting at the same position
+	bool *Board1;
 
 
 };

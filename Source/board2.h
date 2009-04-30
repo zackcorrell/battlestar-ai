@@ -1,11 +1,11 @@
 #ifndef BOARD2_H
 #define BOARD2_H
 
-class Board2
+class Board12
 {
 	int b[10][10];
 public:
-	Board2()
+	Board12()
 	{
 		for(int i = 0; i < 10; i++)
 			for(int j = 0; j < 10; j++)

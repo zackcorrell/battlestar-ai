@@ -10,7 +10,7 @@
 
 #include "Player.h"
 
-Player::Player(char* Name, int BoardWidth, int BoardHeight)
+Player::Player(char* Name, int Board1Width, int Board1Height)
 {
 	// Validate input
 	if(Name == NULL)
@@ -24,15 +24,15 @@ Player::Player(char* Name, int BoardWidth, int BoardHeight)
 	strcpy(PlayerName, Name);
 
 	// Copy over width / height
-	this->BoardWidth = BoardWidth;
-	this->BoardHeight = BoardHeight;
+	this->Board1Width = Board1Width;
+	this->Board1Height = Board1Height;
 
 	// Allocate placement board (For use with stat measurements)
 	for(int i = 0; i < 5; i++)
 	{
-		PlacementBoard[i] = new int[BoardWidth * BoardHeight];
-		for(int j = 0; j < BoardWidth * BoardHeight; j++)
-			PlacementBoard[i][j] = 0;
+		PlacementBoard1[i] = new int[Board1Width * Board1Height];
+		for(int j = 0; j < Board1Width * Board1Height; j++)
+			PlacementBoard1[i][j] = 0;
 	}
 }
 
@@ -46,7 +46,7 @@ Player::~Player()
 
 	// Release placement board
 	for(int i = 0; i < 5; i++)
-		delete [] PlacementBoard[i];
+		delete [] PlacementBoard1[i];
 }	
 
 char* Player::GetName()
@@ -62,13 +62,13 @@ void Player::Reset()
 void Player::Setup(Ship *Ships, int ShipCount)
 {
 	// Setup function passes onto the public static setup function that's pretty generic
-	SetupStatic(Ships, ShipCount, BoardWidth, BoardHeight);
+	SetupStatic(Ships, ShipCount, Board1Width, Board1Height);
 
 	// Add placement to placement history (For stats)
 	AddShipsStat(Ships, ShipCount);
 }
 
-void Player::SetupStatic(Ship *Ships, int ShipCount, int BoardWidth, int BoardHeight)
+void Player::SetupStatic(Ship *Ships, int ShipCount, int Board1Width, int Board1Height)
 {
 	// Validate input
 	if(Ships == NULL)
@@ -91,15 +91,15 @@ void Player::SetupStatic(Ship *Ships, int ShipCount, int BoardWidth, int BoardHe
 		Direction dir = (Direction)(rand() % 4);
 
 		// Choose a random starting position
-		int x = rand() % BoardWidth;
-		int y = rand() % BoardHeight;
+		int x = rand() % Board1Width;
+		int y = rand() % Board1Height;
 
 		// Create the ship and place into memory
 		Ship ship((ShipType)length, x, y, dir);
 		Ships[i - 1] = ship;
 
 		// Validate if this new ship is any good
-		if( Board::ValidateShips(Ships, i, BoardWidth, BoardHeight) == false)
+		if( Board1::ValidateShips(Ships, i, Board1Width, Board1Height) == false)
 			i--;
 	}
 }
@@ -141,7 +141,7 @@ void Player::AddShipsStat(Ship *Ships, int ShipCount)
 			int x = TempShip.x[j], y = TempShip.y[j];
 
 			// Grow stat
-			PlacementBoard[i][y * BoardWidth + x]++;
+			PlacementBoard1[i][y * Board1Width + x]++;
 		}
 	}
 
@@ -157,12 +157,12 @@ void Player::PrintStat()
 		Printf(">> Ship placement for ship[%d] by %s\n", i, GetName());
 
 		// Print table
-		for(int y = 0; y < BoardHeight; y++)
+		for(int y = 0; y < Board1Height; y++)
 		{
-			for(int x = 0; x < BoardWidth; x++)
+			for(int x = 0; x < Board1Width; x++)
 			{
 				// Output current element
-				Printf("(%d)\t", PlacementBoard[i][y * BoardWidth + x]);
+				Printf("(%d)\t", PlacementBoard1[i][y * Board1Width + x]);
 			}
 			Printf("\n");
 		}

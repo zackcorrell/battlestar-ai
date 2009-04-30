@@ -6,7 +6,7 @@
  This source file is developed and maintained by:
  + Jeremy Bridon jbridon@psu.edu
  
- File: Board.h
+ File: Board1.h
  Desc: A standard board of Battleship. Usefull for the Game class,
        but not that usefull for use in Player instances.
  
@@ -19,15 +19,15 @@
 #include "Util.h"
 #include "Ships.h"
 
-class Board
+class Board1
 {
 public:
 
 	// Constructor
-	Board(int BoardWidth, int BoardHeight);
+	Board1(int Board1Width, int Board1Height);
 
 	// Destructor
-	~Board();
+	~Board1();
 
 	// Add ships onto board
 	void AddShips(Ship *ShipsList, int ShipCount);
@@ -54,9 +54,9 @@ public:
 
 private:
 
-	// Board data
-	int BoardWidth, BoardHeight;
-	ShotState *BoardData;
+	// Board1 data
+	int Board1Width, Board1Height;
+	ShotState *Board1Data;
 
 	// Ship list
 	Ship ShipsList[5];

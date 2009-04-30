@@ -26,7 +26,7 @@
 // Includes
 #include "Util.h"
 #include "Ships.h"
-#include "Board.h"
+#include "Board1.h"
 
 // An enum of the current targeting 
 enum TargetingState
@@ -42,7 +42,7 @@ class Player
 public:
 
 	// Constructor takes and saves a name as well as board size
-	Player(char* Name, int BoardWidth, int BoardHeight);
+	Player(char* Name, int Board1Width, int Board1Height);
 
 	// Destructor
 	~Player();
@@ -58,7 +58,7 @@ public:
 	virtual void Setup(Ship *Ships, int ShipCount);
 
 	// Nice little static global
-	static void SetupStatic(Ship *Ships, int ShipCount, int BoardWidth, int BoardHeight);
+	static void SetupStatic(Ship *Ships, int ShipCount, int Board1Width, int Board1Height);
 
 	// Need to implement: Shoot a target an x and y position and shoot
 	virtual void Shoot(int *x, int *y);
@@ -78,11 +78,11 @@ protected:
 	// Print ship stat
 	void PrintStat();
 
-	// Board to keep placement history
-	int *PlacementBoard[5];
+	// Board1 to keep placement history
+	int *PlacementBoard1[5];
 
-	// Board size
-	int BoardWidth, BoardHeight;
+	// Board1 size
+	int Board1Width, Board1Height;
 
 private:
 

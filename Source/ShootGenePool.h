@@ -46,7 +46,7 @@ public:
 	void save(char* filename);
 	void load(char* filename);
 	
-	void getTarget(int* x, int* y, Board2* board);
+	void getTarget(int* x, int* y, Board12* board);
 
 	double bestFitness();
 	double* bestDist();

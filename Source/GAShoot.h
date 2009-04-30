@@ -25,7 +25,7 @@ class GAShoot
 	char EnemyName[128];
 
 	// Enemy shot placement
-	Board2 board;
+	Board12 board;
 
 public:
 
@@ -56,7 +56,7 @@ public:
 
 	void saveHit(int x, int y);
 
-	void printBoard();
+	void printBoard1();
 };
 
 #endif

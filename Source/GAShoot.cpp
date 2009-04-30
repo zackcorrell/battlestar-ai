@@ -103,7 +103,7 @@ void GAShoot::saveHit(int x, int y)
 	genePool.saveHit(x, y);
 }
 
-void GAShoot::printBoard()
+void GAShoot::printBoard1()
 {
 	board.print();
 }

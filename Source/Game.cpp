@@ -10,7 +10,7 @@
 
 #include "Game.h"
 
-Game::Game(Player* PlayerA, Player* PlayerB, int BoardWidth, int BoardHeight, int Games)
+Game::Game(Player* PlayerA, Player* PlayerB, int Board1Width, int Board1Height, int Games)
 {
 	// Validate
 	if(PlayerA == NULL || PlayerB == NULL)
@@ -20,8 +20,8 @@ Game::Game(Player* PlayerA, Player* PlayerB, int BoardWidth, int BoardHeight, in
 	}
 
 	// Save size
-	this->BoardWidth = BoardWidth;
-	this->BoardHeight = BoardHeight;
+	this->Board1Width = Board1Width;
+	this->Board1Height = Board1Height;
 
 	// Save game count
 	GameCount = Games;
@@ -83,7 +83,7 @@ int Game::Run()
 	Printf(">> Starting round %d between (0)[%s], and (1)[%s].\n", TotalGames, Players[0]->GetName(), Players[1]->GetName());
 
 	// Start a game with two boards and a run count
-	Board* Boards[2];
+	Board1* Board1s[2];
 
 	// Reset each player and setup the boards
 	for(int i = 0; i < 2; i++)
@@ -96,8 +96,8 @@ int Game::Run()
 		Players[i]->Setup(ShipList, 5);
 
 		// Setup the game board
-		Boards[i] = new Board(BoardWidth, BoardHeight);
-		Boards[i]->AddShips(ShipList, 5);
+		Board1s[i] = new Board1(Board1Width, Board1Height);
+		Board1s[i]->AddShips(ShipList, 5);
 	}
 
 	// Keep tracking the winner and the number of turns per this game
@@ -118,11 +118,11 @@ int Game::Run()
 			if(Verbose)
 			{
 				Printf(">> (%d)[%s]'s board:\n", i, Players[i]->GetName());
-				Boards[i]->Print();
+				Board1s[i]->Print();
 			}
 
 			// Let the current player shoot the amount of times they have in ships
-			int ShipCount = 5 - Boards[i]->GetSunkCount();
+			int ShipCount = 5 - Board1s[i]->GetSunkCount();
 			for(int j = 0; j < ShipCount; j++)
 			{
 				// Player i shoots the ammount of ships they have
@@ -130,21 +130,21 @@ int Game::Run()
 				Players[i]->Shoot(&x, &y);
 
 				// Retrieve state of the enemy's board
-				ShotState State = Boards[ (i + 1) % 2 ]->GetState(x, y);
+				ShotState State = Board1s[ (i + 1) % 2 ]->GetState(x, y);
 
 				// If we have nothing, return a miss
 				if(State == StateEmpty)
 				{
-					Boards[ (i + 1) % 2 ]->SetState(x, y, StateMiss);
+					Board1s[ (i + 1) % 2 ]->SetState(x, y, StateMiss);
 					State = StateMiss;
 				}
 				else if(State == StateShip)
 				{
-					Boards[ (i + 1) % 2 ]->SetState(x, y, StateHit);
+					Board1s[ (i + 1) % 2 ]->SetState(x, y, StateHit);
 					State = StateHit;
 
 					// Tell the board we hit one of it's ships (So they can sink)
-					Boards[ (i + 1) % 2 ]->HitShip(x, y);
+					Board1s[ (i + 1) % 2 ]->HitShip(x, y);
 				}
 
 				// Player i gets result
@@ -154,7 +154,7 @@ int Game::Run()
 				Players[ (i + 1) % 2]->EnemyResult(x, y, State);
 
 				// If the opposite's board has no ships left, it's this player (i) that wins
-				if(Boards[(i + 1) % 2]->GetSunkCount() == 5)
+				if(Board1s[(i + 1) % 2]->GetSunkCount() == 5)
 				{
 					// Post winner
 					winner = i;
@@ -171,12 +171,12 @@ int Game::Run()
 	for(int i = 0; i < 2; i++)
 	{
 		Printf(">> (%d)[%s]'s board:\n", i, Players[i]->GetName());
-		Boards[i]->Print();
+		Board1s[i]->Print();
 	}
 
 	// Release boards
 	for(int i = 0; i < 2; i++)
-		delete Boards[i];
+		delete Board1s[i];
 
 	// Print winner
 	Printf(">> Round %d winner is: (%d)[%s]\n", TotalGames, winner, Players[winner]->GetName());

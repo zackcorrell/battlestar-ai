@@ -18,7 +18,7 @@
 // Includes
 #include "Util.h"
 #include "Ships.h"
-#include "Board.h"
+#include "Board1.h"
 
 // The value of a single hit; a board is initialized as this size
 #define HIT_UNIT 10.0
@@ -29,7 +29,7 @@ class GAPlacement
 public:
 
 	// Loads file, if possible
-	GAPlacement(char *EnemyName, int BoardWidth, int BoardHeight);
+	GAPlacement(char *EnemyName, int Board1Width, int Board1Height);
 
 	// Write out to file
 	~GAPlacement();
@@ -49,7 +49,7 @@ private:
 	double GetShotDensity(int x, int y);
 
 	// Density board
-	double *BoardData;		// Enemy shot placement; 1.0 per shot (Shot density map)
+	double *Board1Data;		// Enemy shot placement; 1.0 per shot (Shot density map)
 	int Width, Height;
 
 	// Filename used with the current opponent

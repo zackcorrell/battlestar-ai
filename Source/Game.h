@@ -17,7 +17,7 @@
 #define __GAME_H_
 
 #include "Player.h"
-#include "Board.h"
+#include "Board1.h"
 #include "Util.h"
 
 class Game
@@ -25,7 +25,7 @@ class Game
 public:
 
 	// Constructor; takes two opponents and a game count.
-	Game(Player* PlayerA, Player* PlayerB, int BoardWidth, int BoardHeight, int Games = 1);
+	Game(Player* PlayerA, Player* PlayerB, int Board1Width, int Board1Height, int Games = 1);
 
 	// Destructor
 	~Game();
@@ -44,8 +44,8 @@ private:
 	// Total games played, target total game count
 	int TotalGames, GameCount;
 
-	// Board size
-	int BoardWidth, BoardHeight;
+	// Board1 size
+	int Board1Width, Board1Height;
 
 };
 
