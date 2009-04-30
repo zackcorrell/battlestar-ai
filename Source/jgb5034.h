@@ -2,8 +2,6 @@
 // INCLUDED
 
 #include "GAPlayer.h"
-#include "Board.h"
-#include "Status.h"
 
 #ifndef __JGB5034_H_
 #define __JGB5034_H_
