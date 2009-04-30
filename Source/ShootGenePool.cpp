@@ -153,13 +153,14 @@ void ShootGenePool::getTarget(int* x, int* y, Board2* board)
 			break;
 		}
 	}
+
+	delete[] dist;
 	
 	//Begin fucking filter
 	if((*x % 2 == 0 && *y % 2 == 0) || (*x % 2 == 1 && *y % 2 == 1))
 		getTarget(x, y, board);
 
 	board->set(*x, *y, 1);
-	delete[] dist;
 
 	//todo implement fucking filter
 }
