@@ -31,7 +31,7 @@ void GASinkingGene::Load(char* EnemyName)
 	// Form name
 	char FileName[128];
 	if(EnemyName == NULL)
-		EnemyName = "Default";
+		EnemyName = "jgb5034";
 	strcpy(FileName, EnemyName);
 	strcat(FileName, ".dat3");
 
@@ -42,7 +42,7 @@ void GASinkingGene::Load(char* EnemyName)
 	if(File->fail())
 	{
 		delete File;
-		File = new ifstream("Default.dat3");
+		File = new ifstream("jgb5034.dat3");
 	}
 
 	// If we still fail, just quit
@@ -70,7 +70,7 @@ void GASinkingGene::Load(char* EnemyName)
 void GASinkingGene::Save(char* EnemyName)
 {
 	// Don't save if it's the default data file
-	if(strcmp(EnemyName, "Default") == 0)
+	if(strcmp(EnemyName, "jgb5034") == 0)
 		return;
 
 	// Form name
@@ -741,7 +741,7 @@ void GASinkingGene::ResetRegisters()
 	State = Searching;
 	ProgramCounter = 0;
 
-	// Default used dirs to be false
+	// jgb5034 used dirs to be false
 	for(int i = 0; i < 4; i++)
 		DirUsed[i] = false;
 }

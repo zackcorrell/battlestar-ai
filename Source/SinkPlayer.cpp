@@ -56,7 +56,7 @@ void SinkPlayer::Shoot(int *x, int *y)
 		// keep trying to find in-bounded points
 		while(true)
 		{
-			// Default points
+			// jgb5034 points
 			targetx = sourcex;
 			targety = sourcey;
 
@@ -168,7 +168,7 @@ void SinkPlayer::ShootResult(int x, int y, ShotState state)
 			sourcex = x;
 			sourcey = y;
 
-			// Default direction to North
+			// jgb5034 direction to North
 			SearchDirection = North;
 		}
 	}
@@ -201,7 +201,7 @@ void SinkPlayer::ShootResult(int x, int y, ShotState state)
 			// Set flip to true
 			flipped = true;
 
-			// Default positions
+			// jgb5034 positions
 			targetx = sourcex;
 			targety = sourcey;
 

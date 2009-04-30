@@ -95,7 +95,7 @@ void SmartRandom::Shoot(int *x, int *y)
 		// Apply a checker-board pattern
 		while(true)
 		{
-			// Default points
+			// jgb5034 points
 			targetx = sourcex;
 			targety = sourcey;
 
@@ -207,7 +207,7 @@ void SmartRandom::ShootResult(int x, int y, ShotState state)
 			sourcex = x;
 			sourcey = y;
 
-			// Default direction to North
+			// jgb5034 direction to North
 			SearchDirection = North;
 		}
 	}
@@ -240,7 +240,7 @@ void SmartRandom::ShootResult(int x, int y, ShotState state)
 			// Set flip to true
 			flipped = true;
 
-			// Default positions
+			// jgb5034 positions
 			targetx = sourcex;
 			targety = sourcey;
 

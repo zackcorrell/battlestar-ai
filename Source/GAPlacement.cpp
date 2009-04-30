@@ -14,7 +14,7 @@ GAPlacement::GAPlacement(char *EnemyName, int Board1Width, int Board1Height)
 {
 	// Valudate the enemy name
 	if(EnemyName == NULL)
-		EnemyName = "Default";
+		EnemyName = "jgb5034";
 
 	// Save width and height
 	Width = Board1Width;
@@ -32,15 +32,15 @@ GAPlacement::GAPlacement(char *EnemyName, int Board1Width, int Board1Height)
 	// File failed, load default data
 	if(File.fail())
 	{
-		ifstream Default("Default.dat1");
+		ifstream jgb5034("jgb5034.dat1");
 
 		// Set all data to weights of HIT_UNIT
 		for(int i = 0; i < Width * Height; i++)
 		{
-			Default >> Board1Data[i];
+			jgb5034 >> Board1Data[i];
 			Board1Data[i] += HIT_UNIT;
 		}
-		Default.close();
+		jgb5034.close();
 	}
 
 	// File loaded, load data from file

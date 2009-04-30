@@ -77,7 +77,7 @@ void Player::SetupStatic(Ship *Ships, int ShipCount, int Board1Width, int Board1
 		exit(-1);
 	}
 
-	// Default behavior is randomization
+	// jgb5034 behavior is randomization
 	for(int i = 1; i <= ShipCount; i++)
 	{
 		// Choose the appropriate type

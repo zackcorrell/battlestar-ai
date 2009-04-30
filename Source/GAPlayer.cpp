@@ -26,9 +26,9 @@ GAPlayer::GAPlayer(char *EnemyName, int Board1Width, int Board1Height)
 	Shooting = new GAShoot(EnemyName);
 
 	// Instance sinking GA
-	Sinking = new GASinking(Board1Width, Board1Height, "Default");
+	Sinking = new GASinking(Board1Width, Board1Height, "jgb5034");
 
-	// Default shot states
+	// jgb5034 shot states
 	TargetX = TargetY = 0;
 	TargetHit = false;
 }
@@ -74,9 +74,9 @@ void GAPlayer::Reset()
 	Shooting = new GAShoot(EnemyName);
 
 	// Instance sinking GA
-	Sinking = new GASinking(Board1Width, Board1Height, "Default");
+	Sinking = new GASinking(Board1Width, Board1Height, "jgb5034");
 
-	// Default shot states
+	// jgb5034 shot states
 	TargetX = TargetY = 0;
 	TargetHit = false;
 }
@@ -100,7 +100,7 @@ void GAPlayer::Shoot(int *x, int *y)
 		{
 			// Reset internals and use this standard gene
 			delete Sinking;
-			Sinking = new GASinking(10, 10, "Default");
+			Sinking = new GASinking(10, 10, "jgb5034");
 			continue; // Pop back to the top
 		}
 

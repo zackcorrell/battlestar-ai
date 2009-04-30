@@ -29,7 +29,7 @@ enum Direction { North, East, South, West };
 // Define a ship structure
 struct Ship
 {
-	// Constructor (Defaults to invalid data, so make sure you pass some params)
+	// Constructor (jgb5034s to invalid data, so make sure you pass some params)
 	Ship(ShipType type = Destroyer, int x = 0, int y = 0, Direction direction = North)
 	{
 		SetData(type, x, y, direction);
@@ -61,7 +61,7 @@ struct Ship
 			{ this->x[i] = x - i; this->y[i] = y; }
 		}
 
-		// Default hit state to false
+		// jgb5034 hit state to false
 		for(int i = 0; i < (int)Type; i++)
 			Hit[i] = false;
 	}

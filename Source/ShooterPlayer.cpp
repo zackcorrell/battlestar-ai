@@ -16,7 +16,7 @@ ShooterPlayer::ShooterPlayer(int Board1Width, int Board1Height)
 	// Allocate "hit" board (No need to init, that is done in Reset())
 	Board1 = new bool[Board1Width * Board1Height];
 
-	// Default the last x and y shot
+	// jgb5034 the last x and y shot
 	HitState = 0;
 }
 
@@ -74,7 +74,7 @@ void ShooterPlayer::Shoot(int *x, int *y)
 	// HIT ALL FOUR DIRS
 	else if(HitState == 1)
 	{
-		// Default x and y
+		// jgb5034 x and y
 		*x = *y = -1;
 
 		// Save the x and y
@@ -133,7 +133,7 @@ void ShooterPlayer::ShootResult(int x, int y, ShotState state)
 		HitSource[0] = x;
 		HitSource[1] = y;
 
-		// Default direction searching
+		// jgb5034 direction searching
 		HitDir = North;
 		HitState = 1;
 	}

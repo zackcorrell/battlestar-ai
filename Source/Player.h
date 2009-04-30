@@ -54,7 +54,7 @@ public:
 	virtual void Reset();
 
 	// Need to implement: Given a valid Ship buffer of ShipCount size, fill in with valid ships
-	// Default behavior: Random
+	// jgb5034 behavior: Random
 	virtual void Setup(Ship *Ships, int ShipCount);
 
 	// Nice little static global

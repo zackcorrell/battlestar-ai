@@ -41,7 +41,7 @@ clicking the project head in the directory tree and select "Add ->" and then
 Pre-trained data, for each GA component, uses several data files to save
 enemy-placement data over time. *.dat1 is used for placement. *.dat2 is
 used for shooting. *.dat3 is used for sinking. All default data is named as
-"Default.*"
+"jgb5034.*"
 
 -- Usage --
 

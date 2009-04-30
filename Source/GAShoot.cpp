@@ -12,7 +12,7 @@
 
 GAShoot::GAShoot(double* target) : genePool(target), board()
 {
-	strcpy(EnemyName, "Default");
+	strcpy(EnemyName, "jgb5034");
 }
 GAShoot::GAShoot(char* EnemyName) : genePool(), board()
 {
@@ -26,7 +26,7 @@ GAShoot::GAShoot(char* EnemyName) : genePool(), board()
 	FILE* fp = fopen(Temp, "r");
 	if(fp == NULL)
 	{
-		genePool.load("Default.dat2");
+		genePool.load("jgb5034.dat2");
 	}
 	else
 	{
