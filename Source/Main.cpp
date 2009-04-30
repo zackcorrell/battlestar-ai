@@ -48,6 +48,8 @@ bool Verbose;
 bool Logging;
 FILE* LoggingFile;
 
+#include "jgb5034.h"
+
 // Main application entry point (Arguments not needed)
 int main( /* int argc, char *argv[] */ )
 {

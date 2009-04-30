@@ -573,7 +573,7 @@ int GASinkingGene::Simulate(GASinkingGene *Gene, Ship *Ships, int ShipCount)
 	Gene->ResetRegisters();
 
 	// Create a board game with random ship placement
-	Board1 SampleBoard1(WIDTH, LENGTH);
+	Board1 SampleBoard1(10, 10);
 
 	// Place ships randomly
 	SampleBoard1.AddShips(Ships, ShipCount);

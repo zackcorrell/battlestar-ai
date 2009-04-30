@@ -47,8 +47,5 @@ static inline double randFloat()
 	return ((double)rand() / RAND_MAX);
 }
 
-// Global size of board
-const int LENGTH = 10, WIDTH = 10;
-
 // End of inclusion
 #endif

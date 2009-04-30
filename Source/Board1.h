@@ -13,8 +13,8 @@
 ***************************************************************/
 
 // Inclusion guard
-#ifndef __BOARD_H_
-#define __BOARD_H_
+#ifndef __BOARD1_H_
+#define __BOARD1_H_
 
 #include "Util.h"
 #include "Ships.h"
