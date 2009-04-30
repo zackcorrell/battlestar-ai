@@ -130,7 +130,7 @@ Gene Gene::cross(Gene* father, Gene* mother, bool mutate)
 
 char* Gene::saveString()
 {
-	char string[1024];
+	char* string = new char[1024];
 	string[0] = '\0';
 	sprintf(string, "%.3f\n", magnitude);
 	for(int i = 0; i < WAVECOUNT; i++)

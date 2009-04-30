@@ -81,7 +81,11 @@ void ShootGenePool::save(char* filename)
 	fprintf(file, "\n");
 
 	for(int i = 0; i < 100; i++)
-		fputs(pool[i].saveString(), file);//fprintf(file, "%s\n",  pool[i].saveString());
+	{
+		char* str = pool[i].saveString();
+		fputs(str, file);//fprintf(file, "%s\n",  pool[i].saveString());
+		delete[] str;
+	}
 
 	fclose(file);
 }
@@ -95,9 +99,6 @@ void ShootGenePool::load(char* filename)
 		printf("Could not open ShootGenePool file.\n");
 		exit(-1);
 	}
-	char buf[256];
-	//while(1)
-	//	in.getline(buf, 256);
 
 	in >> targetAvg;
 	
@@ -126,47 +127,6 @@ void ShootGenePool::load(char* filename)
 	in.close();
 	sort();
 }
-/*
-
-	FILE* file = fopen(filename, "r");
-
-	char buf[128];
-	int waveCount = 0;
-	int currentGene = 0;
-	Harmonic tempWaves[WAVECOUNT];
-	double magnitude;
-
-	fgets(buf, 128, file);
-	sscanf(buf, "%f\n", &targetAvg); //get target avg
-
-	for(int i = 0; i < 100; fscanf(file, "%f\n", target + i++));
-
-	while(!feof(file))
-	{		
-		fgets(buf, 128, file);
-		if(strcmp(buf, "\n") == 0)
-		{
-			pool[currentGene++] = Gene(tempWaves);
-			waveCount = -1;
-		}
-		else
-		{
-			if(waveCount = -1)
-			{
-				sscanf(buf, "%f", &magnitude);
-				waveCount++;
-			}
-			if(waveCount < WAVECOUNT)
-			{
-				int alpha, beta, mu, omega;
-				sscanf(buf, "%f %d %f %d", &alpha, &mu, &beta, &omega);
-				tempWaves[waveCount++] = Harmonic(alpha, mu, beta, omega);
-			}
-		}
-	}
-
-	fclose(file);
-}*/
 
 void ShootGenePool::getTarget(int* x, int* y, Board2* board)
 {
@@ -183,7 +143,7 @@ void ShootGenePool::getTarget(int* x, int* y, Board2* board)
 	for(int i = 1; i < 100; dist[i] += dist[(i++)-1]); //turn into increasing array
 	double rand = randFloat();
 	*x = 9, *y = 9;
-	for(int i = 0; /*dist[i] < rand &&*/ i < 99; i++)
+	for(int i = 0; i < 99; i++) //was /*dist[i] < rand &&*/ <- i think that's wrong
 	{
 		if(dist[i] > rand)
 		{
