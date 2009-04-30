@@ -30,9 +30,6 @@ GAPlayer::GAPlayer(char *EnemyName, int BoardWidth, int BoardHeight)
 	// Default shot states
 	TargetX = TargetY = 0;
 	TargetHit = false;
-
-	// Load up a first shot
-	Shooting->getTarget(&TargetX, &TargetY);
 }
 
 GAPlayer::~GAPlayer()

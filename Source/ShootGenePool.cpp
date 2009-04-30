@@ -16,8 +16,9 @@ using namespace std;
 void ShootGenePool::advance()
 {
 	Gene nextGen[100];
+	sort();
 
-	memcpy(nextGen, getTopTen(), 10 * sizeof(Gene));
+	memcpy(nextGen, pool, 10 * sizeof(Gene));
 
 	int nextIndex = 10;
 
@@ -26,13 +27,11 @@ void ShootGenePool::advance()
 			for(int j = i+1; j < 10; j++)
 				nextGen[nextIndex++] = Gene::cross(&nextGen[i], &nextGen[j], mutate);
 
-	//assert(nextGen[0].fitness(target) == best().fitness(target));
-
-	//for(int i = 0; i < 100; i++)
-	//	printf("%f\n", nextGen[i].fitness(target));
-	//printf("\n");
+	// Verify that the best gene from the last pool is at least the best gene of the current pool
+	assert(nextGen[0].fitness(target) == best().fitness(target));
 
 	memcpy(pool, nextGen, 100 * sizeof(Gene));
+	Printf("Shooting: Value of best gene for this advance(): %f\n", best().fitness(target));
 }
 
 Gene ShootGenePool::best()
@@ -50,17 +49,6 @@ Gene ShootGenePool::best()
 	}
 
 	return pool[best];
-}
-
-Gene* ShootGenePool::getTopTen()
-{
-	Gene ten[10];
-
-	sort();
-
-	for(int i = 0; i < 10; ten[i++] = pool[i]);
-	
-	return ten;
 }
 
 void ShootGenePool::sort()
@@ -102,6 +90,11 @@ void ShootGenePool::load(char* filename)
 {
 	ifstream in;
 	in.open(filename);
+	if(in.fail())
+	{
+		printf("Could not open ShootGenePool file.\n");
+		exit(-1);
+	}
 	char buf[256];
 	//while(1)
 	//	in.getline(buf, 256);
@@ -178,6 +171,7 @@ void ShootGenePool::load(char* filename)
 void ShootGenePool::getTarget(int* x, int* y, Board2* board)
 {
 	double* dist = best().getDist();
+
 	for(int i = 0; i < 100; i++)
 	{
 		if(board->at(i / 10, i % 10) == 1)

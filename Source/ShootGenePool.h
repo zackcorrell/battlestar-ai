@@ -32,14 +32,13 @@ public:
 	{
 		memcpy(this->target, target, 100 * sizeof(double));
 
-		targetAvg = 0;
+		targetAvg = 0.0;
 		for(int i = 0; i < 100; i++)
 			targetAvg += target[i];
-		targetAvg /= 100;
+		targetAvg /= 100.0;
 		
 		for(int i = 0; i < 100; i++)
 			pool[i] = Gene(/*randFloat() * */targetAvg);
-		//TODO add 20 genes spanning the space
 	}
 
 	void advance();
@@ -57,7 +56,6 @@ public:
 	void saveHit(int x, int y);
 
 private:
-	Gene* getTopTen();
 	void sort();
 };
 

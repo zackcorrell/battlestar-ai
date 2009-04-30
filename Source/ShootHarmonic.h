@@ -19,7 +19,7 @@
 #include <cmath>
 #include "Util.h"
 
-#define STEP (100 / (2.0 * PI))
+#define STEP (100.0 / (2.0 * PI))
 
 //a harmonic is a wave of the form alpha * sin(mu * x) + beta * cos(omega * x)
 class Harmonic

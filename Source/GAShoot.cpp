@@ -25,12 +25,16 @@ GAShoot::GAShoot(char* EnemyName) : genePool(), board()
 	strcat(Temp, ".dat2");
 	FILE* fp = fopen(Temp, "r");
 	if(fp == NULL)
+	{
 		genePool.load("Default.dat2");
+	}
 	else
+	{
+		fclose(fp);
 		genePool.load(Temp);
-	fclose(fp);
+	}
 
-	runGenerations(25);
+	runGenerations(0); // Please set this back to 25
 }
 
 GAShoot::~GAShoot()
@@ -56,6 +60,7 @@ void GAShoot::runGeneration()
 {
 	genePool.advance();
 }
+
 void GAShoot::runGenerations(int n)
 {
 	for(int i = 0; i < n; i++)
@@ -67,6 +72,7 @@ void GAShoot::save(char* filename)
 {
 	genePool.save(filename);
 }
+
 void GAShoot::load(char* filename)
 {
 	genePool.load(filename);
@@ -76,6 +82,7 @@ double GAShoot::bestFitness()
 {
 	return genePool.bestFitness();
 }
+
 double* GAShoot::bestDist()
 {
 	return genePool.bestDist();

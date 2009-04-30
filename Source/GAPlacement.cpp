@@ -34,7 +34,7 @@ GAPlacement::GAPlacement(char *EnemyName, int BoardWidth, int BoardHeight)
 	{
 		ifstream Default("Default.dat1");
 
-		// Set all data to weights of 1.0
+		// Set all data to weights of HIT_UNIT
 		for(int i = 0; i < Width * Height; i++)
 		{
 			Default >> BoardData[i];
@@ -46,65 +46,16 @@ GAPlacement::GAPlacement(char *EnemyName, int BoardWidth, int BoardHeight)
 	// File loaded, load data from file
 	else
 	{
-		// Read in the file's width and height
-		int TempWidth, TempHeight;
-		File >> TempWidth >> TempHeight;
-
 		// Are we reading the same ammount of data?
-		if(TempWidth == Width)
-		{
-			for(int i = 0; i < Width * Height; i++)
-				File >> BoardData[i];			
-		}
-
-		// If we are reading less than in our file
-		else if(TempWidth < Width)
-		{
-			for(int y = 0; y < Height; y++)
-			for(int x = 0; x < Width; x++)
-			{
-				// If there are no more horizontal lines to read
-				// Or if we have read past the length of a horizontal
-				// fill with 1.0
-				if(y >= TempHeight || x >= TempWidth)
-					BoardData[y * BoardWidth + x] = HIT_UNIT;
-				// Read from file
-				else
-					File >> BoardData[y * Width + x];
-			}
-		}
-
-		// If we are reading more than in our file...
-		else if(TempWidth > Width)
-		{
-			for(int y = 0; y < TempHeight; y++)
-			for(int x = 0; x < TempWidth; x++)
-			{
-				// If there are no more horizontal lines to write to
-				// Or if we have wrote past the length of a horizontal
-				// skip data
-				if(y >= Height || x >= Width)
-				{
-					double Temp;
-					File >> Temp;
-				}
-				// Read from file
-				else
-					File >> BoardData[y * Width + x];
-			}
-		}
+		for(int i = 0; i < Width * Height; i++)
+			File >> BoardData[i];
 	}
-
-	// File loaded...
 }
 
 GAPlacement::~GAPlacement()
 {
 	// Write out to disk
 	ofstream File(FileName);
-
-	// Write out width and height
-	File << Width << " " << Height << endl;
 
 	// Write out the matrix data
 	for(int i = 0; i < Width * Height; i++)
