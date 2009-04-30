@@ -21,9 +21,6 @@
 #include "Board.h"
 #include "GASinkingGene.h"
 
-// Maximum gene pool size
-#define GA_MAX_POOL 20 // Multiple of 2
-
 // Sinking management
 class GASinking
 {

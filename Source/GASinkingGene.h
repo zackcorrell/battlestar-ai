@@ -21,7 +21,7 @@
 #include "Board.h" // For simulations
 
 // Maximum gene pool size
-#define GA_MAX_POOL 20
+#define GA_MAX_POOL 50
 
 // Maximum instructions in a section of code
 #define GA_MAX_INSTRUCTIONS 20

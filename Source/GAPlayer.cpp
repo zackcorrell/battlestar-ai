@@ -26,7 +26,7 @@ GAPlayer::GAPlayer(char *EnemyName, int BoardWidth, int BoardHeight)
 	Shooting = new GAShoot(EnemyName);
 
 	// Instance sinking GA
-	Sinking = new GASinking(BoardWidth, BoardHeight, "Default");//EnemyName);
+	Sinking = new GASinking(BoardWidth, BoardHeight, "Default");
 
 	// Default shot states
 	TargetX = TargetY = 0;

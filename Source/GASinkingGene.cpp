@@ -488,8 +488,10 @@ int GASinkingGene::FitnessValue(GASinkingGene Gene, Ship *Ships, int ShipCount)
 		// If even, run the given ships, else, run random ships
 		int SimValue;
 		if(i % 2 == 0)
+		{
 			SimValue = Simulate( &Gene, Ships, ShipCount );
-		else
+		}
+		else if(i % 2 == 1)
 		{
 			Ship RandShips[5];
 			Player::SetupStatic(RandShips, 5, 10, 10);
@@ -586,8 +588,10 @@ int GASinkingGene::Simulate(GASinkingGene *Gene, Ship *Ships, int ShipCount)
 	for(int sim = 0; sim <= GA_SIMULATION_COUNT; sim++)
 	{
 		// Check if we sunk all ships
-		if( SampleBoard.GetSunkCount() >= 5 )
+		if( SampleBoard.GetSunkCount() >= ShipCount )
 			return ShotCount;
+		else if( ShotCount > 220 && SampleBoard.GetSunkCount() < 3)
+			return INT_MAX;
 		else if( sim == GA_SIMULATION_COUNT )
 			return INT_MAX;
 

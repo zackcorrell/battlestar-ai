@@ -34,11 +34,6 @@ GAShoot::GAShoot(char* EnemyName) : genePool(), board()
 		genePool.load(Temp);
 	}
 
-	double *data = bestDist();
-	ofstream File("test.csv");
-	for(int i = 0; i < 100; i++)
-		File << data[i] << ", ";
-
 	runGenerations(5);
 }
 
